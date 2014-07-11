@@ -1,0 +1,6 @@
+kwindowsystem (5.0.0-0ubuntu1) utopic; urgency=medium
+
+  [ Jonathan Riddell ]
+  * Initial stable upstream release
+
+ -- Rohan Garg <rohangarg@kubuntu.org>  Fri, 11 Jul 2014 12:25:58 +0200
