@@ -20,7 +20,7 @@ msgstr ""
 "X-Generator: Lokalize 0.2\n"
 
 #: kwindowsystem_mac.cpp:580 kwindowsystem_win.cpp:632
-#: kwindowsystem_x11.cpp:953
+#: kwindowsystem_x11.cpp:959
 #, fuzzy, qt-format
 #| msgid "Desktop %1"
 msgctxt "KWindowSystem|"
