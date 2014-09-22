@@ -1,3 +1,14 @@
+kwindowsystem (5.2.0-0ubuntu1) utopic; urgency=medium
+
+  [ Jonathan Riddell ]
+  * New upstream release
+  * Use pkg-kde-tools version 3 scripts
+
+  [ Philip Muškovac ]
+  * Add new symbols
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Mon, 22 Sep 2014 20:02:31 +0200
+
 kwindowsystem (5.1.0-0ubuntu1) utopic; urgency=medium
 
   [ Scarlett Clark ]

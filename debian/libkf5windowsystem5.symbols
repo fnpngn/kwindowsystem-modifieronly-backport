@@ -1,4 +1,4 @@
-# SymbolsHelper-Confirmed: 5.0.0 amd64
+# SymbolsHelper-Confirmed: 5.2.0 amd64 armhf i386
 libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN10KKeyServer10xEventToQtEP7_XEventPi@Base 4.96.0
  _ZN10KKeyServer11keyQtToModXEiPj@Base 4.96.0
@@ -42,6 +42,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN10NETWinInfo12setStartupIdEPKc@Base 4.96.0
  _ZN10NETWinInfo12virtual_hookEiPv@Base 4.96.0
  _ZN10NETWinInfo13OnAllDesktopsE@Base 4.96.0
+ _ZN10NETWinInfo13setActivitiesEPKc@Base 5.2.0
  _ZN10NETWinInfo13setWindowTypeEN3NET10WindowTypeE@Base 4.96.0
  _ZN10NETWinInfo13updateWMStateEv@Base 4.96.0
  _ZN10NETWinInfo14setVisibleNameEPKc@Base 4.96.0
@@ -210,6 +211,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN13KWindowSystem14setDesktopNameEiRK7QString@Base 4.96.0
  _ZN13KWindowSystem14showingDesktopEv@Base 4.96.0
  (subst)_ZN13KWindowSystem15demandAttentionE{quintptr}b@Base 4.96.0
+ (subst)_ZN13KWindowSystem15setOnActivitiesE{quintptr}RK11QStringList@Base 5.2.0
  _ZN13KWindowSystem15workAreaChangedEv@Base 4.96.0
  _ZN13KWindowSystem16numberOfDesktopsEv@Base 4.96.0
  (subst)_ZN13KWindowSystem16readNamePropertyE{quintptr}m@Base 4.96.0
