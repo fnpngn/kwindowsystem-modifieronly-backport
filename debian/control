@@ -1,8 +1,8 @@
 Source: kwindowsystem
 Section: libs
 Priority: optional
-Maintainer: Kubuntu Developers <kubuntu-devel@lists.ubuntu.com>
-XSBC-Original-Maintainer: Scarlett Clark <scarlett@scarlettgatelyclark.com>
+Maintainer: Debian/Kubuntu Qt/KDE Maintainers <debian-qt-kde@lists.debian.org>
+Uploaders: Maximiliano Curia <maxy@debian.org>
 Build-Depends: cmake,
                debhelper (>= 9.0.0),
                extra-cmake-modules (>= 1.2.0),
@@ -12,15 +12,14 @@ Build-Depends: cmake,
                libxrender-dev,
                pkg-config,
                pkg-kde-tools (>= 0.15.15ubuntu1~),
-               qt5-default,
                qtbase5-dev,
                qttools5-dev,
                qttools5-dev-tools
 Standards-Version: 3.9.5
 XS-Testsuite: autopkgtest
 Homepage: https://projects.kde.org/projects/frameworks/kwindowsystem
-Vcs-Browser: http://bazaar.launchpad.net/~kubuntu-packagers/kubuntu-packaging-next/kwindowsystem
-Vcs-Bzr: https://code.launchpad.net/~kubuntu-packagers/kubuntu-packaging-next/kwindowsystem
+Vcs-Browser: http://anonscm.debian.org/gitweb/?p=pkg-kde/frameworks/kwindowsystem.git
+Vcs-Git: git://anonscm.debian.org/pkg-kde/frameworks/kwindowsystem.git
 
 Package: libkf5windowsystem-dev
 Section: libdevel

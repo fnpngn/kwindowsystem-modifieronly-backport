@@ -73,12 +73,19 @@ private Q_SLOTS:
     void testWindowType_data();
     void testWindowType();
 
+    void testActivities_data();
     void testActivities();
     void testWindowRole();
     void testWindowClass();
     void testClientMachine();
     void testGroupLeader();
+    void testUrgency_data();
+    void testUrgency();
+    void testInput_data();
+    void testInput();
     void testTransientFor();
+    void testProtocols_data();
+    void testProtocols();
 
 private:
     void performNameTest(xcb_atom_t atom, const char *(NETWinInfo:: *getter)(void)const, void (NETWinInfo:: *setter)(const char *), NET::Property property);
@@ -665,6 +672,90 @@ void NetWinInfoTestClient::testGroupLeader()
     QCOMPARE(info.groupLeader(), m_rootWindow);
 }
 
+void NetWinInfoTestClient::testUrgency_data()
+{
+    QTest::addColumn<quint32>("flags");
+    QTest::addColumn<bool>("expected");
+
+    QTest::newRow("urgency") << quint32(1 << 8) << true;
+    QTest::newRow("none") << quint32(0) << false;
+    QTest::newRow("group_urgency") << quint32((1 << 6) | (1 << 8)) << true;
+    QTest::newRow("input") << quint32(1) << false;
+}
+
+void NetWinInfoTestClient::testUrgency()
+{
+    QVERIFY(connection());
+    INFO
+
+    QVERIFY(!info.urgency());
+    QFETCH(quint32, flags);
+
+    // group leader needs to be changed through wm hints
+    uint32_t values[] = {
+        flags,
+        1, /* Input */
+        1, /* Normal State */
+        XCB_NONE, /* icon pixmap */
+        XCB_NONE, /* icon window */
+        XCB_NONE, /* icon x */
+        XCB_NONE, /* icon y */
+        XCB_NONE, /* icon mask */
+        XCB_NONE /* group leader */
+    };
+    xcb_change_property(connection(), XCB_PROP_MODE_REPLACE, m_testWindow,
+                        XCB_ATOM_WM_HINTS, XCB_ATOM_WM_HINTS, 32, 9, values);
+    xcb_flush(connection());
+
+    // only updated after event
+    waitForPropertyChange(&info, XCB_ATOM_WM_HINTS, NET::Property(0), NET::WM2Urgency);
+    QTEST(info.urgency(), "expected");
+}
+
+void NetWinInfoTestClient::testInput_data()
+{
+    QTest::addColumn<quint32>("flags");
+    QTest::addColumn<quint32>("input");
+    QTest::addColumn<bool>("expected");
+
+    QTest::newRow("flag_input")      << quint32(1) << quint32(1) << true;
+    QTest::newRow("flag_noinput")    << quint32(1) << quint32(0) << false;
+    QTest::newRow("noflag_input")    << quint32(0) << quint32(1) << true;
+    QTest::newRow("noflag_noinput")  << quint32(0) << quint32(0) << true;
+    QTest::newRow("flag_with_other_input")   << quint32(1 | 1 << 8) << quint32(1) << true;
+    QTest::newRow("flag_with_other_noinput") << quint32(1 | 1 << 8) << quint32(0) << false;
+}
+
+void NetWinInfoTestClient::testInput()
+{
+    QVERIFY(connection());
+    INFO
+
+    QVERIFY(info.input());
+    QFETCH(quint32, flags);
+    QFETCH(quint32, input);
+
+    // group leader needs to be changed through wm hints
+    uint32_t values[] = {
+        flags,
+        input, /* Input */
+        1, /* Normal State */
+        XCB_NONE, /* icon pixmap */
+        XCB_NONE, /* icon window */
+        XCB_NONE, /* icon x */
+        XCB_NONE, /* icon y */
+        XCB_NONE, /* icon mask */
+        XCB_NONE /* group leader */
+    };
+    xcb_change_property(connection(), XCB_PROP_MODE_REPLACE, m_testWindow,
+                        XCB_ATOM_WM_HINTS, XCB_ATOM_WM_HINTS, 32, 9, values);
+    xcb_flush(connection());
+
+    // only updated after event
+    waitForPropertyChange(&info, XCB_ATOM_WM_HINTS, NET::Property(0), NET::WM2Urgency);
+    QTEST(info.input(), "expected");
+}
+
 void NetWinInfoTestClient::testTransientFor()
 {
     QVERIFY(connection());
@@ -718,6 +809,19 @@ void NetWinInfoTestClient::testWindowRole()
     QCOMPARE(info.windowRole(), "bar");
 }
 
+void NetWinInfoTestClient::testActivities_data()
+{
+    QTest::addColumn<QByteArray>("activities");
+    QTest::addColumn<QByteArray>("expectedActivities");
+
+    const QByteArray testActivities = QByteArrayLiteral("foo,bar");
+    const QByteArray allActivities = QByteArrayLiteral(KDE_ALL_ACTIVITIES_UUID);
+
+    QTest::newRow("activites") << testActivities << testActivities;
+    QTest::newRow("empty") << QByteArray() << allActivities;
+    QTest::newRow("\\0") << QByteArrayLiteral("\0") << allActivities;
+}
+
 void NetWinInfoTestClient::testActivities()
 {
     QVERIFY(connection());
@@ -725,15 +829,136 @@ void NetWinInfoTestClient::testActivities()
     INFO
 
     QVERIFY(!info.activities());
+    QFETCH(QByteArray, activities);
 
     // activities needs to be changed using xcb
-    xcb_change_property(connection(), XCB_PROP_MODE_REPLACE, m_testWindow,
-                        atom, XCB_ATOM_STRING, 8, 7, "foo,bar");
+    info.setActivities(activities.isNull() ? Q_NULLPTR : activities.constData());
     xcb_flush(connection());
 
     // only updated after event
     waitForPropertyChange(&info, atom, NET::Property(0), NET::WM2Activities);
-    QCOMPARE(info.activities(), "foo,bar");
+    QTEST(QByteArray(info.activities()), "expectedActivities");
+}
+
+Q_DECLARE_METATYPE(NET::Protocols)
+void NetWinInfoTestClient::testProtocols_data()
+{
+    QTest::addColumn<NET::Protocols>("protocols");
+    QTest::addColumn<bool>("takeFocus");
+    QTest::addColumn<bool>("deleteWindow");
+    QTest::addColumn<bool>("ping");
+    QTest::addColumn<bool>("sync");
+    QTest::addColumn<bool>("context");
+
+    const NET::Protocol t = NET::TakeFocusProtocol;
+    const NET::Protocol d = NET::DeleteWindowProtocol;
+    const NET::Protocol p = NET::PingProtocol;
+    const NET::Protocol s = NET::SyncRequestProtocol;
+    const NET::Protocol c = NET::ContextHelpProtocol;
+
+    QTest::newRow("none") << NET::Protocols(NET::NoProtocol) << false << false << false << false << false;
+
+    QTest::newRow("t") << NET::Protocols(t) << true << false << false << false << false;
+    QTest::newRow("d") << NET::Protocols(d) << false << true << false << false << false;
+    QTest::newRow("p") << NET::Protocols(p) << false << false << true << false << false;
+    QTest::newRow("s") << NET::Protocols(s) << false << false << false << true << false;
+    QTest::newRow("c") << NET::Protocols(c) << false << false << false << false << true;
+
+    // all two combinations with t
+    QTest::newRow("t/d") << NET::Protocols(t | d) << true << true  << false << false << false;
+    QTest::newRow("t/p") << NET::Protocols(t | p) << true << false << true  << false << false;
+    QTest::newRow("t/s") << NET::Protocols(t | s) << true << false << false << true  << false;
+    QTest::newRow("t/c") << NET::Protocols(t | c) << true << false << false << false << true;
+    // all two combinations with d
+    QTest::newRow("d/p") << NET::Protocols(d | p) << false << true << true  << false << false;
+    QTest::newRow("d/s") << NET::Protocols(d | s) << false << true << false << true  << false;
+    QTest::newRow("d/c") << NET::Protocols(d | c) << false << true << false << false << true;
+    // all two combinations with p
+    QTest::newRow("p/s") << NET::Protocols(p | s) << false << false << true << true  << false;
+    QTest::newRow("p/c") << NET::Protocols(p | c) << false << false << true << false << true;
+    // and remaining two combination
+    QTest::newRow("s/c") << NET::Protocols(s | c) << false << false << false << true << true;
+
+    // all three combinations with t
+    QTest::newRow("t/d/p") << NET::Protocols(t | d | p) << true << true  << true  << false << false;
+    QTest::newRow("t/d/s") << NET::Protocols(t | d | s) << true << true  << false << true  << false;
+    QTest::newRow("t/d/c") << NET::Protocols(t | d | c) << true << true  << false << false << true;
+    QTest::newRow("t/p/s") << NET::Protocols(t | p | s) << true << false << true  << true  << false;
+    QTest::newRow("t/p/c") << NET::Protocols(t | p | c) << true << false << true  << false << true;
+    QTest::newRow("t/s/c") << NET::Protocols(t | s | c) << true << false << false << true  << true;
+    // all three combinations with d
+    QTest::newRow("d/p/s") << NET::Protocols(d | p | s) << false << true << true  << true  << false;
+    QTest::newRow("d/p/c") << NET::Protocols(d | p | c) << false << true << true  << false << true;
+    QTest::newRow("d/s/c") << NET::Protocols(d | s | c) << false << true << false << true  << true;
+    // and remaining
+    QTest::newRow("p/s/c") << NET::Protocols(p | s | c) << false << false << true << true << true;
+
+    QTest::newRow("t/d/p/s") << NET::Protocols(t | d | p | s) << true  << true  << true  << true  << false;
+    QTest::newRow("t/d/p/c") << NET::Protocols(t | d | p | c) << true  << true  << true  << false << true;
+    QTest::newRow("t/d/s/c") << NET::Protocols(t | d | s | c) << true  << true  << false << true  << true;
+    QTest::newRow("t/p/s/c") << NET::Protocols(t | p | s | c) << true  << false << true  << true  << true;
+    QTest::newRow("d/p/s/c") << NET::Protocols(d | p | s | c) << false << true  << true  << true  << true;
+
+    QTest::newRow("all") << NET::Protocols(t | d | p | s | c) << true << true << true << true << true;
+}
+
+void NetWinInfoTestClient::testProtocols()
+{
+    QVERIFY(connection());
+    ATOM(WM_PROTOCOLS)
+    KXUtils::Atom takeFocus(connection(), QByteArrayLiteral("WM_TAKE_FOCUS"));
+    KXUtils::Atom deleteWindow(connection(), QByteArrayLiteral("WM_DELETE_WINDOW"));
+    KXUtils::Atom ping(connection(), QByteArrayLiteral("_NET_WM_PING"));
+    KXUtils::Atom syncRequest(connection(), QByteArrayLiteral("_NET_WM_SYNC_REQUEST"));
+    KXUtils::Atom contextHelp(connection(), QByteArrayLiteral("_NET_WM_CONTEXT_HELP"));
+    INFO
+
+    QVERIFY(!info.supportsProtocol(NET::TakeFocusProtocol));
+    QVERIFY(!info.supportsProtocol(NET::DeleteWindowProtocol));
+    QVERIFY(!info.supportsProtocol(NET::PingProtocol));
+    QVERIFY(!info.supportsProtocol(NET::SyncRequestProtocol));
+    QVERIFY(!info.supportsProtocol(NET::ContextHelpProtocol));
+    QCOMPARE(info.protocols(), NET::Protocols(NET::NoProtocol));
+
+    QVector<xcb_atom_t> props;
+    QFETCH(NET::Protocols, protocols);
+    if (protocols.testFlag(NET::TakeFocusProtocol)) {
+        props << takeFocus;
+    }
+    if (protocols.testFlag(NET::DeleteWindowProtocol)) {
+        props << deleteWindow;
+    }
+    if (protocols.testFlag(NET::PingProtocol)) {
+        props << ping;
+    }
+    if (protocols.testFlag(NET::SyncRequestProtocol)) {
+        props << syncRequest;
+    }
+    if (protocols.testFlag(NET::ContextHelpProtocol)) {
+        props << contextHelp;
+    }
+
+    xcb_change_property(connection(), XCB_PROP_MODE_REPLACE, m_testWindow, atom, XCB_ATOM_ATOM, 32, props.size(), props.constData());
+    xcb_flush(connection());
+
+    // only updated after event
+    waitForPropertyChange(&info, atom, NET::Property(0), NET::WM2Protocols);
+    QCOMPARE(info.protocols(), protocols);
+    QTEST(info.supportsProtocol(NET::TakeFocusProtocol), "takeFocus");
+    QTEST(info.supportsProtocol(NET::DeleteWindowProtocol), "deleteWindow");
+    QTEST(info.supportsProtocol(NET::PingProtocol), "ping");
+    QTEST(info.supportsProtocol(NET::SyncRequestProtocol), "sync");
+    QTEST(info.supportsProtocol(NET::ContextHelpProtocol), "context");
+
+    xcb_delete_property(connection(), m_testWindow, atom);
+    xcb_flush(connection());
+    waitForPropertyChange(&info, atom, NET::Property(0), NET::WM2Protocols);
+    QVERIFY(!info.supportsProtocol(NET::TakeFocusProtocol));
+    QVERIFY(!info.supportsProtocol(NET::DeleteWindowProtocol));
+    QVERIFY(!info.supportsProtocol(NET::PingProtocol));
+    QVERIFY(!info.supportsProtocol(NET::SyncRequestProtocol));
+    QVERIFY(!info.supportsProtocol(NET::ContextHelpProtocol));
+    QCOMPARE(info.protocols(), NET::Protocols(NET::NoProtocol));
 }
 
 QTEST_MAIN(NetWinInfoTestClient)

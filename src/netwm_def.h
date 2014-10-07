@@ -675,6 +675,9 @@ public:
         @li WM2DesktopLayout _NET_DESKTOP_LAYOUT
         @li WM2FullPlacement _NET_WM_FULL_PLACEMENT
         @li WM2FullscreenMonitors _NET_WM_FULLSCREEN_MONITORS
+        @li WM2Urgency urgency hint in WM_HINTS (see ICCCM 4.1.2.4)
+        @li WM2Input input hint (input in WM_HINTS, see ICCCM 4.1.2.4)
+        @li WM2Protocols see NET::Protocol
     **/
     enum Property2 {
         WM2UserTime            = 1u << 0,
@@ -698,6 +701,9 @@ public:
         WM2Activities          = 1u << 18, // NOT STANDARD @since 4.6
         WM2BlockCompositing    = 1u << 19, // NOT STANDARD @since 4.7
         WM2KDEShadow           = 1u << 20, // NOT Standard @since 4.7
+        WM2Urgency             = 1u << 21, // @since 5.3
+        WM2Input               = 1u << 22, // @since 5.3
+        WM2Protocols           = 1u << 23, // @since 5.3
         WM2AllProperties       = ~0u
     };
     Q_DECLARE_FLAGS(Properties2, Property2)
@@ -746,6 +752,22 @@ public:
     };
 
     /**
+     * Protocols supported by the client.
+     * See ICCCM 4.1.2.7.
+     *
+     * @since 5.3
+     **/
+    enum Protocol {
+        NoProtocol = 0,
+        TakeFocusProtocol = 1 << 0, ///< WM_TAKE_FOCUS
+        DeleteWindowProtocol = 1 << 1, ///< WM_DELETE_WINDOW
+        PingProtocol = 1 << 2, ///< _NET_WM_PING from EWMH
+        SyncRequestProtocol = 1 << 3, ///< _NET_WM_SYNC_REQUEST from EWMH
+        ContextHelpProtocol = 1 << 4 ///< _NET_WM_CONTEXT_HELP, NON STANDARD!
+    };
+    Q_DECLARE_FLAGS(Protocols, Protocol)
+
+    /**
      Compares two X timestamps, taking into account wrapping and 64bit architectures.
      Return value is like with strcmp(), 0 for equal, -1 for time1 < time2, 1 for time1 > time2.
     */
@@ -763,5 +785,6 @@ Q_DECLARE_OPERATORS_FOR_FLAGS(NET::Properties2)
 Q_DECLARE_OPERATORS_FOR_FLAGS(NET::WindowTypes)
 Q_DECLARE_OPERATORS_FOR_FLAGS(NET::States)
 Q_DECLARE_OPERATORS_FOR_FLAGS(NET::Actions)
+Q_DECLARE_OPERATORS_FOR_FLAGS(NET::Protocols)
 
 #endif // netwm_def_h

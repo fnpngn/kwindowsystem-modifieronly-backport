@@ -165,6 +165,9 @@ struct NETWinInfoPrivate {
 
     const char *activities;
     bool blockCompositing;
+    bool urgency;
+    bool input;
+    NET::Protocols protocols;
 
     int ref;
 };

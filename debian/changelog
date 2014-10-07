@@ -1,3 +1,14 @@
+kwindowsystem (5.3.0-0ubuntu1) utopic; urgency=medium
+
+  [ Harald Sitter ]
+  * Do not build depend on qt5-default, we only need qtbase5-dev
+
+  [ Jonathan Riddell ]
+  * 5.3 snapshot needed by kwin
+  * New upstream release
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Tue, 07 Oct 2014 11:15:07 +0100
+
 kwindowsystem (5.2.0-0ubuntu1) utopic; urgency=medium
 
   [ Jonathan Riddell ]
