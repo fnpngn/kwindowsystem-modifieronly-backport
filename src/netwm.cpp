@@ -118,7 +118,11 @@ static xcb_atom_t kde_net_wm_shadow                 = 0;
 
 // application protocols
 static xcb_atom_t wm_protocols = 0;
+static xcb_atom_t wm_take_focus = 0;
+static xcb_atom_t wm_delete_window = 0;
 static xcb_atom_t net_wm_ping = 0;
+static xcb_atom_t net_wm_sync_request = 0;
+static xcb_atom_t net_wm_context_help = 0;
 
 // application window types
 static xcb_atom_t net_wm_window_type_normal  = 0;
@@ -382,7 +386,7 @@ static QByteArray get_atom_name(xcb_connection_t *c, xcb_atom_t atom)
 }
 #endif
 
-static const int netAtomCount = 88;
+static const int netAtomCount = 91;
 
 static void create_netwm_atoms(xcb_connection_t *c)
 {
@@ -481,6 +485,10 @@ static void create_netwm_atoms(xcb_connection_t *c)
 
         { "WM_STATE",                             &xa_wm_state                      },
         { "WM_PROTOCOLS",                         &wm_protocols                     },
+        { "WM_TAKE_FOCUS",                        &wm_take_focus                    },
+        { "WM_DELETE_WINDOW",                     &wm_delete_window                 },
+        { "_NET_WM_SYNC_REQUEST",                 &net_wm_sync_request              },
+        { "_NET_WM_CONTEXT_HELP",                 &net_wm_context_help              },
 
         { "_NET_WM_FULL_PLACEMENT",               &net_wm_full_placement            },
         { "_KDE_NET_WM_ACTIVITIES",               &kde_net_wm_activities            },
@@ -2763,6 +2771,9 @@ NETWinInfo::NETWinInfo(xcb_connection_t *connection, xcb_window_t window, xcb_wi
     p->icon_sizes = NULL;
     p->activities = (char *) 0;
     p->blockCompositing = false;
+    p->urgency = false;
+    p->input = true;
+    p->protocols = NET::NoProtocol;
 
     // p->strut.left = p->strut.right = p->strut.top = p->strut.bottom = 0;
     // p->frame_strut.left = p->frame_strut.right = p->frame_strut.top =
@@ -2822,6 +2833,9 @@ NETWinInfo::NETWinInfo(xcb_connection_t *connection, xcb_window_t window, xcb_wi
     p->icon_sizes = NULL;
     p->activities = (char *) 0;
     p->blockCompositing = false;
+    p->urgency = false;
+    p->input = true;
+    p->protocols = NET::NoProtocol;
 
     // p->strut.left = p->strut.right = p->strut.top = p->strut.bottom = 0;
     // p->frame_strut.left = p->frame_strut.right = p->frame_strut.top =
@@ -3917,6 +3931,8 @@ void NETWinInfo::event(xcb_generic_event_t *event, NET::Properties *properties, 
             dirty2 |= WM2UserTime;
         } else if (pe->atom == XCB_ATOM_WM_HINTS) {
             dirty2 |= WM2GroupLeader;
+            dirty2 |= WM2Urgency;
+            dirty2 |= WM2Input;
         } else if (pe->atom == XCB_ATOM_WM_TRANSIENT_FOR) {
             dirty2 |= WM2TransientFor;
         } else if (pe->atom == XCB_ATOM_WM_CLASS) {
@@ -3931,6 +3947,8 @@ void NETWinInfo::event(xcb_generic_event_t *event, NET::Properties *properties, 
             dirty2 |= WM2BlockCompositing;
         } else if (pe->atom == kde_net_wm_shadow) {
             dirty2 |= WM2KDEShadow;
+        } else if (pe->atom == wm_protocols) {
+            dirty2 |= WM2Protocols;
         }
 
         do_update = true;
@@ -4093,7 +4111,7 @@ void NETWinInfo::update(NET::Properties dirtyProperties, NET::Properties2 dirtyP
         cookies[c++] = xcb_get_property(p->conn, false, p->window, XCB_ATOM_WM_TRANSIENT_FOR, XCB_ATOM_WINDOW, 0, 1);
     }
 
-    if (dirty2 & WM2GroupLeader) {
+    if (dirty2 & (WM2GroupLeader | WM2Urgency | WM2Input)) {
         cookies[c++] = xcb_get_property(p->conn, false, p->window, XCB_ATOM_WM_HINTS, XCB_ATOM_WM_HINTS, 0, 9);
     }
 
@@ -4107,6 +4125,10 @@ void NETWinInfo::update(NET::Properties dirtyProperties, NET::Properties2 dirtyP
 
     if (dirty2 & WM2ClientMachine) {
         cookies[c++] = xcb_get_property(p->conn, false, p->window, XCB_ATOM_WM_CLIENT_MACHINE, XCB_ATOM_STRING, 0, MAX_PROP_SIZE);
+    }
+
+    if (dirty2 & WM2Protocols) {
+        cookies[c++] = xcb_get_property(p->conn, false, p->window, wm_protocols, XCB_ATOM_ATOM, 0, 2048);
     }
 
     c = 0;
@@ -4547,15 +4569,19 @@ void NETWinInfo::update(NET::Properties dirtyProperties, NET::Properties2 dirtyP
         p->transient_for = get_value_reply<xcb_window_t>(p->conn, cookies[c++], XCB_ATOM_WINDOW, 0);
     }
 
-    if (dirty2 & WM2GroupLeader) {
+    if (dirty2 & (WM2GroupLeader | WM2Urgency | WM2Input)) {
         xcb_get_property_reply_t *reply = xcb_get_property_reply(p->conn, cookies[c++], 0);
 
         if (reply && reply->format == 32 && reply->value_len == 9 && reply->type == XCB_ATOM_WM_HINTS) {
             kde_wm_hints *hints = reinterpret_cast<kde_wm_hints *>(xcb_get_property_value(reply));
 
+            if (hints->flags & (1 << 0)/*Input*/) {
+                p->input = hints->input;
+            }
             if (hints->flags & (1 << 6)/*WindowGroupHint*/) {
                 p->window_group = hints->window_group;
             }
+            p->urgency = (hints->flags & (1 << 8)/*UrgencyHint*/);
         }
 
         if (reply) {
@@ -4593,6 +4619,24 @@ void NETWinInfo::update(NET::Properties dirtyProperties, NET::Properties2 dirtyP
         const QByteArray value = get_string_reply(p->conn, cookies[c++], XCB_ATOM_STRING);
         if (value.length() > 0) {
             p->client_machine = nstrndup(value.constData(), value.length());
+        }
+    }
+
+    if (dirty2 & WM2Protocols) {
+        const QVector<xcb_atom_t> protocols = get_array_reply<xcb_atom_t>(p->conn, cookies[c++], XCB_ATOM_ATOM);
+        p->protocols = NET::NoProtocol;
+        for (auto it = protocols.begin(); it != protocols.end(); ++it) {
+            if ((*it) == wm_take_focus) {
+                p->protocols |= TakeFocusProtocol;
+            } else if ((*it) == wm_delete_window) {
+                p->protocols |= DeleteWindowProtocol;
+            } else if ((*it) == net_wm_ping) {
+                p->protocols |= PingProtocol;
+            } else if ((*it) == net_wm_sync_request) {
+                p->protocols |= SyncRequestProtocol;
+            } else if ((*it) == net_wm_context_help) {
+                p->protocols |= ContextHelpProtocol;
+            }
         }
     }
 }
@@ -4740,6 +4784,16 @@ xcb_window_t NETWinInfo::groupLeader() const
     return p->window_group;
 }
 
+bool NETWinInfo::urgency() const
+{
+    return p->urgency;
+}
+
+bool NETWinInfo::input() const
+{
+    return p->input;
+}
+
 const char *NETWinInfo::windowClassClass() const
 {
     return p->class_class;
@@ -4771,7 +4825,7 @@ void NETWinInfo::setActivities(const char *activities)
 
     if (activities == (char *) NULL || activities[0] == '\0') {
         // on all activities
-        static const char *nulluuid = KDE_ALL_ACTIVITIES_UUID;
+        static const char nulluuid[] = KDE_ALL_ACTIVITIES_UUID;
 
         p->activities = nstrdup(nulluuid);
 
@@ -4823,6 +4877,16 @@ NET::Properties2 NETWinInfo::passedProperties2() const
 NET::MappingState NETWinInfo::mappingState() const
 {
     return p->mapping_state;
+}
+
+NET::Protocols NETWinInfo::protocols() const
+{
+    return p->protocols;
+}
+
+bool NETWinInfo::supportsProtocol(NET::Protocol protocol) const
+{
+    return p->protocols.testFlag(protocol);
 }
 
 void NETRootInfo::virtual_hook(int, void *)

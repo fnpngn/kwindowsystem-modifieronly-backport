@@ -1373,6 +1373,24 @@ public:
     xcb_window_t groupLeader() const;
 
     /**
+     * Returns whether the UrgencyHint is set in the WM_HINTS.flags.
+     * See ICCCM 4.1.2.4.
+     *
+     * @since 5.3
+     **/
+    bool urgency() const;
+
+    /**
+     * Returns whether the Input flag is set in WM_HINTS.
+     * See ICCCM 4.1.2.4 and 4.1.7.
+     *
+     * The default value is @c true in case the Client is mapped without a WM_HINTS property.
+     *
+     * @since 5.3
+     **/
+    bool input() const;
+
+    /**
      * Returns the class component of the window class for the window
      * (i.e. WM_CLASS property).
      */
@@ -1499,6 +1517,19 @@ public:
        @return the properties
     **/
     NET::Properties event(xcb_generic_event_t *event);
+
+    /**
+     * @returns The window manager protocols this Client supports.
+     * @since 5.3
+     **/
+    NET::Protocols protocols() const;
+
+    /**
+     * @returns @c true if the Client supports the @p protocol.
+     * @param protocol The window manager protocol to test for
+     * @since 5.3
+     **/
+    bool supportsProtocol(NET::Protocol protocol) const;
 
     /**
        Sentinel value to indicate that the client wishes to be visible on

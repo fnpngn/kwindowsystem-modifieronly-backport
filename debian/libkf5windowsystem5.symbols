@@ -1,4 +1,4 @@
-# SymbolsHelper-Confirmed: 5.2.0 amd64 armhf i386
+# SymbolsHelper-Confirmed: 5.2.0+git20140930 i386
 libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN10KKeyServer10xEventToQtEP7_XEventPi@Base 4.96.0
  _ZN10KKeyServer11keyQtToModXEiPj@Base 4.96.0
@@ -379,6 +379,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZNK10NETWinInfo15visibleIconNameEv@Base 4.96.0
  _ZNK10NETWinInfo15windowClassNameEv@Base 4.96.0
  _ZNK10NETWinInfo16passedPropertiesEv@Base 4.96.0
+ _ZNK10NETWinInfo16supportsProtocolEN3NET8ProtocolE@Base 5.2.0+git20140930
  _ZNK10NETWinInfo16windowClassClassEv@Base 4.96.0
  _ZNK10NETWinInfo17passedProperties2Ev@Base 4.98.0
  _ZNK10NETWinInfo18fullscreenMonitorsEv@Base 4.96.0
@@ -386,13 +387,16 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZNK10NETWinInfo3pidEv@Base 4.96.0
  _ZNK10NETWinInfo4iconEii@Base 4.96.0
  _ZNK10NETWinInfo4nameEv@Base 4.96.0
+ _ZNK10NETWinInfo5inputEv@Base 5.2.0+git20140930
  _ZNK10NETWinInfo5stateEv@Base 4.96.0
  _ZNK10NETWinInfo5strutEv@Base 4.96.0
  _ZNK10NETWinInfo7desktopEb@Base 4.96.0
  _ZNK10NETWinInfo7opacityEv@Base 4.96.0
+ _ZNK10NETWinInfo7urgencyEv@Base 5.2.0+git20140930
  _ZNK10NETWinInfo8iconNameEv@Base 4.96.0
  _ZNK10NETWinInfo8userTimeEv@Base 4.96.0
  _ZNK10NETWinInfo9iconSizesEv@Base 4.96.0
+ _ZNK10NETWinInfo9protocolsEv@Base 5.2.0+git20140930
  _ZNK10NETWinInfo9startupIdEv@Base 4.96.0
  _ZNK11KWindowInfo10activitiesEv@Base 5.0.0
  _ZNK11KWindowInfo10windowRoleEv@Base 4.96.0
