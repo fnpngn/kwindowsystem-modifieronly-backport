@@ -8,7 +8,7 @@
 # Luciano Montanaro <mikelima@cirulla.net>, 2007.
 # Dario Panico <Dareus_Persarumrex@fastwebnet.it>, 2008.
 # Pino Toscano <toscano.pino@tiscali.it>, 2008.
-# Federico Zenith <federico.zenith@member.fsf.org>, 2008, 2012, 2013.
+# Federico Zenith <federico.zenith@member.fsf.org>, 2008, 2012, 2013, 2014.
 # Innocenzo Ventre <innocenzo.ventre@gmail.com>, 2012.
 # Vincenzo Reale <smart2128@baslug.org>, 2014.
 msgid ""
@@ -25,6 +25,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Qt-Contexts: true\n"
 
 #: kwindowsystem_mac.cpp:580 kwindowsystem_win.cpp:632
 #: kwindowsystem_x11.cpp:959
