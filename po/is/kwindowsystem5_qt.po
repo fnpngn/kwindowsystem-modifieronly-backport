@@ -21,12 +21,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: Lokalize 1.2\n"
 "Plural-Forms: Plural-Forms: nplurals=2; plural=n != 1;\n"
-"\n"
-"\n"
-"\n"
-"\n"
-"\n"
-"\n"
+"X-Qt-Contexts: true\n"
 
 #: kwindowsystem_mac.cpp:580 kwindowsystem_win.cpp:632
 #: kwindowsystem_x11.cpp:959

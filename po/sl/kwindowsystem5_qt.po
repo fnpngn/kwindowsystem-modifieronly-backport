@@ -27,6 +27,7 @@ msgstr ""
 "X-Generator: Lokalize 1.5\n"
 "Plural-Forms: nplurals=4; plural=(n%100==1 ? 1 : n%100==2 ? 2 : n%100==3 || n"
 "%100==4 ? 3 : 0);\n"
+"X-Qt-Contexts: true\n"
 
 #: kwindowsystem_mac.cpp:580 kwindowsystem_win.cpp:632
 #: kwindowsystem_x11.cpp:959

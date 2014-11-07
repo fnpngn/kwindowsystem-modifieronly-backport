@@ -1,3 +1,9 @@
+kwindowsystem (5.4.0-0ubuntu1) vivid; urgency=medium
+
+  * New upstream release
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Fri, 07 Nov 2014 15:05:44 +0100
+
 kwindowsystem (5.3.0-0ubuntu2) utopic; urgency=medium
 
   * Add upstream_fix-incorrect-count-of-netwm-atoms.diff fix i386 apps

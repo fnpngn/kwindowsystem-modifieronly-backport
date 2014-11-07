@@ -12,10 +12,10 @@
 # Wang Jian <lark@linux.net.cn>, 2002.
 # Anthony Fok <anthony@thizlinux.com>, 2002.
 # Yuan-Chen Cheng <ycheng@slat.org>, 2002.
-#   Wang Jian <lark@linux.ustc.edu.cn>, 1998.
-#   Funda Wang <fundawang@en2china.com>, 2002.
-#   Sarah Smith <sarahs@redhat.com>, 2002.
-#   Xiong Jiang <jxiong@offtopic.org>, 2002.
+# Wang Jian <lark@linux.ustc.edu.cn>, 1998.
+# Funda Wang <fundawang@en2china.com>, 2002.
+# Sarah Smith <sarahs@redhat.com>, 2002.
+# Xiong Jiang <jxiong@offtopic.org>, 2002.
 # Chia-Lin, Kao <acelan@linux.org.tw>, 2004.
 # Stanley Wong <stanley18fan0k@yahoo.com.hk>, 2005.
 # Abel Cheung <abel@oaka.org>, 2005.
@@ -34,6 +34,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: KBabel 1.3\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Qt-Contexts: true\n"
 
 #: kwindowsystem_mac.cpp:580 kwindowsystem_win.cpp:632
 #: kwindowsystem_x11.cpp:959
