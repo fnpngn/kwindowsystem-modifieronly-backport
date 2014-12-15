@@ -1,4 +1,4 @@
-# SymbolsHelper-Confirmed: 5.2.0+git20140930 i386
+# SymbolsHelper-Confirmed: 5.4.0+git20141128.0009+15.04 amd64 i386
 libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN10KKeyServer10xEventToQtEP7_XEventPi@Base 4.96.0
  _ZN10KKeyServer11keyQtToModXEiPj@Base 4.96.0
@@ -154,6 +154,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN12KStartupInfo18createNewStartupIdEv@Base 4.96.0
  (subst)_ZN12KStartupInfo18setWindowStartupIdE{quintptr}RK10QByteArray@Base 4.96.0
  _ZN12KStartupInfo19currentStartupIdEnvEv@Base 4.96.0
+ _ZN12KStartupInfo30createNewStartupIdForTimestampEj@Base 5.4.0+git20141128.0009+15.04
  _ZN12KStartupInfo7Private11find_wclassERK10QByteArrayS3_P14KStartupInfoIdP16KStartupInfoData@Base 4.96.0
  _ZN12KStartupInfo7Private11got_messageERK7QString@Base 4.96.0
  (subst)_ZN12KStartupInfo7Private12window_addedE{quintptr}@Base 4.96.0
@@ -383,6 +384,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZNK10NETWinInfo16windowClassClassEv@Base 4.96.0
  _ZNK10NETWinInfo17passedProperties2Ev@Base 4.98.0
  _ZNK10NETWinInfo18fullscreenMonitorsEv@Base 4.96.0
+ _ZNK10NETWinInfo19initialMappingStateEv@Base 5.4.0+git20141125.0007+15.04
  _ZNK10NETWinInfo21isBlockingCompositingEv@Base 4.96.0
  _ZNK10NETWinInfo3pidEv@Base 4.96.0
  _ZNK10NETWinInfo4iconEii@Base 4.96.0

@@ -12,7 +12,7 @@ msgstr ""
 "Project-Id-Version: kdelibs4\n"
 "Report-Msgid-Bugs-To: http://bugs.kde.org\n"
 "POT-Creation-Date: 2014-03-23 01:50+0000\n"
-"PO-Revision-Date: 2014-03-16 20:46+0200\n"
+"PO-Revision-Date: 2014-11-11 00:33+0200\n"
 "Last-Translator: Liudas Ališauskas <liudas@aksioma.lt>\n"
 "Language-Team: Lithuanian <kde-i18n-lt@kde.org>\n"
 "Language: lt\n"
@@ -26,8 +26,7 @@ msgstr ""
 
 #: kwindowsystem_mac.cpp:580 kwindowsystem_win.cpp:632
 #: kwindowsystem_x11.cpp:959
-#, fuzzy, qt-format
-#| msgid "Desktop %1"
+#, qt-format
 msgctxt "KWindowSystem|"
 msgid "Desktop %1"
 msgstr "Darbastalis %1"
