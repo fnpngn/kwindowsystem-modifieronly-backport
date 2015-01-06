@@ -208,7 +208,7 @@ void NetRootInfoTestWM::testSupported()
         QVERIFY(rootInfo.isSupported(NET::Property2(1 << i)));
         count++;
     }
-    for (int i = 0; i < 16; ++i) {
+    for (int i = 0; i < 17; ++i) {
         QVERIFY(rootInfo.isSupported(NET::WindowTypeMask(1 << i)));
         count++;
     }
@@ -236,7 +236,7 @@ void NetRootInfoTestWM::testSupported()
 
     // get the cookies of the things to check
     xcb_get_property_cookie_t supportedCookie = xcb_get_property_unchecked(connection(), false, rootInfo.rootWindow(),
-            supported, XCB_ATOM_ATOM, 0, 100);
+            supported, XCB_ATOM_ATOM, 0, 101);
     xcb_get_property_cookie_t wmCheckRootCookie = xcb_get_property_unchecked(connection(), false, rootInfo.rootWindow(),
             wmCheck, XCB_ATOM_WINDOW, 0, 1);
     xcb_get_property_cookie_t wmCheckSupportWinCookie = xcb_get_property_unchecked(connection(), false, m_supportWindow,
@@ -273,23 +273,26 @@ void NetRootInfoTestWM::testSupported()
     rootInfo.setSupported(NET::ActionChangeDesktop, false);
     rootInfo.setSupported(NET::FullScreen, false);
     QVERIFY(rootInfo.isSupported(NET::ToolbarMask));
+    QVERIFY(rootInfo.isSupported(NET::OnScreenDisplayMask));
     QVERIFY(rootInfo.isSupported(NET::DockMask));
     rootInfo.setSupported(NET::ToolbarMask, false);
+    rootInfo.setSupported(NET::OnScreenDisplayMask, false);
 
     QVERIFY(!rootInfo.isSupported(NET::WMFrameExtents));
     QVERIFY(!rootInfo.isSupported(NET::WM2KDETemporaryRules));
     QVERIFY(!rootInfo.isSupported(NET::ActionChangeDesktop));
     QVERIFY(!rootInfo.isSupported(NET::FullScreen));
     QVERIFY(!rootInfo.isSupported(NET::ToolbarMask));
+    QVERIFY(!rootInfo.isSupported(NET::OnScreenDisplayMask));
     QVERIFY(rootInfo.isSupported(NET::DockMask));
 
     // lets get supported again
     supportedCookie = xcb_get_property_unchecked(connection(), false, rootInfo.rootWindow(),
-                      supported, XCB_ATOM_ATOM, 0, 89);
+                      supported, XCB_ATOM_ATOM, 0, 90);
     supportedReply.reset(xcb_get_property_reply(connection(), supportedCookie, Q_NULLPTR));
     QVERIFY(!supportedReply.isNull());
     QCOMPARE(supportedReply->format, uint8_t(32));
-    QCOMPARE(supportedReply->value_len, uint32_t(count - 6));
+    QCOMPARE(supportedReply->value_len, uint32_t(count - 7));
 
     for (int i = 0; i < 5; ++i) {
         // we should have got some events
@@ -301,11 +304,11 @@ void NetRootInfoTestWM::testSupported()
     rootInfo.setSupported(NET::WM2BlockCompositing, false);
     // lets get supported again
     supportedCookie = xcb_get_property_unchecked(connection(), false, rootInfo.rootWindow(),
-                      supported, XCB_ATOM_ATOM, 0, 89);
+                      supported, XCB_ATOM_ATOM, 0, 90);
     supportedReply.reset(xcb_get_property_reply(connection(), supportedCookie, Q_NULLPTR));
     QVERIFY(!supportedReply.isNull());
     QCOMPARE(supportedReply->format, uint8_t(32));
-    QCOMPARE(supportedReply->value_len, uint32_t(count - 7));
+    QCOMPARE(supportedReply->value_len, uint32_t(count - 8));
     NETRootInfo clientInfo(connection(), NET::Supported | NET::SupportingWMCheck);
     waitForPropertyChange(&clientInfo, supported, NET::Supported);
     waitForPropertyChange(&clientInfo, wmCheck, NET::SupportingWMCheck);
