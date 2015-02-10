@@ -650,11 +650,18 @@ WId KWindowSystemPrivateX11::groupLeader(WId win)
 
 QPixmap KWindowSystemPrivateX11::icon(WId win, int width, int height, bool scale, int flags)
 {
-    KXErrorHandler handler; // ignore badwindow
+    NETWinInfo info(QX11Info::connection(), win, QX11Info::appRootWindow(), NET::WMIcon, NET::WM2WindowClass | NET::WM2IconPixmap);
+    return icon(width, height, scale, flags, &info);
+}
+
+QPixmap KWindowSystemPrivateX11::icon(int width, int height, bool scale, int flags, NETWinInfo *info)
+{
     QPixmap result;
+    if (!info) {
+        return result;
+    }
     if (flags & KWindowSystem::NETWM) {
-        NETWinInfo info(QX11Info::connection(), win, QX11Info::appRootWindow(), NET::WMIcon, 0);
-        NETIcon ni = info.icon(width, height);
+        NETIcon ni = info->icon(width, height);
         if (ni.data && ni.size.width > 0 && ni.size.height > 0) {
             QImage img((uchar *) ni.data, (int) ni.size.width, (int) ni.size.height, QImage::Format_ARGB32);
             if (scale && width > 0 && height > 0 && img.size() != QSize(width, height) && !img.isNull()) {
@@ -668,21 +675,10 @@ QPixmap KWindowSystemPrivateX11::icon(WId win, int width, int height, bool scale
     }
 
     if (flags & KWindowSystem::WMHints) {
-        Pixmap p = None;
-        Pixmap p_mask = None;
+        xcb_pixmap_t p = info->icccmIconPixmap();
+        xcb_pixmap_t p_mask = info->icccmIconPixmapMask();
 
-        XWMHints *hints = XGetWMHints(QX11Info::display(), win);
-        if (hints && (hints->flags & IconPixmapHint)) {
-            p = hints->icon_pixmap;
-        }
-        if (hints && (hints->flags & IconMaskHint)) {
-            p_mask = hints->icon_mask;
-        }
-        if (hints) {
-            XFree((char *)hints);
-        }
-
-        if (p != None) {
+        if (p != XCB_PIXMAP_NONE) {
             QPixmap pm = KXUtils::createPixmapFromHandle(p, p_mask);
             if (scale && width > 0 && height > 0 && !pm.isNull()
                     && (pm.width() != width || pm.height() != height)) {
@@ -709,21 +705,12 @@ QPixmap KWindowSystemPrivateX11::icon(WId win, int width, int height, bool scale
         // Try to load the icon from the classhint if the app didn't specify
         // its own:
         if (result.isNull()) {
-
-            XClassHint  hint;
-            if (XGetClassHint(QX11Info::display(), win, &hint)) {
-                QString className = QLatin1String(hint.res_class);
-
-                const QIcon icon = QIcon::fromTheme(className.toLower());
-                const QPixmap pm = icon.isNull() ? QPixmap() : icon.pixmap(iconWidth, iconWidth);
-                if (scale && !pm.isNull()) {
-                    result = QPixmap::fromImage(pm.toImage().scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
-                } else {
-                    result = pm;
-                }
-
-                XFree(hint.res_name);
-                XFree(hint.res_class);
+            const QIcon icon = QIcon::fromTheme(QString::fromUtf8(info->windowClassClass()).toLower());
+            const QPixmap pm = icon.isNull() ? QPixmap() : icon.pixmap(iconWidth, iconWidth);
+            if (scale && !pm.isNull()) {
+                result = QPixmap::fromImage(pm.toImage().scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
+            } else {
+                result = pm;
             }
         }
     }
@@ -980,6 +967,12 @@ bool KWindowSystemPrivateX11::showingDesktop()
 {
     init(INFO_BASIC);
     return s_d_func()->showingDesktop();
+}
+
+void KWindowSystemPrivateX11::setShowingDesktop(bool showing)
+{
+    NETRootInfo info(QX11Info::connection(), 0, NET::WM2ShowingDesktop);
+    info.setShowingDesktop(showing);
 }
 
 void KWindowSystemPrivateX11::setUserTime(WId win, long time)

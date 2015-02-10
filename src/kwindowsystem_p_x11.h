@@ -48,6 +48,7 @@ public:
     WId groupLeader(WId window) Q_DECL_OVERRIDE;
 #endif
     QPixmap icon(WId win, int width, int height, bool scale, int flags) Q_DECL_OVERRIDE;
+    QPixmap icon(int width, int height, bool scale, int flags, NETWinInfo *info);
     void setIcons(WId win, const QPixmap &icon, const QPixmap &miniIcon) Q_DECL_OVERRIDE;
     void setType(WId win, NET::WindowType windowType) Q_DECL_OVERRIDE;
     void setState(WId win, NET::States state) Q_DECL_OVERRIDE;
@@ -62,6 +63,7 @@ public:
     QString desktopName(int desktop) Q_DECL_OVERRIDE;
     void setDesktopName(int desktop, const QString &name) Q_DECL_OVERRIDE;
     bool showingDesktop() Q_DECL_OVERRIDE;
+    void setShowingDesktop(bool showing) Q_DECL_OVERRIDE;
     void setUserTime(WId win, long time) Q_DECL_OVERRIDE;
     void setExtendedStrut(WId win, int left_width, int left_start, int left_end,
                           int right_width, int right_start, int right_end, int top_width, int top_start, int top_end,
