@@ -41,6 +41,7 @@ private Q_SLOTS:
     void testNumberOfDesktopsChanged();
     void testDesktopNamesChanged();
     void testShowingDesktopChanged();
+    void testSetShowingDesktop();
     void testWorkAreaChanged();
     void testWindowTitleChanged();
     void testMinimizeWindow();
@@ -185,10 +186,6 @@ void KWindowSystemX11Test::testDesktopNamesChanged()
 
 void KWindowSystemX11Test::testShowingDesktopChanged()
 {
-    NETRootInfo rootInfo(QX11Info::connection(), NET::Supported | NET::SupportingWMCheck);
-    if (qstrcmp(rootInfo.wmName(), "Openbox") == 0) {
-        QSKIP("setting name test fails on openbox");
-    }
     QX11Info::setAppTime(QX11Info::getTimestamp());
     const bool showingDesktop = KWindowSystem::showingDesktop();
 
@@ -214,6 +211,33 @@ void KWindowSystemX11Test::testShowingDesktopChanged()
     QCOMPARE(spy.count(), 1);
     QCOMPARE(spy.first().at(0).toBool(), showingDesktop);
     QCOMPARE(KWindowSystem::showingDesktop(), showingDesktop);
+}
+
+void KWindowSystemX11Test::testSetShowingDesktop()
+{
+    QSignalSpy spy(KWindowSystem::self(), SIGNAL(showingDesktopChanged(bool)));
+    const bool showingDesktop = KWindowSystem::showingDesktop();
+
+    // setting the same state shouldn't change it
+    QX11Info::setAppTime(QX11Info::getTimestamp());
+    KWindowSystem::setShowingDesktop(showingDesktop);
+    QCOMPARE(spy.wait(), false); // spy.wait() waits for 5s
+    QCOMPARE(KWindowSystem::showingDesktop(), showingDesktop);
+    spy.clear();
+
+    // set opposite state
+    QX11Info::setAppTime(QX11Info::getTimestamp());
+    KWindowSystem::setShowingDesktop(!showingDesktop);
+    QVERIFY(spy.wait());
+    QCOMPARE(KWindowSystem::showingDesktop(), !showingDesktop);
+    spy.clear();
+
+    // setting back to clean state
+    QX11Info::setAppTime(QX11Info::getTimestamp());
+    KWindowSystem::setShowingDesktop(showingDesktop);
+    QVERIFY(spy.wait());
+    QCOMPARE(KWindowSystem::showingDesktop(), showingDesktop);
+    spy.clear();
 }
 
 void KWindowSystemX11Test::testWorkAreaChanged()

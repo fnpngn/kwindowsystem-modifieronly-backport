@@ -1,4 +1,4 @@
-# SymbolsHelper-Confirmed: 5.4.0+git20141128.0009+15.04 amd64 i386
+# SymbolsHelper-Confirmed: 5.6.0+git20150202.1356+15.04 amd64 i386
 libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN10KKeyServer10xEventToQtEP7_XEventPi@Base 4.96.0
  _ZN10KKeyServer11keyQtToModXEiPj@Base 4.96.0
@@ -225,6 +225,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN13KWindowSystem17desktopToViewportEib@Base 4.96.0
  (subst)_ZN13KWindowSystem17forceActiveWindowE{quintptr}l@Base 4.96.0
  _ZN13KWindowSystem17setCurrentDesktopEi@Base 4.96.0
+ _ZN13KWindowSystem17setShowingDesktopEb@Base 5.6.0+git20150112.0023+15.04
  _ZN13KWindowSystem17viewportToDesktopERK6QPoint@Base 4.96.0
  _ZN13KWindowSystem18compositingChangedEb@Base 4.96.0
  (subst)_ZN13KWindowSystem19activeWindowChangedE{quintptr}@Base 4.96.0
@@ -241,6 +242,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN13KWindowSystem36allowExternalProcessWindowActivationEi@Base 4.96.0
  (subst)_ZN13KWindowSystem4iconE{quintptr}iib@Base 4.96.0
  (subst)_ZN13KWindowSystem4iconE{quintptr}iibi@Base 4.96.0
+ (subst)_ZN13KWindowSystem4iconE{quintptr}iibiP10NETWinInfo@Base 5.6.0+git20150122.0006+15.04
  _ZN13KWindowSystem4selfEv@Base 4.96.0
  _ZN13KWindowSystem6d_funcEv@Base 4.96.0
  (subst)_ZN13KWindowSystem6hasWIdE{quintptr}@Base 4.96.0
@@ -371,12 +373,14 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZNK10NETWinInfo12iconGeometryEv@Base 4.96.0
  _ZNK10NETWinInfo12iconInternalER9NETRArrayI7NETIconEiii@Base 4.96.0
  _ZNK10NETWinInfo12mappingStateEv@Base 4.96.0
+ _ZNK10NETWinInfo12opaqueRegionEv@Base 5.6.0+git20150202.1356+15.04
  _ZNK10NETWinInfo12transientForEv@Base 4.96.0
  _ZNK10NETWinInfo13clientMachineEv@Base 4.96.0
  _ZNK10NETWinInfo13extendedStrutEv@Base 4.96.0
  _ZNK10NETWinInfo13hasNETSupportEv@Base 4.96.0
  _ZNK10NETWinInfo13hasWindowTypeEv@Base 4.96.0
  _ZNK10NETWinInfo14allowedActionsEv@Base 4.96.0
+ _ZNK10NETWinInfo15icccmIconPixmapEv@Base 5.6.0+git20150122.0006+15.04
  _ZNK10NETWinInfo15visibleIconNameEv@Base 4.96.0
  _ZNK10NETWinInfo15windowClassNameEv@Base 4.96.0
  _ZNK10NETWinInfo16passedPropertiesEv@Base 4.96.0
@@ -384,6 +388,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZNK10NETWinInfo16windowClassClassEv@Base 4.96.0
  _ZNK10NETWinInfo17passedProperties2Ev@Base 4.98.0
  _ZNK10NETWinInfo18fullscreenMonitorsEv@Base 4.96.0
+ _ZNK10NETWinInfo19icccmIconPixmapMaskEv@Base 5.6.0+git20150122.0006+15.04
  _ZNK10NETWinInfo19initialMappingStateEv@Base 5.4.0+git20141125.0007+15.04
  _ZNK10NETWinInfo21isBlockingCompositingEv@Base 4.96.0
  _ZNK10NETWinInfo3pidEv@Base 4.96.0

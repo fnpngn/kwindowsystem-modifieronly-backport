@@ -1402,6 +1402,33 @@ public:
     MappingState initialMappingState() const;
 
     /**
+     * Returns the icon pixmap as set in WM_HINTS.
+     * See ICCCM 4.1.2.4.
+     *
+     * The default value is @c XCB_PIXMAP_NONE.
+     *
+     * Using the ICCCM variant for the icon is deprecated and only
+     * offers a limited functionality compared to @link {icon}.
+     * Only use this variant as a fallback.
+     *
+     * @see icccmIconPixmapMask
+     * @see icon
+     * @since 5.7
+     **/
+    xcb_pixmap_t icccmIconPixmap() const;
+
+    /**
+     * Returns the mask for the icon pixmap as set in WM_HINTS.
+     * See ICCCM 4.1.2.4.
+     *
+     * The default value is @c XCB_PIXMAP_NONE.
+     *
+     * @see icccmIconPixmap
+     * @since 5.7
+     **/
+    xcb_pixmap_t icccmIconPixmapMask() const;
+
+    /**
      * Returns the class component of the window class for the window
      * (i.e. WM_CLASS property).
      */
@@ -1541,6 +1568,12 @@ public:
      * @since 5.3
      **/
     bool supportsProtocol(NET::Protocol protocol) const;
+
+    /**
+     * @returns The opaque region as specified by the Client.
+     * @since 5.7
+     **/
+    std::vector<NETRect> opaqueRegion() const;
 
     /**
        Sentinel value to indicate that the client wishes to be visible on

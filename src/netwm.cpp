@@ -105,6 +105,7 @@ static xcb_atom_t net_frame_extents        = 0;
 static xcb_atom_t net_wm_window_opacity    = 0;
 static xcb_atom_t kde_net_wm_frame_strut   = 0;
 static xcb_atom_t net_wm_fullscreen_monitors = 0;
+static xcb_atom_t net_wm_opaque_region     = 0;
 
 // KDE extensions
 static xcb_atom_t kde_net_wm_window_type_override   = 0;
@@ -387,7 +388,7 @@ static QByteArray get_atom_name(xcb_connection_t *c, xcb_atom_t atom)
 }
 #endif
 
-static const int netAtomCount = 93;
+static const int netAtomCount = 94;
 
 static void create_netwm_atoms(xcb_connection_t *c)
 {
@@ -436,6 +437,7 @@ static void create_netwm_atoms(xcb_connection_t *c)
         { "_NET_FRAME_EXTENTS",                   &net_frame_extents                },
         { "_NET_WM_WINDOW_OPACITY",               &net_wm_window_opacity            },
         { "_NET_WM_FULLSCREEN_MONITORS",          &net_wm_fullscreen_monitors       },
+        { "_NET_WM_OPAQUE_REGION",                &net_wm_opaque_region             },
 
         { "_NET_WM_WINDOW_TYPE_NORMAL",           &net_wm_window_type_normal        },
         { "_NET_WM_WINDOW_TYPE_DESKTOP",          &net_wm_window_type_desktop       },
@@ -1336,6 +1338,10 @@ void NETRootInfo::setSupported()
         atoms[pnum++] = kde_net_wm_shadow;
     }
 
+    if (p->properties2 & WM2OpaqueRegion) {
+        atoms[pnum++] = net_wm_opaque_region;
+    }
+
     xcb_change_property(p->conn, XCB_PROP_MODE_REPLACE, p->root, net_supported,
                         XCB_ATOM_ATOM, 32, pnum, (const void *) atoms);
 
@@ -1627,6 +1633,10 @@ void NETRootInfo::updateSupportedProperties(xcb_atom_t atom)
     else if (atom == kde_net_wm_shadow) {
         p->properties2 |= WM2KDEShadow;
     }
+
+    else if (atom == net_wm_opaque_region) {
+        p->properties2 |= WM2OpaqueRegion;
+    }
 }
 
 void NETRootInfo::setActiveWindow(xcb_window_t window)
@@ -1741,7 +1751,7 @@ void NETRootInfo::setShowingDesktop(bool showing)
         uint32_t data[5] = {
             uint32_t(showing ? 1 : 0), 0, 0, 0, 0
         };
-        send_client_message(p->conn, netwm_sendevent_mask, p->root, 0, net_showing_desktop, data);
+        send_client_message(p->conn, netwm_sendevent_mask, p->root, p->root, net_showing_desktop, data);
     }
 }
 
@@ -2770,6 +2780,8 @@ NETWinInfo::NETWinInfo(xcb_connection_t *connection, xcb_window_t window, xcb_wi
     p->transient_for = XCB_NONE;
     p->opacity = 0xffffffffU;
     p->window_group = XCB_NONE;
+    p->icon_pixmap = XCB_PIXMAP_NONE;
+    p->icon_mask = XCB_PIXMAP_NONE;
     p->allowed_actions = 0;
     p->has_net_support = false;
     p->class_class = (char *) 0;
@@ -2833,6 +2845,8 @@ NETWinInfo::NETWinInfo(xcb_connection_t *connection, xcb_window_t window, xcb_wi
     p->transient_for = XCB_NONE;
     p->opacity = 0xffffffffU;
     p->window_group = XCB_NONE;
+    p->icon_pixmap = XCB_PIXMAP_NONE;
+    p->icon_mask = XCB_PIXMAP_NONE;
     p->allowed_actions = 0;
     p->has_net_support = false;
     p->class_class = (char *) 0;
@@ -3950,6 +3964,7 @@ void NETWinInfo::event(xcb_generic_event_t *event, NET::Properties *properties, 
             dirty2 |= WM2Urgency;
             dirty2 |= WM2Input;
             dirty2 |= WM2InitialMappingState;
+            dirty2 |= WM2IconPixmap;
         } else if (pe->atom == XCB_ATOM_WM_TRANSIENT_FOR) {
             dirty2 |= WM2TransientFor;
         } else if (pe->atom == XCB_ATOM_WM_CLASS) {
@@ -3966,6 +3981,8 @@ void NETWinInfo::event(xcb_generic_event_t *event, NET::Properties *properties, 
             dirty2 |= WM2KDEShadow;
         } else if (pe->atom == wm_protocols) {
             dirty2 |= WM2Protocols;
+        } else if (pe->atom == net_wm_opaque_region) {
+            dirty2 |= WM2OpaqueRegion;
         }
 
         do_update = true;
@@ -4128,7 +4145,7 @@ void NETWinInfo::update(NET::Properties dirtyProperties, NET::Properties2 dirtyP
         cookies[c++] = xcb_get_property(p->conn, false, p->window, XCB_ATOM_WM_TRANSIENT_FOR, XCB_ATOM_WINDOW, 0, 1);
     }
 
-    if (dirty2 & (WM2GroupLeader | WM2Urgency | WM2Input | WM2InitialMappingState)) {
+    if (dirty2 & (WM2GroupLeader | WM2Urgency | WM2Input | WM2InitialMappingState | WM2IconPixmap)) {
         cookies[c++] = xcb_get_property(p->conn, false, p->window, XCB_ATOM_WM_HINTS, XCB_ATOM_WM_HINTS, 0, 9);
     }
 
@@ -4146,6 +4163,10 @@ void NETWinInfo::update(NET::Properties dirtyProperties, NET::Properties2 dirtyP
 
     if (dirty2 & WM2Protocols) {
         cookies[c++] = xcb_get_property(p->conn, false, p->window, wm_protocols, XCB_ATOM_ATOM, 0, 2048);
+    }
+
+    if (dirty2 & WM2OpaqueRegion) {
+        cookies[c++] = xcb_get_property(p->conn, false, p->window, net_wm_opaque_region, XCB_ATOM_CARDINAL, 0, MAX_PROP_SIZE);
     }
 
     c = 0;
@@ -4590,7 +4611,7 @@ void NETWinInfo::update(NET::Properties dirtyProperties, NET::Properties2 dirtyP
         p->transient_for = get_value_reply<xcb_window_t>(p->conn, cookies[c++], XCB_ATOM_WINDOW, 0);
     }
 
-    if (dirty2 & (WM2GroupLeader | WM2Urgency | WM2Input | WM2InitialMappingState)) {
+    if (dirty2 & (WM2GroupLeader | WM2Urgency | WM2Input | WM2InitialMappingState | WM2IconPixmap)) {
         xcb_get_property_reply_t *reply = xcb_get_property_reply(p->conn, cookies[c++], 0);
 
         if (reply && reply->format == 32 && reply->value_len == 9 && reply->type == XCB_ATOM_WM_HINTS) {
@@ -4614,6 +4635,12 @@ void NETWinInfo::update(NET::Properties dirtyProperties, NET::Properties2 dirtyP
                     p->initialMappingState = Withdrawn;
                     break;
                 }
+            }
+            if (hints->flags & (1 << 2)/*IconPixmapHint*/) {
+                p->icon_pixmap = hints->icon_pixmap;
+            }
+            if (hints->flags & (1 << 5)/*IconMaskHint*/) {
+                p->icon_mask = hints->icon_mask;
             }
             if (hints->flags & (1 << 6)/*WindowGroupHint*/) {
                 p->window_group = hints->window_group;
@@ -4674,6 +4701,20 @@ void NETWinInfo::update(NET::Properties dirtyProperties, NET::Properties2 dirtyP
             } else if ((*it) == net_wm_context_help) {
                 p->protocols |= ContextHelpProtocol;
             }
+        }
+    }
+
+    if (dirty2 & WM2OpaqueRegion) {
+        const QVector<qint32> values = get_array_reply<qint32>(p->conn, cookies[c++], XCB_ATOM_CARDINAL);
+        p->opaqueRegion.clear();
+        p->opaqueRegion.reserve(values.count() / 4);
+        for (int i = 0; i < values.count(); i += 4) {
+            NETRect rect;
+            rect.pos.x = values.at(i);
+            rect.pos.y = values.at(i + 1);
+            rect.size.width  = values.at(i + 2);
+            rect.size.height = values.at(i + 3);
+            p->opaqueRegion.push_back(rect);
         }
     }
 }
@@ -4837,6 +4878,16 @@ NET::MappingState NETWinInfo::initialMappingState() const
     return p->initialMappingState;
 }
 
+xcb_pixmap_t NETWinInfo::icccmIconPixmap() const
+{
+    return p->icon_pixmap;
+}
+
+xcb_pixmap_t NETWinInfo::icccmIconPixmapMask() const
+{
+    return p->icon_mask;
+}
+
 const char *NETWinInfo::windowClassClass() const
 {
     return p->class_class;
@@ -4930,6 +4981,11 @@ NET::Protocols NETWinInfo::protocols() const
 bool NETWinInfo::supportsProtocol(NET::Protocol protocol) const
 {
     return p->protocols.testFlag(protocol);
+}
+
+std::vector< NETRect > NETWinInfo::opaqueRegion() const
+{
+    return p->opaqueRegion;
 }
 
 void NETRootInfo::virtual_hook(int, void *)

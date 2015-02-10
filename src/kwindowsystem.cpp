@@ -232,6 +232,11 @@ bool KWindowSystemPrivateDummy::showingDesktop()
     return false;
 }
 
+void KWindowSystemPrivateDummy::setShowingDesktop(bool showing)
+{
+    Q_UNUSED(showing);
+}
+
 void KWindowSystemPrivateDummy::setUserTime(WId win, long time)
 {
     Q_UNUSED(win)
@@ -466,6 +471,19 @@ QPixmap KWindowSystem::icon(WId win, int width, int height, bool scale, int flag
     return d->icon(win, width, height, scale, flags);
 }
 
+QPixmap KWindowSystem::icon(WId win, int width, int height, bool scale, int flags, NETWinInfo *info)
+{
+    Q_D(KWindowSystem);
+#if KWINDOWSYSTEM_HAVE_X11
+    if (KWindowSystemPrivateX11 *xd = dynamic_cast<KWindowSystemPrivateX11*>(d)) {
+        return xd->icon(width, height, scale, flags, info);
+    }
+#else
+    Q_UNUSED(info)
+#endif
+    return d->icon(win, width, height, scale, flags);
+}
+
 void KWindowSystem::setIcons(WId win, const QPixmap &icon, const QPixmap &miniIcon)
 {
     Q_D(KWindowSystem);
@@ -564,6 +582,12 @@ bool KWindowSystem::showingDesktop()
 {
     Q_D(KWindowSystem);
     return d->showingDesktop();
+}
+
+void KWindowSystem::setShowingDesktop(bool showing)
+{
+    Q_D(KWindowSystem);
+    return d->setShowingDesktop(showing);
 }
 
 void KWindowSystem::setUserTime(WId win, long time)
