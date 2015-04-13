@@ -1,3 +1,9 @@
+kwindowsystem (5.9.0-0ubuntu1) vivid; urgency=medium
+
+  * New upstream release
+
+ -- Scarlett Clark <sgclark@kubuntu.org>  Mon, 13 Apr 2015 22:16:47 +0200
+
 kwindowsystem (5.8.0-0ubuntu1) vivid; urgency=medium
 
   * New upstream release

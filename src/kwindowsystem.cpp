@@ -25,6 +25,7 @@
 #if KWINDOWSYSTEM_HAVE_X11
 #include "kwindowsystem_p_x11.h"
 #endif
+#include "kwindowsystem_p_wayland.h"
 
 #include <QGuiApplication>
 #include <QMetaMethod>
@@ -41,6 +42,9 @@ public:
             d.reset(new KWindowSystemPrivateX11());
         }
 #endif
+        if (d.isNull() && (QGuiApplication::platformName().startsWith(QLatin1String("wayland")))) {
+            d.reset(new KWindowSystemPrivateWayland());
+        }
         if (d.isNull()) {
             d.reset(new KWindowSystemPrivateDummy());
         }
@@ -475,8 +479,8 @@ QPixmap KWindowSystem::icon(WId win, int width, int height, bool scale, int flag
 {
     Q_D(KWindowSystem);
 #if KWINDOWSYSTEM_HAVE_X11
-    if (KWindowSystemPrivateX11 *xd = dynamic_cast<KWindowSystemPrivateX11*>(d)) {
-        return xd->icon(width, height, scale, flags, info);
+    if (info) {
+        return KWindowSystemPrivateX11::icon(width, height, scale, flags, info);
     }
 #else
     Q_UNUSED(info)
