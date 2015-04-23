@@ -312,10 +312,11 @@ void KWindowSystemX11Test::testWindowTitleChanged()
             continue;
         }
         if ((*it).at(0).toULongLong() == widget.winId()) {
-            const unsigned long *props = (*it).at(1).value<const unsigned long *>();
-            if (props[0] & NET::WMName) {
+            // This was emited from a stack pointer, so not really useful
+            // const unsigned long *props = (*it).at(1).value<const unsigned long *>();
+            // if (props[0] & NET::WMName) {
                 gotWMName = true;
-            }
+            // }
         }
         if (gotWMName) {
             break;
