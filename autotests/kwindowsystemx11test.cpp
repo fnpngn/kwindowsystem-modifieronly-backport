@@ -33,6 +33,7 @@ class KWindowSystemX11Test : public QObject
 {
     Q_OBJECT
 private Q_SLOTS:
+    void initTestCase();
     // needs to be first test, would fail if run after others (X11)
     void testActiveWindowChanged();
     void testWindowAdded();
@@ -46,6 +47,11 @@ private Q_SLOTS:
     void testWindowTitleChanged();
     void testMinimizeWindow();
 };
+
+void KWindowSystemX11Test::initTestCase()
+{
+    QCoreApplication::setAttribute(Qt::AA_ForceRasterWidgets);
+}
 
 void KWindowSystemX11Test::testActiveWindowChanged()
 {
@@ -271,12 +277,10 @@ void KWindowSystemX11Test::testWindowTitleChanged()
     QTest::qWait(200);
 
     QSignalSpy propertiesChangedSpy(KWindowSystem::self(), SIGNAL(windowChanged(WId,NET::Properties,NET::Properties2)));
-    QSignalSpy oldPropertiesChangedSpy(KWindowSystem::self(), SIGNAL(windowChanged(WId,const unsigned long *)));
     QSignalSpy propertyChangedSpy(KWindowSystem::self(), SIGNAL(windowChanged(WId,unsigned int)));
     QSignalSpy windowChangedSpy(KWindowSystem::self(), SIGNAL(windowChanged(WId)));
 
     QVERIFY(propertiesChangedSpy.isValid());
-    QVERIFY(oldPropertiesChangedSpy.isValid());
     QVERIFY(propertyChangedSpy.isValid());
     QVERIFY(windowChangedSpy.isValid());
 
@@ -302,25 +306,6 @@ void KWindowSystemX11Test::testWindowTitleChanged()
         }
         propertiesChangedSpy.clear();
         counter++;
-    }
-    QVERIFY(gotWMName);
-
-    gotWMName = false;
-    QCOMPARE(oldPropertiesChangedSpy.isEmpty(), false);
-    for (auto it = oldPropertiesChangedSpy.constBegin(); it != oldPropertiesChangedSpy.constEnd(); ++it) {
-        if ((*it).isEmpty()) {
-            continue;
-        }
-        if ((*it).at(0).toULongLong() == widget.winId()) {
-            // This was emited from a stack pointer, so not really useful
-            // const unsigned long *props = (*it).at(1).value<const unsigned long *>();
-            // if (props[0] & NET::WMName) {
-                gotWMName = true;
-            // }
-        }
-        if (gotWMName) {
-            break;
-        }
     }
     QVERIFY(gotWMName);
 
