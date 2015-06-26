@@ -48,7 +48,7 @@
 #endif
 
 static Atom net_wm_cm;
-static void create_atoms(Display *dpy = QX11Info::display());
+static void create_atoms();
 
 static const NET::Properties windowsProperties = NET::ClientList | NET::ClientListStacking |
                                                  NET::Supported |
@@ -92,8 +92,8 @@ NETEventFilter::NETEventFilter(KWindowSystemPrivateX11::FilterInfo _what)
                   -1, false),
       QAbstractNativeEventFilter(),
       strutSignalConnected(false),
-      haveXfixes(false),
       compositingEnabled(false),
+      haveXfixes(false),
       what(_what),
       winId(XCB_WINDOW_NONE)
 {
@@ -367,7 +367,7 @@ static Atom _wm_protocols;
 static Atom _wm_change_state;
 static Atom kwm_utf8_string;
 
-static void create_atoms(Display *dpy)
+static void create_atoms()
 {
     if (!atoms_created) {
         const int max = 20;
@@ -386,12 +386,12 @@ static void create_atoms(Display *dpy)
         names[n++] = "UTF8_STRING";
 
         char net_wm_cm_name[ 100 ];
-        sprintf(net_wm_cm_name, "_NET_WM_CM_S%d", DefaultScreen(dpy));
+        sprintf(net_wm_cm_name, "_NET_WM_CM_S%d", QX11Info::appScreen());
         atoms[n] = &net_wm_cm;
         names[n++] = net_wm_cm_name;
 
         // we need a const_cast for the shitty X API
-        XInternAtoms(dpy, const_cast<char **>(names), n, false, atoms_return);
+        XInternAtoms(QX11Info::display(), const_cast<char **>(names), n, false, atoms_return);
         for (int i = 0; i < n; i++) {
             *atoms[i] = atoms_return[i];
         }
@@ -680,7 +680,7 @@ QPixmap KWindowSystemPrivateX11::icon(int width, int height, bool scale, int fla
         xcb_pixmap_t p_mask = info->icccmIconPixmapMask();
 
         if (p != XCB_PIXMAP_NONE) {
-            QPixmap pm = KXUtils::createPixmapFromHandle(p, p_mask);
+            QPixmap pm = KXUtils::createPixmapFromHandle(info->xcbConnection(), p, p_mask);
             if (scale && width > 0 && height > 0 && !pm.isNull()
                     && (pm.width() != width || pm.height() != height)) {
                 result = QPixmap::fromImage(pm.toImage().scaled(width, height, Qt::IgnoreAspectRatio, Qt::SmoothTransformation));
@@ -831,20 +831,12 @@ void KWindowSystemPrivateX11::lowerWindow(WId win)
 
 bool KWindowSystemPrivateX11::compositingActive()
 {
-    if (QX11Info::display()) {
-        init(INFO_BASIC);
-        if (s_d_func()->haveXfixes) {
-            return s_d_func()->compositingEnabled;
-        } else {
-            create_atoms();
-            return XGetSelectionOwner(QX11Info::display(), net_wm_cm);
-        }
-    } else { // work even without QApplication instance
-        Display *dpy = XOpenDisplay(NULL);
-        create_atoms(dpy);
-        bool ret = XGetSelectionOwner(dpy, net_wm_cm) != None;
-        XCloseDisplay(dpy);
-        return ret;
+    init(INFO_BASIC);
+    if (s_d_func()->haveXfixes) {
+        return s_d_func()->compositingEnabled;
+    } else {
+        create_atoms();
+        return XGetSelectionOwner(QX11Info::display(), net_wm_cm);
     }
 }
 
