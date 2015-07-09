@@ -74,7 +74,9 @@ private:
 
 void KWindowInfoX11Test::initTestCase()
 {
+#if QT_VERSION >= QT_VERSION_CHECK(5, 3, 0)
     QCoreApplication::setAttribute(Qt::AA_ForceRasterWidgets);
+#endif
 }
 
 bool KWindowInfoX11Test::waitForWindow(QSignalSpy& spy, WId winId, NET::Property property) const
@@ -702,8 +704,8 @@ void KWindowInfoX11Test::testExtendedStrut()
 void KWindowInfoX11Test::testGeometry()
 {
     KWindowInfo info(window->winId(), NET::WMGeometry | NET::WMFrameExtents);
-    QCOMPARE(info.geometry(), window->geometry());
-    QCOMPARE(info.frameGeometry(), window->frameGeometry());
+    QCOMPARE(info.geometry().size(), window->geometry().size());
+    QCOMPARE(info.frameGeometry().size(), window->frameGeometry().size());
 
     QSignalSpy spy(KWindowSystem::self(), SIGNAL(windowChanged(WId,unsigned int)));
 
