@@ -121,10 +121,14 @@ void KManagerSelectionTest::testWatching()
     QVERIFY(sw.newowner == true);
     QVERIFY(sw.lostowner == false);
     sw.newowner = sw.lostowner = false;
+    newOwnerSpy.clear();
+    QVERIFY(newOwnerSpy.isEmpty());
     claim(&owner2, true, false);
     xSync();
-    QVERIFY(newOwnerSpy.wait(2000));
-    QCOMPARE(newOwnerSpy.count(), 2);
+    if (newOwnerSpy.isEmpty()) {
+        QVERIFY(newOwnerSpy.wait());
+    }
+    QCOMPARE(newOwnerSpy.count(), 1);
     QVERIFY(sw.newowner == true);
     QVERIFY(sw.lostowner == false);
     sw.newowner = sw.lostowner = false;
