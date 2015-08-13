@@ -4,7 +4,7 @@ remove_definitions(-DQT_NO_CAST_TO_ASCII)
 
 include(ECMMarkAsTest)
 
-find_package(Qt5 5.2.0 CONFIG REQUIRED Test)
+find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED Test)
 
 if (NOT APPLE)
     find_package(X11)
@@ -32,6 +32,7 @@ endmacro()
 
 
 if(X11_FOUND)
+    include_directories(${CMAKE_SOURCE_DIR}/src/platforms/xcb)
     kwindowsystem_unit_tests(
         kmanagerselectiontest
         kstartupinfo_unittest
