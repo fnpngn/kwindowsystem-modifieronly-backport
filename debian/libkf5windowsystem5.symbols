@@ -589,3 +589,9 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZTV28KWindowSystemPluginInterface@Base 5.13.0
  _ZTVN15KSelectionOwner7PrivateE@Base 4.96.0
  _ZTVN17KSelectionWatcher7PrivateE@Base 4.96.0
+KF5WindowSystemWaylandPlugin.so libkf5windowsystem5 #MINVER#
+ qt_plugin_instance@Base 5.13.0
+ qt_plugin_query_metadata@Base 5.13.0
+KF5WindowSystemX11Plugin.so libkf5windowsystem5 #MINVER#
+ qt_plugin_instance@Base 5.13.0
+ qt_plugin_query_metadata@Base 5.13.0
