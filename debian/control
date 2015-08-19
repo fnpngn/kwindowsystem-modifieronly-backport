@@ -26,7 +26,8 @@ Section: libdevel
 Architecture: any
 Depends: libkf5windowsystem5 (= ${binary:Version}),
          qtbase5-dev (>= 5.4),
-         ${misc:Depends}
+         ${misc:Depends},
+         ${shlibs:Depends}
 Description: development files for kwindowsystem
  The class KWindowSystem provides information about the state of the
  window manager and allows asking the window manager to change them
@@ -41,7 +42,7 @@ Multi-Arch: same
 Depends: libkf5windowsystem-data (= ${source:Version}),
          ${misc:Depends},
          ${shlibs:Depends}
-Description: Convenience access to certain properties and features of the window manager.
+Description: Convenience access to certain properties and features of the window manager
  The class KWindowSystem provides information about the state of the
  window manager and allows asking the window manager to change them
  using a more high-level interface than the NETWinInfo/NETRootInfo
@@ -50,10 +51,10 @@ Description: Convenience access to certain properties and features of the window
 Package: libkf5windowsystem-data
 Architecture: all
 Multi-Arch: foreign
-Depends: ${misc:Depends}, ${shlibs:Depends}
+Depends: ${misc:Depends}
 Breaks: libkf5windowsystem5-data
 Replaces: libkf5windowsystem5-data
-Description: Convenience access to certain properties and features of the window manager.
+Description: Convenience access to certain properties and features of the window manager
  The class KWindowSystem provides information about the state of the
  window manager and allows asking the window manager to change them
  using a more high-level interface than the NETWinInfo/NETRootInfo
@@ -66,7 +67,8 @@ Section: debug
 Priority: extra
 Architecture: any
 Multi-Arch: same
-Depends: libkf5windowsystem5 (= ${binary:Version}), ${misc:Depends}
+Depends: libkf5windowsystem5 (= ${binary:Version}), ${misc:Depends},
+         ${shlibs:Depends}
 Description: debug symbols for kwindowsystem
  The class KWindowSystem provides information about the state of the
  window manager and allows asking the window manager to change them
