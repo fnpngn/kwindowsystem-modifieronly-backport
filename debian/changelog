@@ -1,3 +1,15 @@
+kwindowsystem (5.13.0-3) unstable; urgency=medium
+
+  [ Pino Toscano ]
+  * Update symbols files.
+
+  [ Alf Gaida ]
+  * Update copyright file. Thanks to Alf Gaida
+
+  [ Maximiliano Curia ]
+
+ -- Maximiliano Curia <maxy@debian.org>  Thu, 27 Aug 2015 18:35:57 +0200
+
 kwindowsystem (5.13.0-2) unstable; urgency=medium
 
   * Install missing plugins. (Closes: #796032)

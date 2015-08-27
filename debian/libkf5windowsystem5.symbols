@@ -1,4 +1,4 @@
-# SymbolsHelper-Confirmed: 5.13.0 amd64
+# SymbolsHelper-Confirmed: 5.13.0 amd64 armel armhf hurd-i386 i386 kfreebsd-i386 mips mipsel powerpc x32
 libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN10KKeyServer10xEventToQtEP7_XEventPi@Base 4.96.0
  _ZN10KKeyServer11keyQtToModXEiPj@Base 4.96.0
@@ -372,11 +372,11 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN17KSelectionWatcherD0Ev@Base 4.96.0
  _ZN17KSelectionWatcherD1Ev@Base 4.96.0
  _ZN17KSelectionWatcherD2Ev@Base 4.96.0
- _ZN18KWindowInfoPrivate6createEy6QFlagsIN3NET8PropertyEES0_INS1_9Property2EE@Base 5.13.0
- _ZN18KWindowInfoPrivate7PrivateC1Ey6QFlagsIN3NET8PropertyEES1_INS2_9Property2EE@Base 5.13.0
- _ZN18KWindowInfoPrivate7PrivateC2Ey6QFlagsIN3NET8PropertyEES1_INS2_9Property2EE@Base 5.13.0
- _ZN18KWindowInfoPrivateC1Ey6QFlagsIN3NET8PropertyEES0_INS1_9Property2EE@Base 5.13.0
- _ZN18KWindowInfoPrivateC2Ey6QFlagsIN3NET8PropertyEES0_INS1_9Property2EE@Base 5.13.0
+ (subst)_ZN18KWindowInfoPrivate6createE{quintptr}6QFlagsIN3NET8PropertyEES0_INS1_9Property2EE@Base 5.13.0
+ (subst)_ZN18KWindowInfoPrivate7PrivateC1E{quintptr}6QFlagsIN3NET8PropertyEES1_INS2_9Property2EE@Base 5.13.0
+ (subst)_ZN18KWindowInfoPrivate7PrivateC2E{quintptr}6QFlagsIN3NET8PropertyEES1_INS2_9Property2EE@Base 5.13.0
+ (subst)_ZN18KWindowInfoPrivateC1E{quintptr}6QFlagsIN3NET8PropertyEES0_INS1_9Property2EE@Base 5.13.0
+ (subst)_ZN18KWindowInfoPrivateC2E{quintptr}6QFlagsIN3NET8PropertyEES0_INS1_9Property2EE@Base 5.13.0
  _ZN18KWindowInfoPrivateD0Ev@Base 5.13.0
  _ZN18KWindowInfoPrivateD1Ev@Base 5.13.0
  _ZN18KWindowInfoPrivateD2Ev@Base 5.13.0
@@ -392,7 +392,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN28KWindowSystemPluginInterface11qt_metacallEN11QMetaObject4CallEiPPv@Base 5.13.0
  _ZN28KWindowSystemPluginInterface11qt_metacastEPKc@Base 5.13.0
  _ZN28KWindowSystemPluginInterface13createEffectsEv@Base 5.13.0
- _ZN28KWindowSystemPluginInterface16createWindowInfoEy6QFlagsIN3NET8PropertyEES0_INS1_9Property2EE@Base 5.13.0
+ (subst)_ZN28KWindowSystemPluginInterface16createWindowInfoE{quintptr}6QFlagsIN3NET8PropertyEES0_INS1_9Property2EE@Base 5.13.0
  _ZN28KWindowSystemPluginInterface16staticMetaObjectE@Base 5.13.0
  _ZN28KWindowSystemPluginInterface18createWindowSystemEv@Base 5.13.0
  _ZN28KWindowSystemPluginInterfaceC1EP7QObject@Base 5.13.0
