@@ -4,7 +4,7 @@ project(KWindowSystem)
 
 # ECM setup
 include(FeatureSummary)
-find_package(ECM 5.14.0  NO_MODULE)
+find_package(ECM 5.15.0  NO_MODULE)
 set_package_properties(ECM PROPERTIES TYPE REQUIRED DESCRIPTION "Extra CMake Modules." URL "https://projects.kde.org/projects/kdesupport/extra-cmake-modules")
 feature_summary(WHAT REQUIRED_PACKAGES_NOT_FOUND FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
@@ -19,7 +19,7 @@ include(CMakeFindFrameworks)
 
 include(ECMPoQmTools)
 
-set(KF5_VERSION "5.14.0") # handled by release scripts
+set(KF5_VERSION "5.15.0") # handled by release scripts
 
 ecm_setup_version(${KF5_VERSION} VARIABLE_PREFIX KWINDOWSYSTEM
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kwindowsystem_version.h"
@@ -48,8 +48,9 @@ if (NOT APPLE)
 endif()
 
 set(KWINDOWSYSTEM_HAVE_X11 ${X11_FOUND})
-find_package(XCB COMPONENTS XCB KEYSYMS)
+
 if(X11_FOUND)
+    find_package(XCB COMPONENTS XCB KEYSYMS)
     find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED X11Extras)
     set_package_properties(X11_Xrender PROPERTIES DESCRIPTION "X Rendering Extension (libXrender)"
                            URL "http://www.x.org" TYPE RECOMMENDED
