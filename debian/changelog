@@ -1,3 +1,9 @@
+kwindowsystem (5.16.0-1) unstable; urgency=medium
+
+  * New upstream release (5.16.0).
+
+ -- Maximiliano Curia <maxy@debian.org>  Mon, 30 Nov 2015 12:12:47 +0100
+
 kwindowsystem (5.15.0-1) unstable; urgency=medium
 
   * New upstream release (5.15.0).
