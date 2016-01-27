@@ -29,4 +29,4 @@ msgstr ""
 #, qt-format
 msgctxt "KWindowSystem|"
 msgid "Desktop %1"
-msgstr "Darbastalis %1"
+msgstr "Darbalaukis %1"
