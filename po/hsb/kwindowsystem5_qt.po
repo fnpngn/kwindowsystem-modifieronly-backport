@@ -23,8 +23,8 @@ msgstr ""
 "X-Generator: KAider 0.1\n"
 "X-Qt-Contexts: true\n"
 
-#: platforms/osx/kwindowsystem.cpp:580 platforms/windows/kwindowsystem.cpp:632
-#: platforms/xcb/kwindowsystem.cpp:939
+#: platforms/osx/kwindowsystem.cpp:578 platforms/windows/kwindowsystem.cpp:630
+#: platforms/xcb/kwindowsystem.cpp:979
 #, fuzzy, qt-format
 #| msgid "Desktop %1"
 msgctxt "KWindowSystem|"
