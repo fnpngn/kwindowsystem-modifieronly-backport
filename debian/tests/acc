@@ -8,4 +8,11 @@ for in_file in debian/*.acc.in; do
         "${in_file}" > "${out_file}"
 done
 
+DH_VERBOSE=1
+
 dh_acc
+ret=$?
+if [ 0 -ne $ret ]; then
+    cp -r logs "${ADT_ARTIFACTS}"/acc.logs
+fi
+exit $ret

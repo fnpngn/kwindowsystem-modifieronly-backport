@@ -1,3 +1,20 @@
+kwindowsystem (5.21.0-1) experimental; urgency=medium
+
+  [ Maximiliano Curia ]
+  * Replace the "Historical name" ddeb-migration by its "Modern, clearer" replacement dbgsym-migration.
+  * Add upstream metadata (DEP-12)
+  * debian/control: Update Vcs-Browser and Vcs-Git fields
+  * Update acc test script
+  * Remove xephyr hack
+  * uscan no longer supports more than one main upstream tarball being listed
+
+  [ Automatic packaging ]
+  * Update symbols files.
+  * Bump Standards-Version to 3.9.8
+  * Update build-deps and deps with the info from cmake
+
+ -- Maximiliano Curia <maxy@debian.org>  Thu, 05 May 2016 15:02:43 +0200
+
 kwindowsystem (5.19.0-1) experimental; urgency=medium
 
   * New upstream release (5.19.0).

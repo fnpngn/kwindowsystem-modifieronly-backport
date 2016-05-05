@@ -20,7 +20,7 @@ msgstr ""
 "X-Generator: Lokalize 2.0\n"
 
 #: platforms/osx/kwindowsystem.cpp:578 platforms/windows/kwindowsystem.cpp:630
-#: platforms/xcb/kwindowsystem.cpp:979
+#: platforms/xcb/kwindowsystem.cpp:981
 #, qt-format
 msgctxt "KWindowSystem|"
 msgid "Desktop %1"

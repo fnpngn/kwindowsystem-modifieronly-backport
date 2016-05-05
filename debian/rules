@@ -4,7 +4,7 @@
 include /usr/share/pkg-kde-tools/qt-kde-team/3/debian-qt-kde.mk
 
 override_dh_strip:
-	$(overridden_command) --ddeb-migration='libkf5windowsystem5-dbg (<= 5.19.0-1~~)'
+	$(overridden_command) --dbgsym-migration='libkf5windowsystem5-dbg (<= 5.19.0-1~~)'
 
 override_dh_auto_test:
 	-$(overriden_command)
