@@ -1,4 +1,4 @@
-# SymbolsHelper-Confirmed: 5.20.0 amd64 armhf i386
+# SymbolsHelper-Confirmed: 5.21.0 amd64 armhf i386 powerpc
 KF5WindowSystemWaylandPlugin.so libkf5windowsystem5 #MINVER#
  qt_plugin_instance@Base 5.13.0
  qt_plugin_query_metadata@Base 5.13.0
