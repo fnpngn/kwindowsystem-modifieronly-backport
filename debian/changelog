@@ -1,3 +1,11 @@
+kwindowsystem (5.23.0-1) unstable; urgency=medium
+
+  [ Automatic packaging ]
+  * Update build-deps and deps with the info from cmake
+  * Update symbols files from buildds logs (5.22.0-1).
+
+ -- Maximiliano Curia <maxy@debian.org>  Sat, 18 Jun 2016 08:24:07 +0200
+
 kwindowsystem (5.22.0-1) unstable; urgency=medium
 
   [ Automatic packaging ]
