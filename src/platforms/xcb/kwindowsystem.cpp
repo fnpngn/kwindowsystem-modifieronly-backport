@@ -188,7 +188,6 @@ bool NETEventFilter::nativeEventFilter(xcb_generic_event_t *ev)
     KWindowSystem *s_q = KWindowSystem::self();
     const uint8_t eventType = ev->response_type & ~0x80;
 
-#ifdef KWINDOWSYSTEM_HAVE_XFIXES
     if (eventType == xfixesEventBase + XCB_XFIXES_SELECTION_NOTIFY) {
         xcb_xfixes_selection_notify_event_t *event = reinterpret_cast<xcb_xfixes_selection_notify_event_t *>(ev);
         if (event->window == winId) {
@@ -215,7 +214,6 @@ bool NETEventFilter::nativeEventFilter(xcb_generic_event_t *ev)
         }
         return false;
     }
-#endif
 
     xcb_window_t eventWindow = XCB_WINDOW_NONE;
     switch (eventType) {
@@ -482,6 +480,7 @@ void KWindowSystemPrivateX11::init(FilterInfo what)
     }
 
     if (!s_d || s_d->what < what) {
+        const bool wasCompositing = s_d ? s_d->compositingEnabled : false;
         MainThreadInstantiator instantiator(what);
         NETEventFilter *filter;
         if (instantiator.thread() == QCoreApplication::instance()->thread()) {
@@ -498,6 +497,9 @@ void KWindowSystemPrivateX11::init(FilterInfo what)
         }
         d.reset(filter);
         d->activate();
+        if (wasCompositing != s_d_func()->compositingEnabled) {
+            emit KWindowSystem::self()->compositingChanged(s_d_func()->compositingEnabled);
+        }
     }
 }
 
