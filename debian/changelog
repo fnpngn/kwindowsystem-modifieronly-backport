@@ -1,3 +1,14 @@
+kwindowsystem (5.25.0-1) unstable; urgency=medium
+
+  [ Automatic packaging ]
+  * Update build-deps and deps with the info from cmake
+  * Update symbols files.
+
+  [ Maximiliano Curia ]
+  * Bump group breaks (5.25)
+
+ -- Maximiliano Curia <maxy@debian.org>  Thu, 18 Aug 2016 17:18:33 +0200
+
 kwindowsystem (5.23.0-1) unstable; urgency=medium
 
   [ Automatic packaging ]
