@@ -5,7 +5,7 @@ Maintainer: Debian/Kubuntu Qt/KDE Maintainers <debian-qt-kde@lists.debian.org>
 Uploaders: Maximiliano Curia <maxy@debian.org>
 Build-Depends: cmake (>= 2.8.12),
                debhelper (>= 9),
-               extra-cmake-modules (>= 5.25.0~),
+               extra-cmake-modules (>= 5.26.0~),
                libqt5x11extras5-dev (>= 5.5.0~),
                libx11-dev,
                libxcb-keysyms1-dev,
@@ -35,13 +35,13 @@ Description: development files for kwindowsystem
  lowlevel classes.
  .
  Contains development files for kwindowsystem.
-Breaks: libkf5crash-dev (<< 5.25),
-        libkf5kdelibs4support-dev (<< 5.25),
-        libkf5khtml-dev (<< 5.25),
-        libkf5notifications-dev (<< 5.25),
-        libkf5textwidgets-dev (<< 5.25),
-        libkf5wallet-dev (<< 5.25),
-        libkf5xmlgui-dev (<< 5.25)
+Breaks: libkf5crash-dev (<< 5.26),
+        libkf5kdelibs4support-dev (<< 5.26),
+        libkf5khtml-dev (<< 5.26),
+        libkf5notifications-dev (<< 5.26),
+        libkf5textwidgets-dev (<< 5.26),
+        libkf5wallet-dev (<< 5.26),
+        libkf5xmlgui-dev (<< 5.26)
 
 Package: libkf5windowsystem5
 Architecture: any
@@ -54,24 +54,24 @@ Description: Convenience access to certain properties and features of the window
  window manager and allows asking the window manager to change them
  using a more high-level interface than the NETWinInfo/NETRootInfo
  low level classes.
-Breaks: kinit (<< 5.25),
-        kio (<< 5.25),
-        libkf5crash5 (<< 5.25),
-        libkf5globalaccel-bin (<< 5.25),
-        libkf5kdelibs4support5 (<< 5.25),
-        libkf5khtml-bin (<< 5.25),
-        libkf5khtml5 (<< 5.25),
-        libkf5kiowidgets5 (<< 5.25),
-        libkf5notifications5 (<< 5.25),
-        libkf5plasma5 (<< 5.25),
-        libkf5plasmaquick5 (<< 5.25),
-        libkf5textwidgets5 (<< 5.25),
-        libkf5wallet-bin (<< 5.25),
-        libkf5wallet5 (<< 5.25),
-        libkf5xmlgui5 (<< 5.25),
-        plasma-framework (<< 5.25),
-        qml-module-org-kde-kquickcontrols (<< 5.25),
-        qml-module-org-kde-kwindowsystem (<< 5.25)
+Breaks: kinit (<< 5.26),
+        kio (<< 5.26),
+        libkf5crash5 (<< 5.26),
+        libkf5globalaccel-bin (<< 5.26),
+        libkf5kdelibs4support5 (<< 5.26),
+        libkf5khtml-bin (<< 5.26),
+        libkf5khtml5 (<< 5.26),
+        libkf5kiowidgets5 (<< 5.26),
+        libkf5notifications5 (<< 5.26),
+        libkf5plasma5 (<< 5.26),
+        libkf5plasmaquick5 (<< 5.26),
+        libkf5textwidgets5 (<< 5.26),
+        libkf5wallet-bin (<< 5.26),
+        libkf5wallet5 (<< 5.26),
+        libkf5xmlgui5 (<< 5.26),
+        plasma-framework (<< 5.26),
+        qml-module-org-kde-kquickcontrols (<< 5.26),
+        qml-module-org-kde-kwindowsystem (<< 5.26)
 
 Package: libkf5windowsystem-data
 Architecture: all
