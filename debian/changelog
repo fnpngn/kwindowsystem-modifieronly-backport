@@ -1,3 +1,15 @@
+kwindowsystem (5.26.0-1) unstable; urgency=medium
+
+  [ Automatic packaging ]
+  * Update build-deps and deps with the info from cmake
+  * Update symbols files from buildds logs (5.25.0-1).
+
+  [ Maximiliano Curia ]
+  * Bump group breaks (5.26)
+  * Replace dbus-launch with dbus-run-session in tests
+
+ -- Maximiliano Curia <maxy@debian.org>  Thu, 29 Sep 2016 11:57:02 +0200
+
 kwindowsystem (5.25.0-1) unstable; urgency=medium
 
   [ Automatic packaging ]
