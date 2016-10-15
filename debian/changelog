@@ -1,3 +1,16 @@
+kwindowsystem (5.27.0-1) unstable; urgency=medium
+
+  [ Automatic packaging ]
+  * Update symbols files from buildds logs (5.26.0-1).
+  * Update build-deps and deps with the info from cmake
+  * Update symbols files.
+
+  [ Maximiliano Curia ]
+  * New upstream release (5.27)
+  * Bump group breaks (5.27)
+
+ -- Maximiliano Curia <maxy@debian.org>  Sat, 15 Oct 2016 16:57:16 +0200
+
 kwindowsystem (5.26.0-1) unstable; urgency=medium
 
   [ Automatic packaging ]
