@@ -1,4 +1,4 @@
-# SymbolsHelper-Confirmed: 5.27.0 alpha amd64 arm64 armel armhf hppa hurd-i386 i386 m68k mips mips64el mipsel powerpc powerpcspe ppc64 ppc64el s390x sparc64 x32
+# SymbolsHelper-Confirmed: 5.28.0 amd64
 KF5WindowSystemWaylandPlugin.so libkf5windowsystem5 #MINVER#
  qt_plugin_instance@Base 5.13.0
  qt_plugin_query_metadata@Base 5.13.0
@@ -61,6 +61,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN10NETWinInfo15setIconInternalER9NETRArrayI7NETIconERijS1_b@Base 4.96.0
  _ZN10NETWinInfo16setExtendedStrutERK16NETExtendedStrut@Base 4.96.0
  _ZN10NETWinInfo17setAllowedActionsE6QFlagsIN3NET6ActionEE@Base 4.96.0
+ _ZN10NETWinInfo18setDesktopFileNameEPKc@Base 5.28.0
  _ZN10NETWinInfo18setVisibleIconNameEPKc@Base 4.96.0
  _ZN10NETWinInfo21setFullscreenMonitorsE21NETFullscreenMonitors@Base 4.96.0
  _ZN10NETWinInfo22setBlockingCompositingEb@Base 4.96.0
@@ -436,6 +437,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZNK10NETWinInfo13hasWindowTypeEv@Base 4.96.0
  _ZNK10NETWinInfo13xcbConnectionEv@Base 5.10.0
  _ZNK10NETWinInfo14allowedActionsEv@Base 4.96.0
+ _ZNK10NETWinInfo15desktopFileNameEv@Base 5.28.0
  _ZNK10NETWinInfo15icccmIconPixmapEv@Base 5.6.0+git20150122.0006+15.04
  _ZNK10NETWinInfo15visibleIconNameEv@Base 4.96.0
  _ZNK10NETWinInfo15windowClassNameEv@Base 4.96.0
