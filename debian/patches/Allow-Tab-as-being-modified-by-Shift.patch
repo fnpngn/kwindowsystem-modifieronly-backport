@@ -1,0 +1,29 @@
+From: Roman Gilg <subdiff@gmail.com>
+Date: Sun, 15 Jan 2017 15:23:27 +0100
+Subject: Allow Tab as being modified by Shift
+
+Backtab was already in the list of allowed keys, but not Tab,
+which happens to get queried though. In the case of bug 368581 when
+walking in reverse direction of windows by pressing Alt+Shift+Tab.
+
+BUG: 368581
+
+Reviewers: graesslin
+
+Differential Revision: https://phabricator.kde.org/D4141
+---
+ src/kkeyserver.cpp | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/src/kkeyserver.cpp b/src/kkeyserver.cpp
+index c005456..811fb4e 100644
+--- a/src/kkeyserver.cpp
++++ b/src/kkeyserver.cpp
+@@ -125,6 +125,7 @@ bool isShiftAsModifierAllowed(int keyQt)
+     case Qt::Key_Return:
+     case Qt::Key_Space:
+     case Qt::Key_Backspace:
++    case Qt::Key_Tab:
+     case Qt::Key_Backtab:
+     case Qt::Key_Escape:
+     case Qt::Key_Print:
