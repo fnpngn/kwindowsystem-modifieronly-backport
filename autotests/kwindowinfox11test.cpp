@@ -26,12 +26,17 @@
 #include <QScreen>
 #include <QSignalSpy>
 #include <QX11Info>
+
+#include <unistd.h>
+
 Q_DECLARE_METATYPE(WId)
 Q_DECLARE_METATYPE(NET::State)
 Q_DECLARE_METATYPE(NET::States)
 Q_DECLARE_METATYPE(NET::WindowType)
 Q_DECLARE_METATYPE(NET::WindowTypeMask)
 Q_DECLARE_METATYPE(NET::WindowTypes)
+Q_DECLARE_METATYPE(NET::Properties)
+Q_DECLARE_METATYPE(NET::Properties2)
 
 
 class KWindowInfoX11Test : public QObject
@@ -59,6 +64,8 @@ private Q_SLOTS:
     void testGroupLeader();
     void testExtendedStrut();
     void testGeometry();
+    void testDesktopFileName();
+    void testPid();
 
     // actionSupported is not tested as it's too window manager specific
     // we could write a test against KWin's behavior, but that would fail on
@@ -66,7 +73,7 @@ private Q_SLOTS:
 
 private:
     void showWidget(QWidget *widget);
-    bool waitForWindow(QSignalSpy &spy, WId winId, NET::Property property) const;
+    bool waitForWindow(QSignalSpy &spy, WId winId, NET::Properties property, NET::Properties2 properties2 = NET::Properties2()) const;
     bool verifyMinimized(WId window) const;
 
     QScopedPointer<QWidget> window;
@@ -75,9 +82,11 @@ private:
 void KWindowInfoX11Test::initTestCase()
 {
     QCoreApplication::setAttribute(Qt::AA_ForceRasterWidgets);
+    qRegisterMetaType<NET::Properties>();
+    qRegisterMetaType<NET::Properties2>();
 }
 
-bool KWindowInfoX11Test::waitForWindow(QSignalSpy& spy, WId winId, NET::Property property) const
+bool KWindowInfoX11Test::waitForWindow(QSignalSpy& spy, WId winId, NET::Properties property, NET::Properties2 property2) const
 {
     // we need to wait, window manager has to react and update the property.
     bool foundOurWindow = false;
@@ -90,8 +99,15 @@ bool KWindowInfoX11Test::waitForWindow(QSignalSpy& spy, WId winId, NET::Property
             if (it->first().value<WId>() != winId) {
                 continue;
             }
-            if (it->last().toUInt() != property) {
-                continue;
+            if (property != NET::Properties()) {
+                if (it->at(1).value<NET::Properties>() != property) {
+                    continue;
+                }
+            }
+            if (property2 != NET::Properties2()) {
+                if (it->at(2).value<NET::Properties2>() != property2) {
+                    continue;
+                }
             }
             foundOurWindow = true;
             break;
@@ -201,7 +217,8 @@ void KWindowInfoX11Test::testState()
         QVERIFY(!info.hasState(NET::States(1 << i)));
     }
 
-    QSignalSpy spy(KWindowSystem::self(), SIGNAL(windowChanged(WId,unsigned int)));
+    QSignalSpy spy(KWindowSystem::self(), static_cast<void (KWindowSystem::*)(WId,NET::Properties,NET::Properties2)>(&KWindowSystem::windowChanged));
+    QVERIFY(spy.isValid());
     // now we have a clean window and can do fun stuff
     KWindowSystem::setState(window->winId(), state);
 
@@ -250,7 +267,8 @@ void KWindowInfoX11Test::testDemandsAttention()
     QVERIFY(info.valid());
     QVERIFY(!info.hasState(NET::DemandsAttention));
 
-    QSignalSpy spy(KWindowSystem::self(), SIGNAL(windowChanged(WId,unsigned int)));
+    QSignalSpy spy(KWindowSystem::self(), static_cast<void (KWindowSystem::*)(WId,NET::Properties,NET::Properties2)>(&KWindowSystem::windowChanged));
+    QVERIFY(spy.isValid());
     // now we have a clean window and can do fun stuff
     KWindowSystem::demandAttention(window->winId());
 
@@ -446,7 +464,8 @@ void KWindowInfoX11Test::testDesktop()
     }
 
     // set on all desktop
-    QSignalSpy spy(KWindowSystem::self(), SIGNAL(windowChanged(WId,unsigned int)));
+    QSignalSpy spy(KWindowSystem::self(), static_cast<void (KWindowSystem::*)(WId,NET::Properties,NET::Properties2)>(&KWindowSystem::windowChanged));
+    QVERIFY(spy.isValid());
     KWindowSystem::setOnAllDesktops(window->winId(), true);
     QVERIFY(waitForWindow(spy, window->winId(), NET::WMDesktop));
 
@@ -480,11 +499,11 @@ void KWindowInfoX11Test::testDesktop()
 void KWindowInfoX11Test::testActivities()
 {
     NETRootInfo rootInfo(QX11Info::connection(), NET::Supported | NET::SupportingWMCheck);
-    qRegisterMetaType<unsigned int>("NET::Properties");
-    qRegisterMetaType<unsigned int>("NET::Properties2");
-    QSignalSpy spyReal(KWindowSystem::self(), SIGNAL(windowChanged(WId,NET::Properties,NET::Properties2)));
+    QSignalSpy spyReal(KWindowSystem::self(), static_cast<void (KWindowSystem::*)(WId,NET::Properties,NET::Properties2)>(&KWindowSystem::windowChanged));
+    QVERIFY(spyReal.isValid());
 
-    KWindowInfo info(window->winId(), 0, NET::WM2Activities);
+    KWindowInfo info(window->winId(), NET::Properties(), NET::WM2Activities);
+    QVERIFY(info.valid());
 
     QStringList startingActivities = info.activities();
 
@@ -496,18 +515,18 @@ void KWindowInfoX11Test::testActivities()
     // Window on all activities
     KWindowSystem::self()->setOnActivities(window->winId(), QStringList());
 
-    QVERIFY(waitForWindow(spyReal, window->winId(), (NET::Property)NET::WM2Activities));
+    QVERIFY(waitForWindow(spyReal, window->winId(), NET::Properties(), NET::WM2Activities));
 
-    KWindowInfo info2(window->winId(), 0, NET::WM2Activities);
+    KWindowInfo info2(window->winId(), NET::Properties(), NET::WM2Activities);
 
     QVERIFY(info2.activities().size() == 0);
 
     // Window on a specific activity
     KWindowSystem::self()->setOnActivities(window->winId(), QStringList() << "test-activity");
 
-    QVERIFY(waitForWindow(spyReal, window->winId(), (NET::Property)NET::WM2Activities));
+    QVERIFY(waitForWindow(spyReal, window->winId(), NET::Properties(), NET::WM2Activities));
 
-    KWindowInfo info3(window->winId(), 0, NET::WM2Activities);
+    KWindowInfo info3(window->winId(), NET::Properties(), NET::WM2Activities);
 
     QVERIFY(info3.activities().size() == 1);
     QVERIFY(info3.activities()[0] == "test-activity");
@@ -515,9 +534,9 @@ void KWindowInfoX11Test::testActivities()
     // Window on a two activities
     KWindowSystem::self()->setOnActivities(window->winId(), QStringList() << "test-activity" << "test-activity2");
 
-    QVERIFY(waitForWindow(spyReal, window->winId(), (NET::Property)NET::WM2Activities));
+    QVERIFY(waitForWindow(spyReal, window->winId(), NET::Properties(), NET::WM2Activities));
 
-    KWindowInfo info4(window->winId(), 0, NET::WM2Activities);
+    KWindowInfo info4(window->winId(), NET::Properties(), NET::WM2Activities);
 
     QVERIFY(info4.activities().size() == 2);
     QVERIFY(info4.activities()[0] == "test-activity");
@@ -526,16 +545,16 @@ void KWindowInfoX11Test::testActivities()
     // Window on the starting activity
     KWindowSystem::self()->setOnActivities(window->winId(), startingActivities);
 
-    QVERIFY(waitForWindow(spyReal, window->winId(), NET::Property(NET::WM2Activities)));
+    QVERIFY(waitForWindow(spyReal, window->winId(), NET::Properties(), NET::WM2Activities));
 
-    KWindowInfo info5(window->winId(), 0, NET::WM2Activities);
+    KWindowInfo info5(window->winId(), NET::Properties(), NET::WM2Activities);
 
     QVERIFY(info5.activities() == startingActivities);
 }
 
 void KWindowInfoX11Test::testWindowClass()
 {
-    KWindowInfo info(window->winId(), 0, NET::WM2WindowClass);
+    KWindowInfo info(window->winId(), NET::Properties(), NET::WM2WindowClass);
     QCOMPARE(info.windowClassName(), QByteArrayLiteral("kwindowinfox11test"));
     QCOMPARE(info.windowClassClass(), QByteArrayLiteral("kwindowinfox11test"));
 
@@ -547,14 +566,14 @@ void KWindowInfoX11Test::testWindowClass()
     // it's just a property change so we can easily refresh
     QX11Info::getTimestamp();
 
-    KWindowInfo info2(window->winId(), 0, NET::WM2WindowClass);
+    KWindowInfo info2(window->winId(), NET::Properties(), NET::WM2WindowClass);
     QCOMPARE(info2.windowClassName(), QByteArrayLiteral("foo"));
     QCOMPARE(info2.windowClassClass(), QByteArrayLiteral("bar"));
 }
 
 void KWindowInfoX11Test::testWindowRole()
 {
-    KWindowInfo info(window->winId(), 0, NET::WM2WindowRole);
+    KWindowInfo info(window->winId(), NET::Properties(), NET::WM2WindowRole);
     QVERIFY(info.windowRole().isNull());
 
     // window role needs to be changed using xcb
@@ -566,13 +585,13 @@ void KWindowInfoX11Test::testWindowRole()
     // it's just a property change so we can easily refresh
     QX11Info::getTimestamp();
 
-    KWindowInfo info2(window->winId(), 0, NET::WM2WindowRole);
+    KWindowInfo info2(window->winId(), NET::Properties(), NET::WM2WindowRole);
     QCOMPARE(info2.windowRole(), QByteArrayLiteral("bar"));
 }
 
 void KWindowInfoX11Test::testClientMachine()
 {
-    KWindowInfo info(window->winId(), 0, NET::WM2ClientMachine);
+    KWindowInfo info(window->winId(), NET::Properties(), NET::WM2ClientMachine);
     QVERIFY(info.clientMachine().isNull());
 
     // client machine needs to be set through xcb
@@ -583,7 +602,7 @@ void KWindowInfoX11Test::testClientMachine()
     // it's just a property change so we can easily refresh
     QX11Info::getTimestamp();
 
-    KWindowInfo info2(window->winId(), 0, NET::WM2ClientMachine);
+    KWindowInfo info2(window->winId(), NET::Properties(), NET::WM2ClientMachine);
     QCOMPARE(info2.clientMachine(), QByteArrayLiteral("localhost"));
 }
 
@@ -618,7 +637,7 @@ void KWindowInfoX11Test::testName()
     }
 
     // create a low level NETWinInfo to manipulate the name
-    NETWinInfo winInfo(QX11Info::connection(), window->winId(), QX11Info::appRootWindow(), NET::WMName, 0);
+    NETWinInfo winInfo(QX11Info::connection(), window->winId(), QX11Info::appRootWindow(), NET::WMName, NET::Properties2());
     winInfo.setName("foobar");
 
     QX11Info::getTimestamp();
@@ -634,7 +653,7 @@ void KWindowInfoX11Test::testName()
 
 void KWindowInfoX11Test::testTransientFor()
 {
-    KWindowInfo info(window->winId(), 0, NET::WM2TransientFor);
+    KWindowInfo info(window->winId(), NET::Properties(), NET::WM2TransientFor);
     QCOMPARE(info.transientFor(), WId(0));
 
     // let's create a second window
@@ -648,13 +667,13 @@ void KWindowInfoX11Test::testTransientFor()
                         XCB_ATOM_WM_TRANSIENT_FOR, XCB_ATOM_WINDOW, 32, 1, &id);
     xcb_flush(QX11Info::connection());
 
-    KWindowInfo info2(window->winId(), 0, NET::WM2TransientFor);
+    KWindowInfo info2(window->winId(), NET::Properties(), NET::WM2TransientFor);
     QCOMPARE(info2.transientFor(), window2->winId());
 }
 
 void KWindowInfoX11Test::testGroupLeader()
 {
-    KWindowInfo info(window->winId(), 0, NET::WM2GroupLeader);
+    KWindowInfo info(window->winId(), NET::Properties(), NET::WM2GroupLeader);
     QCOMPARE(info.groupLeader(), WId(0));
 
     // TODO: here we should try to set a group leader and re-read it
@@ -663,7 +682,7 @@ void KWindowInfoX11Test::testGroupLeader()
 
 void KWindowInfoX11Test::testExtendedStrut()
 {
-    KWindowInfo info(window->winId(), 0, NET::WM2ExtendedStrut);
+    KWindowInfo info(window->winId(), NET::Properties(), NET::WM2ExtendedStrut);
     NETExtendedStrut strut = info.extendedStrut();
     QCOMPARE(strut.bottom_end, 0);
     QCOMPARE(strut.bottom_start, 0);
@@ -683,7 +702,7 @@ void KWindowInfoX11Test::testExtendedStrut()
     // it's just an xprop, so one roundtrip is good enough
     QX11Info::getTimestamp();
 
-    KWindowInfo info2(window->winId(), 0, NET::WM2ExtendedStrut);
+    KWindowInfo info2(window->winId(), NET::Properties(), NET::WM2ExtendedStrut);
     strut = info2.extendedStrut();
     QCOMPARE(strut.bottom_end, 32);
     QCOMPARE(strut.bottom_start, 22);
@@ -705,7 +724,8 @@ void KWindowInfoX11Test::testGeometry()
     QCOMPARE(info.geometry().size(), window->geometry().size());
     QCOMPARE(info.frameGeometry().size(), window->frameGeometry().size());
 
-    QSignalSpy spy(KWindowSystem::self(), SIGNAL(windowChanged(WId,unsigned int)));
+    QSignalSpy spy(KWindowSystem::self(), static_cast<void (KWindowSystem::*)(WId,NET::Properties,NET::Properties2)>(&KWindowSystem::windowChanged));
+    QVERIFY(spy.isValid());
 
     // this is tricky, KWin is smart and doesn't allow all geometries we pass in
     // setting to center of screen should work, though
@@ -718,6 +738,38 @@ void KWindowInfoX11Test::testGeometry()
     QCOMPARE(info2.geometry(), window->geometry());
     QCOMPARE(info2.geometry(), geo);
     QCOMPARE(info2.frameGeometry(), window->frameGeometry());
+}
+
+void KWindowInfoX11Test::testDesktopFileName()
+{
+    KWindowInfo info(window->winId(), NET::Properties(), NET::WM2DesktopFileName);
+    QVERIFY(info.valid());
+    QCOMPARE(info.desktopFileName(), QByteArray());
+
+    QSignalSpy spy(KWindowSystem::self(), static_cast<void (KWindowSystem::*)(WId,NET::Properties,NET::Properties2)>(&KWindowSystem::windowChanged));
+    QVERIFY(spy.isValid());
+
+    // create a NETWinInfo to set the desktop file name
+    NETWinInfo netInfo(QX11Info::connection(), window->winId(), QX11Info::appRootWindow(), NET::Properties(), NET::Properties2());
+    netInfo.setDesktopFileName("org.kde.foo");
+    xcb_flush(QX11Info::connection());
+
+    // it's just a property change so we can easily refresh
+    QX11Info::getTimestamp();
+    QTRY_COMPARE(spy.count(), 1);
+    QCOMPARE(spy.first().at(0).value<WId>(), window->winId());
+    QCOMPARE(spy.first().at(2).value<NET::Properties2>(), NET::Properties2(NET::WM2DesktopFileName));
+
+    KWindowInfo info2(window->winId(), NET::Properties(), NET::WM2DesktopFileName);
+    QVERIFY(info2.valid());
+    QCOMPARE(info2.desktopFileName(), QByteArrayLiteral("org.kde.foo"));
+}
+
+void KWindowInfoX11Test::testPid()
+{
+    KWindowInfo info(window->winId(), NET::WMPid);
+    QVERIFY(info.valid());
+    QCOMPARE(info.pid(), getpid());
 }
 
 QTEST_MAIN(KWindowInfoX11Test)

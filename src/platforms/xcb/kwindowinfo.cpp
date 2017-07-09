@@ -30,7 +30,12 @@
 // KWindowSystem::info() should be updated too if something has to be changed here
 KWindowInfoPrivateX11::KWindowInfoPrivateX11(WId _win, NET::Properties properties, NET::Properties2 properties2)
     : KWindowInfoPrivate(_win, properties, properties2)
+    , KWindowInfoPrivateDesktopFileNameExtension()
+    , KWindowInfoPrivatePidExtension()
 {
+    installDesktopFileNameExtension(this);
+    installPidExtension(this);
+
     KXErrorHandler handler;
     if (properties & NET::WMVisibleIconName) {
         properties |= NET::WMIconName | NET::WMVisibleName;    // force, in case it will be used as a fallback
@@ -267,7 +272,7 @@ bool KWindowInfoPrivateX11::onAllDesktops() const
         if (m_info->passedProperties() & NET::WMState) {
             return m_info->state() & NET::Sticky;
         }
-        NETWinInfo info(QX11Info::connection(), win(), QX11Info::appRootWindow(), NET::WMState, 0);
+        NETWinInfo info(QX11Info::connection(), win(), QX11Info::appRootWindow(), NET::WMState, NET::Properties2());
         return info.state() & NET::Sticky;
     }
     return m_info->desktop() == NET::OnAllDesktops;
@@ -414,3 +419,22 @@ bool KWindowInfoPrivateX11::isMinimized() const
     return KWindowSystem::icccmCompliantMappingState() ? false : true;
 }
 
+QByteArray KWindowInfoPrivateX11::desktopFileName() const
+{
+#if !defined(KDE_NO_WARNING_OUTPUT)
+    if (!(m_info->passedProperties2() & NET::WM2DesktopFileName)) {
+        qWarning() << "Pass NET::WM2DesktopFileName to KWindowInfo";
+    }
+#endif
+    return QByteArray(m_info->desktopFileName());
+}
+
+int KWindowInfoPrivateX11::pid() const
+{
+#if !defined(KDE_NO_WARNING_OUTPUT)
+    if (!(m_info->passedProperties() & NET::WMPid)) {
+        qWarning() << "Pass NET::WMPid to KWindowInfo";
+    }
+#endif
+    return m_info->pid();
+}

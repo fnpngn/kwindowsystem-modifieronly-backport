@@ -48,7 +48,7 @@ public:
  * can be used to check whether the returned value is valid.
  *
  * This class has two modes of operations: a direct one which performs the request directly
- * during construction, and an indirect one which needs an explicit call to @link fetch.
+ * during construction, and an indirect one which needs an explicit call to {@link fetch}.
  *
  * @code
  * Atom direct(QX11Info::connection(), QByteArrayLiteral("myAtomName"));
@@ -68,7 +68,7 @@ class Atom
 {
 public:
     explicit Atom(const QByteArray &name)
-        : m_connection(Q_NULLPTR)
+        : m_connection(nullptr)
         , m_retrieved(false)
         , m_atom(XCB_ATOM_NONE)
         , m_name(name)
@@ -128,7 +128,7 @@ private:
         if (m_retrieved || !m_cookie.sequence) {
             return;
         }
-        ScopedCPointer<xcb_intern_atom_reply_t> reply(xcb_intern_atom_reply(m_connection, m_cookie, Q_NULLPTR));
+        ScopedCPointer<xcb_intern_atom_reply_t> reply(xcb_intern_atom_reply(m_connection, m_cookie, nullptr));
         if (!reply.isNull()) {
             m_atom = reply->atom;
         }

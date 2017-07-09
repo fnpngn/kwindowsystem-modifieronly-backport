@@ -35,6 +35,12 @@ KWindowInfoPrivate *KWindowInfoPrivate::create(WId window, NET::Properties prope
     return KWindowSystemPluginWrapper::self().createWindowInfo(window, properties, properties2);
 }
 
+KWindowInfoPrivateDesktopFileNameExtension::KWindowInfoPrivateDesktopFileNameExtension() = default;
+KWindowInfoPrivateDesktopFileNameExtension::~KWindowInfoPrivateDesktopFileNameExtension() = default;
+
+KWindowInfoPrivatePidExtension::KWindowInfoPrivatePidExtension() = default;
+KWindowInfoPrivatePidExtension::~KWindowInfoPrivatePidExtension() = default;
+
 class KWindowInfoPrivate::Private
 {
 public:
@@ -42,12 +48,16 @@ public:
     WId window;
     NET::Properties properties;
     NET::Properties2 properties2;
+    KWindowInfoPrivateDesktopFileNameExtension *desktopFileNameExtension;
+    KWindowInfoPrivatePidExtension *pidExtension;
 };
 
 KWindowInfoPrivate::Private::Private(WId window, NET::Properties properties, NET::Properties2 properties2)
     : window(window)
     , properties(properties)
     , properties2(properties2)
+    , desktopFileNameExtension(nullptr)
+    , pidExtension(nullptr)
 {
 }
 
@@ -63,6 +73,26 @@ KWindowInfoPrivate::~KWindowInfoPrivate()
 WId KWindowInfoPrivate::win() const
 {
     return d->window;
+}
+
+KWindowInfoPrivateDesktopFileNameExtension *KWindowInfoPrivate::desktopFileNameExtension() const
+{
+    return d->desktopFileNameExtension;
+}
+
+void KWindowInfoPrivate::installDesktopFileNameExtension(KWindowInfoPrivateDesktopFileNameExtension *extension)
+{
+    d->desktopFileNameExtension = extension;
+}
+
+KWindowInfoPrivatePidExtension *KWindowInfoPrivate::pidExtension() const
+{
+    return d->pidExtension;
+}
+
+void KWindowInfoPrivate::installPidExtension(KWindowInfoPrivatePidExtension *extension)
+{
+    d->pidExtension = extension;
 }
 
 KWindowInfoPrivateDummy::KWindowInfoPrivateDummy(WId window, NET::Properties properties, NET::Properties2 properties2)
@@ -82,7 +112,7 @@ bool KWindowInfoPrivateDummy::valid(bool withdrawn_is_valid) const
 
 NET::States KWindowInfoPrivateDummy::state() const
 {
-    return 0;
+    return NET::States();
 }
 
 bool KWindowInfoPrivateDummy::isMinimized() const
@@ -367,6 +397,22 @@ QByteArray KWindowInfo::clientMachine() const
 bool KWindowInfo::actionSupported(NET::Action action) const
 {
     DELEGATE(actionSupported, action)
+}
+
+QByteArray KWindowInfo::desktopFileName() const
+{
+    if (auto extension = d->desktopFileNameExtension()) {
+        return extension->desktopFileName();
+    }
+    return QByteArray();
+}
+
+int KWindowInfo::pid() const
+{
+    if (auto extension = d->pidExtension()) {
+        return extension->pid();
+    }
+    return 0;
 }
 
 #undef DELEGATE

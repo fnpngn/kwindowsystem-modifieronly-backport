@@ -24,7 +24,7 @@
 class Property : public QScopedPointer<xcb_get_property_reply_t, QScopedPointerPodDeleter>
 {
 public:
-    Property(xcb_get_property_reply_t *p = 0) : QScopedPointer<xcb_get_property_reply_t, QScopedPointerPodDeleter>(p) {}
+    Property(xcb_get_property_reply_t *p = nullptr) : QScopedPointer<xcb_get_property_reply_t, QScopedPointerPodDeleter>(p) {}
 };
 
 #define INFO NETWinInfo info(m_connection, m_testWindow, m_rootWindow, NET::WMAllProperties, NET::WM2AllProperties, NET::Client);
@@ -37,7 +37,7 @@ public:
 #define GETPROP(type, length, formatSize) \
     xcb_get_property_cookie_t cookie = xcb_get_property_unchecked(connection(), false, m_testWindow, \
                                        atom, type, 0, length); \
-    Property reply(xcb_get_property_reply(connection(), cookie, Q_NULLPTR)); \
+    Property reply(xcb_get_property_reply(connection(), cookie, nullptr)); \
     QVERIFY(!reply.isNull()); \
     QCOMPARE(reply->format, uint8_t(formatSize)); \
     QCOMPARE(reply->value_len, uint32_t(length));
@@ -45,7 +45,7 @@ public:
 #define VERIFYDELETED(t) \
     xcb_get_property_cookie_t cookieDeleted = xcb_get_property_unchecked(connection(), false, m_testWindow, \
             atom, t, 0, 1); \
-    Property replyDeleted(xcb_get_property_reply(connection(), cookieDeleted, Q_NULLPTR)); \
+    Property replyDeleted(xcb_get_property_reply(connection(), cookieDeleted, nullptr)); \
     QVERIFY(!replyDeleted.isNull()); \
     QVERIFY(replyDeleted->type == XCB_ATOM_NONE);
 
@@ -124,7 +124,7 @@ void NetWinInfoTestClient::cleanupTestCase()
 void NetWinInfoTestClient::init()
 {
     // first reset just to be sure
-    m_connection = Q_NULLPTR;
+    m_connection = nullptr;
     m_rootWindow = XCB_WINDOW_NONE;
     m_testWindow = XCB_WINDOW_NONE;
     // start Xvfb
@@ -977,7 +977,7 @@ void NetWinInfoTestClient::testActivities()
     QFETCH(QByteArray, activities);
 
     // activities needs to be changed using xcb
-    info.setActivities(activities.isNull() ? Q_NULLPTR : activities.constData());
+    info.setActivities(activities.isNull() ? nullptr : activities.constData());
     xcb_flush(connection());
 
     // only updated after event

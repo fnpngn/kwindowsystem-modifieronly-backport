@@ -1,3 +1,26 @@
+kwindowsystem (5.36.0-1) experimental; urgency=medium
+
+  [ Maximiliano Curia ]
+  * New upstream release (5.35.0).
+  * Bump Standards-Version to 4.0.0.
+  * Update build-deps and deps with the info from cmake
+  * Bump group breaks (5.35)
+  * Drop upstream patches
+  * Update symbols files.
+  * watch: Use https uris
+  * New upstream release (5.36.0).
+  * Bump group breaks (5.36)
+  * Update build-deps and deps with the info from cmake
+
+  [ Raymond Wooninck ]
+  * Add signing key
+  * also include signing-key
+
+  [ Harald Sitter ]
+  * acc c++11. now used more liberally
+
+ -- Maximiliano Curia <maxy@debian.org>  Sun, 09 Jul 2017 23:41:25 +0200
+
 kwindowsystem (5.28.0-2) unstable; urgency=medium
 
   * Apply "Allow Tab as being modified by Shift" (4fe25b7)

@@ -54,7 +54,7 @@ class KWindowInfoPrivate;
  * demands attention window state:
  *
  * @code
- * QWidget *widget = new QWidget(Q_NULLPTR);
+ * QWidget *widget = new QWidget(nullptr);
  * widget->show(); // ensures native window gets created
  * connect(KWindowSystem::self(), static_cast<void (KWindowSystem::*)(WId, unsigned int)>(&KWindowSystem::windowChanged),
  *        [window](WId winId, unsigned int properties) {
@@ -83,7 +83,7 @@ public:
      * @param properties Bitmask of NET::Property
      * @param properties2 Bitmask of NET::Property2
      */
-    KWindowInfo(WId window, NET::Properties properties, NET::Properties2 properties2 = 0);
+    KWindowInfo(WId window, NET::Properties properties, NET::Properties2 properties2 = NET::Properties2());
     ~KWindowInfo();
     /**
      * Returns false if this window info is not valid.
@@ -107,7 +107,7 @@ public:
      * Requires NET::WMState passed as properties parameter to the constructor.
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), NET::WMState);
      * if (info.valid())
@@ -122,7 +122,7 @@ public:
      *
      * Requires NET::WMState passed as properties parameter to the constructor.
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), NET::WMState);
      * if (info.valid())
@@ -142,7 +142,7 @@ public:
      * Requires NET::WMState and NET::XAWMState passed as properties parameter to the constructor.
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), NET::WMState | NET::XAWMState);
      * if (info.valid())
@@ -158,7 +158,7 @@ public:
      * Requires NET::XAWMState passed as properties parameter to the constructor.
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), NET::XAWMState);
      * if (info.valid())
@@ -176,7 +176,7 @@ public:
      * Requires NET::WM2ExtendedStrut passed as properties2 parameter to the constructor.
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), 0, NET::WM2ExtendedStrut);
      * if (info.valid())
@@ -191,7 +191,7 @@ public:
      * Requires NET::WMWindowType passed as properties parameter to the constructor.
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), NET::WMWindowType);
      * if (info.valid())
@@ -210,7 +210,7 @@ public:
      * Requires NET::WMVisibleName passed as properties parameter to the constructor.
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), NET::WMVisibleName);
      * if (info.valid())
@@ -230,7 +230,7 @@ public:
      * @return the window name with state
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), NET::WMVisibleName | NET::WMState | NET::XAWMState);
      * if (info.valid())
@@ -249,7 +249,7 @@ public:
      * Requires NET::WMName passed as properties parameter to the constructor.
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), NET::WMName);
      * if (info.valid())
@@ -267,7 +267,7 @@ public:
      * Requires NET::WMVisibleIconName passed as properties parameter to the constructor.
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), NET::WMVisibleIconName);
      * if (info.valid())
@@ -286,7 +286,7 @@ public:
      * @return the window iconic name with state
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), NET::WMVisibleIconName | NET::WMState | NET::XAWMState);
      * if (info.valid())
@@ -304,7 +304,7 @@ public:
      * Requires NET::WMIconName passed as properties parameter to the constructor.
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), NET::WMIconName);
      * if (info.valid())
@@ -318,7 +318,7 @@ public:
      * Requires NET::WMDesktop passed as properties parameter to the constructor.
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), NET::WMDesktop);
      * if (info.valid())
@@ -332,7 +332,7 @@ public:
      * Requires NET::WMDesktop passed as properties parameter to the constructor.
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), NET::WMDesktop);
      * if (info.valid())
@@ -347,7 +347,7 @@ public:
      * Requires NET::WMDesktop passed as properties parameter to the constructor.
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), NET::WMDesktop);
      * if (info.valid())
@@ -365,7 +365,7 @@ public:
      * Requires NET::WMDesktop passed as properties parameter to the constructor.
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), NET::WMDesktop);
      * if (info.valid())
@@ -391,7 +391,7 @@ public:
      * Requires NET::WM2Activities passed as properties parameter to the constructor.
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), 0, NET::WM2Activities);
      * if (info.valid())
@@ -409,7 +409,7 @@ public:
      * Requires NET::WMGeometry passed as properties parameter to the constructor.
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), NET::WMGeometry);
      * if (info.valid())
@@ -423,7 +423,7 @@ public:
      * Requires NET::WMFrameExtents passed as properties parameter to the constructor.
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), NET::WMFrameExtents);
      * if (info.valid())
@@ -439,7 +439,7 @@ public:
      * Requires NET::WM2TransientFor passed as properties2 parameter to the constructor.
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), 0, NET::WM2TransientFor);
      * if (info.valid())
@@ -453,7 +453,7 @@ public:
      * Requires NET::WM2GroupLeader passed as properties2 parameter to the constructor.
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), 0, NET::WM2GroupLeader);
      * if (info.valid())
@@ -469,7 +469,7 @@ public:
      * Requires NET::WM2WindowClass passed as properties2 parameter to the constructor.
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), 0, NET::WM2WindowClass);
      * if (info.valid())
@@ -485,7 +485,7 @@ public:
      * Requires NET::WM2WindowClass passed as properties2 parameter to the constructor.
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), 0, NET::WM2WindowClass);
      * if (info.valid())
@@ -501,7 +501,7 @@ public:
      * Requires NET::WM2WindowRole passed as properties2 parameter to the constructor.
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), 0, NET::WM2WindowRole);
      * if (info.valid())
@@ -517,7 +517,7 @@ public:
      * Requires NET::WM2ClientMachine passed as properties2 parameter to the constructor.
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), 0, NET::WM2ClientMachine);
      * if (info.valid())
@@ -534,7 +534,7 @@ public:
      * Requires NET::WM2AllowedActions passed as properties2 parameter to the constructor.
      *
      * @code
-     * QWidget *window = new QWidget(Q_NULLPTR);
+     * QWidget *window = new QWidget(nullptr);
      * window->show();
      * KWindowInfo info(window->winId(), 0, NET::WM2AllowedActions);
      * if (info.valid())
@@ -542,6 +542,46 @@ public:
      * @endcode
      */
     bool actionSupported(NET::Action action) const;
+
+    /**
+     * Returns the desktop file name of the window's application if present.
+     *
+     * This is either the base name without full path and without file extension of the
+     * desktop file for the window's application (e.g. "org.kde.foo").
+     *
+     * If the application's desktop file name is not at a standard location it should be
+     * the full path to the desktop file name (e.g. "/opt/kde/share/org.kde.foo.desktop").
+     *
+     * Requires NET::WM2DesktopFileName passed as properties2 parameter to the constructor.
+     *
+     * @code
+     * QWidget *window = new QWidget(nullptr);
+     * window->show();
+     * KWindowInfo info(window->winId(), 0, NET::WM2DesktopFileName);
+     * if (info.valid())
+     *     info.desktopFileName();
+     * @endcode
+     *
+     * @since 5.29
+     **/
+    QByteArray desktopFileName() const;
+
+    /**
+     * Returns the process ID of the window's application if present.
+     *
+     * Requires NET::WMPid passed as properties parameter to the constructor.
+     *
+     * @code
+     * QWidget *window = new QWidget(nullptr);
+     * window->show();
+     * KWindowInfo info(window->winId(), NET::WMPid);
+     * if (info.valid())
+     *     info.desktopFileName();
+     * @endcode
+     *
+     * @since 5.29
+     */
+    int pid() const;
 
     /**
      * Copy constructor.
