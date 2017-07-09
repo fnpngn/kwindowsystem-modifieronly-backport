@@ -1,4 +1,4 @@
-# SymbolsHelper-Confirmed: 5.28.0 amd64
+# SymbolsHelper-Confirmed: 5.35.0 amd64
 KF5WindowSystemWaylandPlugin.so libkf5windowsystem5 #MINVER#
  qt_plugin_instance@Base 5.13.0
  qt_plugin_query_metadata@Base 5.13.0
@@ -386,6 +386,8 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN17KSelectionWatcherD0Ev@Base 4.96.0
  _ZN17KSelectionWatcherD1Ev@Base 4.96.0
  _ZN17KSelectionWatcherD2Ev@Base 4.96.0
+ _ZN18KWindowInfoPrivate19installPidExtensionEP30KWindowInfoPrivatePidExtension@Base 5.35.0
+ _ZN18KWindowInfoPrivate31installDesktopFileNameExtensionEP42KWindowInfoPrivateDesktopFileNameExtension@Base 5.35.0
  (subst)_ZN18KWindowInfoPrivate6createE{quintptr}6QFlagsIN3NET8PropertyEES0_INS1_9Property2EE@Base 5.13.0
  (subst)_ZN18KWindowInfoPrivate7PrivateC1E{quintptr}6QFlagsIN3NET8PropertyEES1_INS2_9Property2EE@Base 5.13.0
  (subst)_ZN18KWindowInfoPrivate7PrivateC2E{quintptr}6QFlagsIN3NET8PropertyEES1_INS2_9Property2EE@Base 5.13.0
@@ -414,9 +416,19 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN28KWindowSystemPluginInterfaceD0Ev@Base 5.13.0
  _ZN28KWindowSystemPluginInterfaceD1Ev@Base 5.13.0
  _ZN28KWindowSystemPluginInterfaceD2Ev@Base 5.13.0
+ _ZN30KWindowInfoPrivatePidExtensionC1Ev@Base 5.35.0
+ _ZN30KWindowInfoPrivatePidExtensionC2Ev@Base 5.35.0
+ _ZN30KWindowInfoPrivatePidExtensionD0Ev@Base 5.35.0
+ _ZN30KWindowInfoPrivatePidExtensionD1Ev@Base 5.35.0
+ _ZN30KWindowInfoPrivatePidExtensionD2Ev@Base 5.35.0
  _ZN3NET13timestampDiffEmm@Base 4.96.0
  _ZN3NET15typeMatchesMaskENS_10WindowTypeE6QFlagsINS_14WindowTypeMaskEE@Base 4.96.0
  _ZN3NET16timestampCompareEmm@Base 4.96.0
+ _ZN42KWindowInfoPrivateDesktopFileNameExtensionC1Ev@Base 5.35.0
+ _ZN42KWindowInfoPrivateDesktopFileNameExtensionC2Ev@Base 5.35.0
+ _ZN42KWindowInfoPrivateDesktopFileNameExtensionD0Ev@Base 5.35.0
+ _ZN42KWindowInfoPrivateDesktopFileNameExtensionD1Ev@Base 5.35.0
+ _ZN42KWindowInfoPrivateDesktopFileNameExtensionD2Ev@Base 5.35.0
  _ZNK10KXMessages10metaObjectEv@Base 4.96.0
  _ZNK10NETWinInfo10activitiesEv@Base 4.96.0
  _ZNK10NETWinInfo10windowRoleEv@Base 4.96.0
@@ -477,12 +489,14 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZNK11KWindowInfo13frameGeometryEv@Base 4.96.0
  _ZNK11KWindowInfo13onAllDesktopsEv@Base 4.96.0
  _ZNK11KWindowInfo15actionSupportedEN3NET6ActionE@Base 4.96.0
+ _ZNK11KWindowInfo15desktopFileNameEv@Base 5.35.0
  _ZNK11KWindowInfo15visibleIconNameEv@Base 4.96.0
  _ZNK11KWindowInfo15windowClassNameEv@Base 4.96.0
  _ZNK11KWindowInfo16windowClassClassEv@Base 4.96.0
  _ZNK11KWindowInfo18isOnCurrentDesktopEv@Base 4.96.0
  _ZNK11KWindowInfo20visibleNameWithStateEv@Base 4.96.0
  _ZNK11KWindowInfo24visibleIconNameWithStateEv@Base 4.96.0
+ _ZNK11KWindowInfo3pidEv@Base 5.35.0
  _ZNK11KWindowInfo3winEv@Base 4.96.0
  _ZNK11KWindowInfo4nameEv@Base 4.96.0
  _ZNK11KWindowInfo5stateEv@Base 4.96.0
@@ -559,6 +573,8 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZNK16KStartupInfoData8hostnameEv@Base 4.96.0
  _ZNK16KStartupInfoData8xineramaEv@Base 4.96.0
  _ZNK17KSelectionWatcher10metaObjectEv@Base 4.96.0
+ _ZNK18KWindowInfoPrivate12pidExtensionEv@Base 5.35.0
+ _ZNK18KWindowInfoPrivate24desktopFileNameExtensionEv@Base 5.35.0
  _ZNK18KWindowInfoPrivate3winEv@Base 5.13.0
  _ZNK28KWindowSystemPluginInterface10metaObjectEv@Base 5.13.0
  _ZTI10KXMessages@Base 4.96.0
@@ -573,7 +589,9 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZTI20KWindowSystemPrivate@Base 5.13.0
  _ZTI21KWindowEffectsPrivate@Base 5.13.0
  _ZTI28KWindowSystemPluginInterface@Base 5.13.0
+ _ZTI30KWindowInfoPrivatePidExtension@Base 5.35.0
  _ZTI3NET@Base 4.96.0
+ _ZTI42KWindowInfoPrivateDesktopFileNameExtension@Base 5.35.0
  _ZTIN15KSelectionOwner7PrivateE@Base 4.96.0
  _ZTIN17KSelectionWatcher7PrivateE@Base 4.96.0
  _ZTS10KXMessages@Base 4.96.0
@@ -588,7 +606,9 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZTS20KWindowSystemPrivate@Base 5.13.0
  _ZTS21KWindowEffectsPrivate@Base 5.13.0
  _ZTS28KWindowSystemPluginInterface@Base 5.13.0
+ _ZTS30KWindowInfoPrivatePidExtension@Base 5.35.0
  _ZTS3NET@Base 4.96.0
+ _ZTS42KWindowInfoPrivateDesktopFileNameExtension@Base 5.35.0
  _ZTSN15KSelectionOwner7PrivateE@Base 4.96.0
  _ZTSN17KSelectionWatcher7PrivateE@Base 4.96.0
  _ZTV10KXMessages@Base 4.96.0
@@ -602,5 +622,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZTV20KWindowSystemPrivate@Base 5.13.0
  _ZTV21KWindowEffectsPrivate@Base 5.13.0
  _ZTV28KWindowSystemPluginInterface@Base 5.13.0
+ _ZTV30KWindowInfoPrivatePidExtension@Base 5.35.0
+ _ZTV42KWindowInfoPrivateDesktopFileNameExtension@Base 5.35.0
  _ZTVN15KSelectionOwner7PrivateE@Base 4.96.0
  _ZTVN17KSelectionWatcher7PrivateE@Base 4.96.0

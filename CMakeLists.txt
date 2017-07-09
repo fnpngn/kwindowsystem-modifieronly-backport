@@ -1,10 +1,11 @@
-cmake_minimum_required(VERSION 2.8.12)
+cmake_minimum_required(VERSION 3.0)
 
-project(KWindowSystem)
+set(KF5_VERSION "5.36.0") # handled by release scripts
+project(KWindowSystem VERSION ${KF5_VERSION})
 
 # ECM setup
 include(FeatureSummary)
-find_package(ECM 5.28.0  NO_MODULE)
+find_package(ECM 5.36.0  NO_MODULE)
 set_package_properties(ECM PROPERTIES TYPE REQUIRED DESCRIPTION "Extra CMake Modules." URL "https://projects.kde.org/projects/kdesupport/extra-cmake-modules")
 feature_summary(WHAT REQUIRED_PACKAGES_NOT_FOUND FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
@@ -12,22 +13,24 @@ set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
 
 
 include(GenerateExportHeader)
-include(ECMPackageConfigHelpers)
+include(CMakePackageConfigHelpers)
 include(ECMSetupVersion)
 include(ECMGenerateHeaders)
 include(CMakeFindFrameworks)
 
+include(ECMAddQch)
 include(ECMPoQmTools)
 
-set(KF5_VERSION "5.28.0") # handled by release scripts
+option(BUILD_QCH "Build API documentation in QCH format (for e.g. Qt Assistant, Qt Creator & KDevelop)" OFF)
+add_feature_info(QCH ${BUILD_QCH} "API documentation in QCH format (for e.g. Qt Assistant, Qt Creator & KDevelop)")
 
-ecm_setup_version(${KF5_VERSION} VARIABLE_PREFIX KWINDOWSYSTEM
+ecm_setup_version(PROJECT VARIABLE_PREFIX KWINDOWSYSTEM
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kwindowsystem_version.h"
                         PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5WindowSystemConfigVersion.cmake"
                         SOVERSION 5)
 
 # Dependencies
-set(REQUIRED_QT_VERSION 5.5.0)
+set(REQUIRED_QT_VERSION 5.6.0)
 find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED Widgets)
 
 include(KDEInstallDirs)
@@ -70,7 +73,17 @@ add_subdirectory(tests)
 # create a Config.cmake and a ConfigVersion.cmake file and install them
 set(CMAKECONFIG_INSTALL_DIR "${KDE_INSTALL_CMAKEPACKAGEDIR}/KF5WindowSystem")
 
-ecm_configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KF5WindowSystemConfig.cmake.in"
+if (BUILD_QCH)
+    ecm_install_qch_export(
+        TARGETS KF5WindowSystem_QCH
+        FILE KF5WindowSystemQchTargets.cmake
+        DESTINATION "${CMAKECONFIG_INSTALL_DIR}"
+        COMPONENT Devel
+    )
+    set(PACKAGE_INCLUDE_QCHTARGETS "include(\"\${CMAKE_CURRENT_LIST_DIR}/KF5WindowSystemQchTargets.cmake\")")
+endif()
+
+configure_package_config_file("${CMAKE_CURRENT_SOURCE_DIR}/KF5WindowSystemConfig.cmake.in"
                               "${CMAKE_CURRENT_BINARY_DIR}/KF5WindowSystemConfig.cmake"
                               INSTALL_DESTINATION  ${CMAKECONFIG_INSTALL_DIR}
                               )

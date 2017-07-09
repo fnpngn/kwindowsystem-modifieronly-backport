@@ -120,7 +120,7 @@ static void doSync()
 {
     auto *c = QX11Info::connection();
     const auto cookie = xcb_get_input_focus(c);
-    xcb_generic_error_t *error = Q_NULLPTR;
+    xcb_generic_error_t *error = nullptr;
     QScopedPointer<xcb_get_input_focus_reply_t, QScopedPointerPodDeleter> sync(xcb_get_input_focus_reply(c, cookie, &error));
     if (error) {
         free(error);
@@ -272,7 +272,7 @@ void KStartupInfo_UnitTest::checkStartupTest()
                         wmClass.length() * 2 + 1,
                         "kstartupinfotest\0kstartupinfotest");
     xcb_change_property(c, XCB_PROP_MODE_REPLACE, window, XCB_ATOM_WM_CLIENT_MACHINE, XCB_ATOM_STRING, 8, 9, "localhost");
-    NETWinInfo winInfo(QX11Info::connection(), window, QX11Info::appRootWindow(), 0, 0);
+    NETWinInfo winInfo(QX11Info::connection(), window, QX11Info::appRootWindow(), NET::Properties(), NET::Properties2());
     winInfo.setPid(pid);
 
     KStartupInfo info(KStartupInfo::DisableKWinModule | KStartupInfo::AnnounceSilenceChanges, this);

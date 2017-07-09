@@ -28,7 +28,7 @@ Q_DECLARE_METATYPE(NET::Actions)
 class Property : public QScopedPointer<xcb_get_property_reply_t, QScopedPointerPodDeleter>
 {
 public:
-    Property(xcb_get_property_reply_t *p = 0) : QScopedPointer<xcb_get_property_reply_t, QScopedPointerPodDeleter>(p) {}
+    Property(xcb_get_property_reply_t *p = nullptr) : QScopedPointer<xcb_get_property_reply_t, QScopedPointerPodDeleter>(p) {}
 };
 
 #define INFO NETWinInfo info(m_connection, m_testWindow, m_rootWindow, NET::WMAllProperties, NET::WM2AllProperties, NET::WindowManager);
@@ -41,7 +41,7 @@ public:
 #define GETPROP(type, length, formatSize) \
     xcb_get_property_cookie_t cookie = xcb_get_property_unchecked(connection(), false, m_testWindow, \
                                        atom, type, 0, length); \
-    Property reply(xcb_get_property_reply(connection(), cookie, Q_NULLPTR)); \
+    Property reply(xcb_get_property_reply(connection(), cookie, nullptr)); \
     QVERIFY(!reply.isNull()); \
     QCOMPARE(reply->format, uint8_t(formatSize)); \
     QCOMPARE(reply->value_len, uint32_t(length));
@@ -49,7 +49,7 @@ public:
 #define VERIFYDELETED(t) \
     xcb_get_property_cookie_t cookieDeleted = xcb_get_property_unchecked(connection(), false, m_testWindow, \
             atom, t, 0, 1); \
-    Property replyDeleted(xcb_get_property_reply(connection(), cookieDeleted, Q_NULLPTR)); \
+    Property replyDeleted(xcb_get_property_reply(connection(), cookieDeleted, nullptr)); \
     QVERIFY(!replyDeleted.isNull()); \
     QVERIFY(replyDeleted->type == XCB_ATOM_NONE);
 
@@ -107,7 +107,7 @@ void NetWinInfoTestWM::cleanupTestCase()
 void NetWinInfoTestWM::init()
 {
     // first reset just to be sure
-    m_connection = Q_NULLPTR;
+    m_connection = nullptr;
     m_rootWindow = XCB_WINDOW_NONE;
     m_testWindow = XCB_WINDOW_NONE;
     // start Xvfb
@@ -264,7 +264,7 @@ void NetWinInfoTestWM::testAllowedActions()
     ATOM(_NET_WM_ALLOWED_ACTIONS)
     INFO
 
-    QCOMPARE(info.allowedActions(), NET::Actions(0));
+    QCOMPARE(info.allowedActions(), NET::Actions());
     QFETCH(NET::Actions, actions);
     info.setAllowedActions(actions);
     QCOMPARE(info.allowedActions(), actions);
@@ -472,9 +472,9 @@ void NetWinInfoTestWM::testState()
     ATOM(_NET_WM_STATE)
     INFO
 
-    QCOMPARE(info.state(), NET::States(0));
+    QCOMPARE(info.state(), NET::States());
     QFETCH(NET::States, states);
-    info.setState(states, 0);
+    info.setState(states, NET::States());
     QCOMPARE(info.state(), states);
 
     // compare with the X property

@@ -120,7 +120,7 @@ public:
        @param doActivate true to call activate() to do an initial data read/update
        of the query information.
     **/
-    NETRootInfo(xcb_connection_t *connection, NET::Properties properties, NET::Properties2 properties2 = 0,
+    NETRootInfo(xcb_connection_t *connection, NET::Properties properties, NET::Properties2 properties2 = NET::Properties2(),
                 int screen = -1, bool doActivate = true);
 
 
@@ -710,7 +710,7 @@ public:
      * @param properties2 The NET::Properties2 that changed
      * @since 5.0
      **/
-    void event(xcb_generic_event_t *event, NET::Properties *properties, NET::Properties2 *properties2 = Q_NULLPTR);
+    void event(xcb_generic_event_t *event, NET::Properties *properties, NET::Properties2 *properties2 = nullptr);
 
     /**
        This function takes the passed XEvent and returns an OR'ed list of
@@ -1415,7 +1415,7 @@ public:
      * The default value is @c XCB_PIXMAP_NONE.
      *
      * Using the ICCCM variant for the icon is deprecated and only
-     * offers a limited functionality compared to @link {icon}.
+     * offers a limited functionality compared to {@link icon}.
      * Only use this variant as a fallback.
      *
      * @see icccmIconPixmapMask
@@ -1548,7 +1548,7 @@ public:
      * @param properties2 The NET::Properties2 that changed
      * @since 5.0
      **/
-    void event(xcb_generic_event_t *event, NET::Properties *properties, NET::Properties2 *properties2 = Q_NULLPTR);
+    void event(xcb_generic_event_t *event, NET::Properties *properties, NET::Properties2 *properties2 = nullptr);
 
     /**
        This function takes the pass XEvent and returns an OR'ed list of NETWinInfo
@@ -1654,7 +1654,7 @@ protected:
     }
 
 private:
-    void update(NET::Properties dirtyProperties, NET::Properties2 dirtyProperties2 = 0);
+    void update(NET::Properties dirtyProperties, NET::Properties2 dirtyProperties2 = NET::Properties2());
     void updateWMState();
     void setIconInternal(NETRArray<NETIcon> &icons, int &icon_count, xcb_atom_t property, NETIcon icon, bool replace);
     NETIcon iconInternal(NETRArray<NETIcon> &icons, int icon_count, int width, int height) const;

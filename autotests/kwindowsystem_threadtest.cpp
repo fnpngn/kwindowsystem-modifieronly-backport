@@ -45,7 +45,7 @@ private:
 class KWindowSystemCreator : public QRunnable
 {
 public:
-    void run()
+    void run() Q_DECL_OVERRIDE
     {
         (void)KWindowSystem::self();
     }
@@ -54,7 +54,7 @@ public:
 class WindowInfoLister : public QThread
 {
 public:
-    void run()
+    void run() Q_DECL_OVERRIDE
     {
         // simulate some activity in another thread gathering window information
         const QList<WId> windows = KWindowSystem::stackingOrder();
@@ -71,7 +71,7 @@ public:
 
 void KWindowSystemThreadTest::initTestCase()
 {
-    m_widget = 0;
+    m_widget = nullptr;
     QRunnable *creator = new KWindowSystemCreator;
     creator->setAutoDelete(true);
     QThreadPool::globalInstance()->start(creator);
