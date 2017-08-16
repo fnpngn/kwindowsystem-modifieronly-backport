@@ -1,3 +1,15 @@
+kwindowsystem (5.37.0-1) experimental; urgency=medium
+
+  * New upstream release (5.37.0).
+  * Update build-deps and deps with the info from cmake
+  * Bump group breaks (5.37)
+  * Add a libkf5windowsystem-doc package for the qch files
+  * Bump Standards-Version to 4.0.1.
+  * Set section for the doc package
+  * Release to experimental
+
+ -- Maximiliano Curia <maxy@debian.org>  Wed, 16 Aug 2017 10:42:22 +0200
+
 kwindowsystem (5.36.0-1) experimental; urgency=medium
 
   [ Maximiliano Curia ]
