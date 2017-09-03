@@ -1,3 +1,12 @@
+kwindowsystem (5.37.0-2) sid; urgency=medium
+
+  * New revision
+  * Bump Standards-Version to 4.1.0.
+  * Update upstream metadata
+  * Release to sid
+
+ -- Maximiliano Curia <maxy@debian.org>  Sun, 03 Sep 2017 09:58:59 +0200
+
 kwindowsystem (5.37.0-1) experimental; urgency=medium
 
   * New upstream release (5.37.0).
