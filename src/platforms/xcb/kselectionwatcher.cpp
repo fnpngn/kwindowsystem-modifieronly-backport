@@ -25,6 +25,7 @@ DEALINGS IN THE SOFTWARE.
 #include "kselectionwatcher.h"
 
 #include <config-kwindowsystem.h>
+#include "kwindowsystem.h"
 
 #include <QtCore/QObject>
 #include <QGuiApplication>
@@ -62,7 +63,7 @@ static xcb_atom_t intern_atom(xcb_connection_t *c, const char *name)
 // KSelectionWatcher
 //*******************************************
 
-class KSelectionWatcher::Private
+class Q_DECL_HIDDEN KSelectionWatcher::Private
     : public QAbstractNativeEventFilter
 {
 public:
@@ -104,7 +105,7 @@ private:
 
 KSelectionWatcher::Private *KSelectionWatcher::Private::create(KSelectionWatcher *watcher, xcb_atom_t selection_P, int screen_P)
 {
-    if (QGuiApplication::platformName() == QStringLiteral("xcb")) {
+    if (KWindowSystem::isPlatformX11()) {
         return create(watcher, selection_P, QX11Info::connection(), QX11Info::appRootWindow(screen_P));
     }
     return nullptr;
@@ -117,7 +118,7 @@ KSelectionWatcher::Private *KSelectionWatcher::Private::create(KSelectionWatcher
 
 KSelectionWatcher::Private *KSelectionWatcher::Private::create(KSelectionWatcher *watcher, const char *selection_P, int screen_P)
 {
-    if (QGuiApplication::platformName() == QStringLiteral("xcb")) {
+    if (KWindowSystem::isPlatformX11()) {
         return create(watcher, selection_P, QX11Info::connection(), QX11Info::appRootWindow(screen_P));
     }
     return nullptr;

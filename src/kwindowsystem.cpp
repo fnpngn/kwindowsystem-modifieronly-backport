@@ -507,7 +507,7 @@ QPixmap KWindowSystem::icon(WId win, int width, int height, bool scale, int flag
     height *= qApp->devicePixelRatio();
 #if KWINDOWSYSTEM_HAVE_X11
     if (info) {
-        if (QGuiApplication::platformName().compare(QLatin1String("xcb"), Qt::CaseInsensitive) == 0) {
+        if (isPlatformX11()) {
             // this is the xcb plugin, we can just delegate
             return d->iconFromNetWinInfo(width, height, scale, flags, info);
         } else {
@@ -715,12 +715,20 @@ QPoint KWindowSystem::constrainViewportRelativePosition(const QPoint &pos)
 
 static inline KWindowSystem::Platform initPlatform()
 {
+    auto platformName = QGuiApplication::platformName();
+    if (platformName == QLatin1String("flatpak")) {
+        // here we cannot know what is the actual windowing system, let's try it's env variable
+        const auto flatpakPlatform = QString::fromLocal8Bit(qgetenv("QT_QPA_FLATPAK_PLATFORM"));
+        if (!flatpakPlatform.isEmpty()) {
+            platformName = flatpakPlatform;
+        }
+    }
 #if KWINDOWSYSTEM_HAVE_X11
-    if (QX11Info::isPlatformX11()) {
+    if (platformName == QLatin1String("xcb")) {
         return KWindowSystem::Platform::X11;
     }
 #endif
-    if (QGuiApplication::platformName().startsWith(QLatin1String("wayland"), Qt::CaseInsensitive)) {
+    if (platformName.startsWith(QLatin1String("wayland"), Qt::CaseInsensitive)) {
         return KWindowSystem::Platform::Wayland;
     }
     return KWindowSystem::Platform::Unknown;

@@ -1,4 +1,4 @@
-# SymbolsHelper-Confirmed: 5.35.0 amd64
+# SymbolsHelper-Confirmed: 5.41.0 amd64
 KF5WindowSystemWaylandPlugin.so libkf5windowsystem5 #MINVER#
  qt_plugin_instance@Base 5.13.0
  qt_plugin_query_metadata@Base 5.13.0
@@ -18,6 +18,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN10KKeyServer14modXScrollLockEv@Base 4.96.0
  _ZN10KKeyServer15modToStringUserEj@Base 4.96.0
  _ZN10KKeyServer15stringUserToModERK7QString@Base 4.96.0
+ _ZN10KKeyServer15symXModXToKeyQtEjtPi@Base 5.41.0
  _ZN10KKeyServer18keyboardHasMetaKeyEv@Base 4.96.0
  _ZN10KKeyServer20xcbKeyPressEventToQtEP19xcb_generic_event_tPi@Base 4.96.0
  _ZN10KKeyServer20xcbKeyPressEventToQtEP21xcb_key_press_event_tPi@Base 4.96.0
@@ -168,25 +169,6 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  (subst)_ZN12KStartupInfo18setWindowStartupIdE{quintptr}RK10QByteArray@Base 4.96.0
  _ZN12KStartupInfo19currentStartupIdEnvEv@Base 4.96.0
  _ZN12KStartupInfo30createNewStartupIdForTimestampEj@Base 5.4.0+git20141128.0009+15.04
- _ZN12KStartupInfo7Private11find_wclassERK10QByteArrayS3_P14KStartupInfoIdP16KStartupInfoData@Base 4.96.0
- _ZN12KStartupInfo7Private11got_messageERK7QString@Base 4.96.0
- (subst)_ZN12KStartupInfo7Private12window_addedE{quintptr}@Base 4.96.0
- _ZN12KStartupInfo7Private16got_startup_infoERK7QStringb@Base 4.96.0
- _ZN12KStartupInfo7Private16startups_cleanupEv@Base 4.96.0
- (subst)_ZN12KStartupInfo7Private17slot_window_addedE{quintptr}@Base 4.96.0
- _ZN12KStartupInfo7Private19remove_startup_pidsERK14KStartupInfoIdRK16KStartupInfoData@Base 4.96.0
- _ZN12KStartupInfo7Private19remove_startup_pidsERK16KStartupInfoData@Base 4.96.0
- (subst)_ZN12KStartupInfo7Private22check_startup_internalE{quintptr}P14KStartupInfoIdP16KStartupInfoData@Base 4.96.0
- _ZN12KStartupInfo7Private22clean_all_noncompliantEv@Base 4.96.0
- _ZN12KStartupInfo7Private23got_remove_startup_infoERK7QString@Base 4.96.0
- _ZN12KStartupInfo7Private23startups_cleanup_no_ageEv@Base 4.96.0
- _ZN12KStartupInfo7Private25new_startup_info_internalERK14KStartupInfoIdRNS_4DataEb@Base 4.96.0
- _ZN12KStartupInfo7Private25removeStartupInfoInternalEN4QMapI14KStartupInfoIdNS_4DataEE8iteratorE@Base 4.99.0
- _ZN12KStartupInfo7Private25startups_cleanup_internalEb@Base 4.96.0
- _ZN12KStartupInfo7Private28removeAllStartupInfoInternalERK14KStartupInfoId@Base 4.99.0
- _ZN12KStartupInfo7Private29check_required_startup_fieldsERK7QStringRK16KStartupInfoDatai@Base 4.96.0
- _ZN12KStartupInfo7Private7find_idERK10QByteArrayP14KStartupInfoIdP16KStartupInfoData@Base 4.96.0
- _ZN12KStartupInfo7Private8find_pidEiRK10QByteArrayP14KStartupInfoIdP16KStartupInfoData@Base 4.96.0
  _ZN12KStartupInfo9startupIdEv@Base 4.96.0
  _ZN12KStartupInfoC1EbP7QObject@Base 4.96.0
  _ZN12KStartupInfoC1EiP7QObject@Base 4.96.0
@@ -307,17 +289,6 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN15KSelectionOwner22failedToClaimOwnershipEv@Base 4.96.0
  _ZN15KSelectionOwner24filter_selection_requestEPv@Base 4.96.0
  _ZN15KSelectionOwner5claimEbb@Base 4.96.0
- _ZN15KSelectionOwner7Private10xa_targetsE@Base 4.96.0
- _ZN15KSelectionOwner7Private11xa_multipleE@Base 4.96.0
- _ZN15KSelectionOwner7Private12gotTimestampEv@Base 4.96.0
- _ZN15KSelectionOwner7Private12manager_atomE@Base 4.96.0
- _ZN15KSelectionOwner7Private12xa_timestampE@Base 4.96.0
- _ZN15KSelectionOwner7Private14claimSucceededEv@Base 4.96.0
- _ZN15KSelectionOwner7Private6createEPS_PKcP16xcb_connection_tj@Base 5.7.0+git20150224.0052+15.04
- _ZN15KSelectionOwner7Private6createEPS_PKci@Base 4.96.0
- _ZN15KSelectionOwner7Private6createEPS_jP16xcb_connection_tj@Base 5.7.0+git20150224.0052+15.04
- _ZN15KSelectionOwner7Private6createEPS_ji@Base 4.96.0
- _ZN15KSelectionOwner7Private7timeoutEv@Base 4.96.0
  (optional=gccinternal|arch=)_ZN15KSelectionOwner7PrivateD0Ev@Base 4.96.0
  (optional=gccinternal|arch=)_ZN15KSelectionOwner7PrivateD1Ev@Base 4.96.0
  (optional=gccinternal|arch=)_ZN15KSelectionOwner7PrivateD2Ev@Base 4.96.0
@@ -345,7 +316,6 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN16KStartupInfoData6addPidEi@Base 4.96.0
  _ZN16KStartupInfoData6setBinERK7QString@Base 4.96.0
  _ZN16KStartupInfoData6updateERKS_@Base 4.96.0
- _ZN16KStartupInfoData7Private10remove_pidEi@Base 4.96.0
  _ZN16KStartupInfoData7setIconERK7QString@Base 4.96.0
  _ZN16KStartupInfoData7setNameERK7QString@Base 4.96.0
  _ZN16KStartupInfoData9setScreenEi@Base 4.96.0
@@ -365,11 +335,6 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN17KSelectionWatcher16staticMetaObjectE@Base 4.96.0
  _ZN17KSelectionWatcher4initEv@Base 4.96.0
  _ZN17KSelectionWatcher5ownerEv@Base 4.96.0
- _ZN17KSelectionWatcher7Private12manager_atomE@Base 4.96.0
- _ZN17KSelectionWatcher7Private6createEPS_PKcP16xcb_connection_tj@Base 5.7.0+git20150224.0052+15.04
- _ZN17KSelectionWatcher7Private6createEPS_PKci@Base 4.96.0
- _ZN17KSelectionWatcher7Private6createEPS_jP16xcb_connection_tj@Base 5.7.0+git20150224.0052+15.04
- _ZN17KSelectionWatcher7Private6createEPS_ji@Base 4.96.0
  (optional=gccinternal|arch=)_ZN17KSelectionWatcher7PrivateD0Ev@Base 4.96.0
  (optional=gccinternal|arch=)_ZN17KSelectionWatcher7PrivateD1Ev@Base 4.96.0
  (optional=gccinternal|arch=)_ZN17KSelectionWatcher7PrivateD2Ev@Base 4.96.0
@@ -389,8 +354,6 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN18KWindowInfoPrivate19installPidExtensionEP30KWindowInfoPrivatePidExtension@Base 5.35.0
  _ZN18KWindowInfoPrivate31installDesktopFileNameExtensionEP42KWindowInfoPrivateDesktopFileNameExtension@Base 5.35.0
  (subst)_ZN18KWindowInfoPrivate6createE{quintptr}6QFlagsIN3NET8PropertyEES0_INS1_9Property2EE@Base 5.13.0
- (subst)_ZN18KWindowInfoPrivate7PrivateC1E{quintptr}6QFlagsIN3NET8PropertyEES1_INS2_9Property2EE@Base 5.13.0
- (subst)_ZN18KWindowInfoPrivate7PrivateC2E{quintptr}6QFlagsIN3NET8PropertyEES1_INS2_9Property2EE@Base 5.13.0
  (subst)_ZN18KWindowInfoPrivateC1E{quintptr}6QFlagsIN3NET8PropertyEES0_INS1_9Property2EE@Base 5.13.0
  (subst)_ZN18KWindowInfoPrivateC2E{quintptr}6QFlagsIN3NET8PropertyEES0_INS1_9Property2EE@Base 5.13.0
  _ZN18KWindowInfoPrivateD0Ev@Base 5.13.0
@@ -546,7 +509,6 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZNK14KStartupInfoId15setupStartupEnvEv@Base 4.96.0
  _ZNK14KStartupInfoId2idEv@Base 4.96.0
  _ZNK14KStartupInfoId6isNullEv@Base 4.99.0
- _ZNK14KStartupInfoId7Private7to_textEv@Base 4.96.0
  _ZNK14KStartupInfoId9timestampEv@Base 4.96.0
  _ZNK14KStartupInfoIdeqERKS_@Base 4.96.0
  _ZNK14KStartupInfoIdltERKS_@Base 4.96.0
@@ -565,7 +527,6 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZNK16KStartupInfoData6is_pidEi@Base 4.96.0
  _ZNK16KStartupInfoData6screenEv@Base 4.96.0
  _ZNK16KStartupInfoData6silentEv@Base 4.96.0
- _ZNK16KStartupInfoData7Private7to_textEv@Base 4.96.0
  _ZNK16KStartupInfoData7WMClassEv@Base 4.96.0
  _ZNK16KStartupInfoData7desktopEv@Base 4.96.0
  _ZNK16KStartupInfoData8findIconEv@Base 4.96.0
@@ -592,8 +553,6 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZTI30KWindowInfoPrivatePidExtension@Base 5.35.0
  _ZTI3NET@Base 4.96.0
  _ZTI42KWindowInfoPrivateDesktopFileNameExtension@Base 5.35.0
- _ZTIN15KSelectionOwner7PrivateE@Base 4.96.0
- _ZTIN17KSelectionWatcher7PrivateE@Base 4.96.0
  _ZTS10KXMessages@Base 4.96.0
  _ZTS10NETWinInfo@Base 4.96.0
  _ZTS11NETRootInfo@Base 4.96.0
@@ -609,8 +568,6 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZTS30KWindowInfoPrivatePidExtension@Base 5.35.0
  _ZTS3NET@Base 4.96.0
  _ZTS42KWindowInfoPrivateDesktopFileNameExtension@Base 5.35.0
- _ZTSN15KSelectionOwner7PrivateE@Base 4.96.0
- _ZTSN17KSelectionWatcher7PrivateE@Base 4.96.0
  _ZTV10KXMessages@Base 4.96.0
  _ZTV10NETWinInfo@Base 4.96.0
  _ZTV11NETRootInfo@Base 4.96.0
@@ -624,5 +581,3 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZTV28KWindowSystemPluginInterface@Base 5.13.0
  _ZTV30KWindowInfoPrivatePidExtension@Base 5.35.0
  _ZTV42KWindowInfoPrivateDesktopFileNameExtension@Base 5.35.0
- _ZTVN15KSelectionOwner7PrivateE@Base 4.96.0
- _ZTVN17KSelectionWatcher7PrivateE@Base 4.96.0

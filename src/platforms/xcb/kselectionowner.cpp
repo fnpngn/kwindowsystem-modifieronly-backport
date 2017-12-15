@@ -25,6 +25,7 @@ DEALINGS IN THE SOFTWARE.
 #include "kselectionowner.h"
 
 #include <config-kwindowsystem.h>
+#include "kwindowsystem.h"
 
 #include <QtCore/QBasicTimer>
 #include <QDebug>
@@ -61,7 +62,7 @@ static xcb_atom_t intern_atom(xcb_connection_t *c, const char *name)
     return atom;
 }
 
-class KSelectionOwner::Private
+class Q_DECL_HIDDEN KSelectionOwner::Private
     : public QAbstractNativeEventFilter
 {
 public:
@@ -123,7 +124,7 @@ private:
 
 KSelectionOwner::Private* KSelectionOwner::Private::create(KSelectionOwner *owner, xcb_atom_t selection_P, int screen_P)
 {
-    if (QGuiApplication::platformName() == QStringLiteral("xcb")) {
+    if (KWindowSystem::isPlatformX11()) {
         return create(owner, selection_P, QX11Info::connection(), QX11Info::appRootWindow(screen_P));
     }
     qWarning() << "Trying to use KSelectionOwner on a non-X11 platform! This is an application bug.";
@@ -137,7 +138,7 @@ KSelectionOwner::Private *KSelectionOwner::Private::create(KSelectionOwner *owne
 
 KSelectionOwner::Private *KSelectionOwner::Private::create(KSelectionOwner *owner, const char *selection_P, int screen_P)
 {
-    if (QGuiApplication::platformName() == QStringLiteral("xcb")) {
+    if (KWindowSystem::isPlatformX11()) {
         return create(owner, selection_P, QX11Info::connection(), QX11Info::appRootWindow(screen_P));
     }
     qWarning() << "Trying to use KSelectionOwner on a non-X11 platform! This is an application bug.";
