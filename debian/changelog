@@ -1,3 +1,38 @@
+kwindowsystem (5.41.0-1) experimental; urgency=medium
+
+  * New upstream release (5.41.0).
+  * Update build-deps and deps with the info from cmake
+  * Update symbols files
+  * Fix FTCBFS: Annotate libqt5sql5-sqlite with :native. (Closes: 882783)
+  * Bump group breaks (5.41)
+  * Release to experimental
+
+ -- Maximiliano Curia <maxy@debian.org>  Fri, 15 Dec 2017 10:43:14 -0300
+
+kwindowsystem (5.41.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Fri, 08 Dec 2017 14:48:45 +0000
+
+kwindowsystem (5.40.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Fri, 10 Nov 2017 13:00:15 +0000
+
+kwindowsystem (5.39.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Sun, 15 Oct 2017 11:47:41 +0000
+
+kwindowsystem (5.38.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Mon, 11 Sep 2017 13:32:11 +0000
+
 kwindowsystem (5.37.0-2) sid; urgency=medium
 
   * New revision
@@ -18,6 +53,12 @@ kwindowsystem (5.37.0-1) experimental; urgency=medium
   * Release to experimental
 
  -- Maximiliano Curia <maxy@debian.org>  Wed, 16 Aug 2017 10:42:22 +0200
+
+kwindowsystem (5.37.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Fri, 11 Aug 2017 15:18:39 +0000
 
 kwindowsystem (5.36.0-1) experimental; urgency=medium
 
@@ -42,6 +83,54 @@ kwindowsystem (5.36.0-1) experimental; urgency=medium
 
  -- Maximiliano Curia <maxy@debian.org>  Sun, 09 Jul 2017 23:41:25 +0200
 
+kwindowsystem (5.36.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Mon, 10 Jul 2017 17:14:05 +0000
+
+kwindowsystem (5.35.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Sun, 11 Jun 2017 20:38:15 +0000
+
+kwindowsystem (5.34.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Sun, 14 May 2017 17:40:30 +0000
+
+kwindowsystem (5.33.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Fri, 07 Apr 2017 16:25:43 +0000
+
+kwindowsystem (5.32.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Sun, 12 Mar 2017 13:24:26 +0000
+
+kwindowsystem (5.31.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Mon, 13 Feb 2017 14:40:51 +0000
+
+kwindowsystem (5.30.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Mon, 16 Jan 2017 13:43:17 +0000
+
+kwindowsystem (5.29.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Fri, 09 Dec 2016 19:09:12 +0000
+
 kwindowsystem (5.28.0-2) unstable; urgency=medium
 
   * Apply "Allow Tab as being modified by Shift" (4fe25b7)
@@ -63,6 +152,12 @@ kwindowsystem (5.28.0-1) unstable; urgency=medium
 
  -- Maximiliano Curia <maxy@debian.org>  Fri, 18 Nov 2016 16:02:48 +0100
 
+kwindowsystem (5.28.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Thu, 17 Nov 2016 09:46:36 +0000
+
 kwindowsystem (5.27.0-1) unstable; urgency=medium
 
   [ Automatic packaging ]
@@ -76,6 +171,12 @@ kwindowsystem (5.27.0-1) unstable; urgency=medium
 
  -- Maximiliano Curia <maxy@debian.org>  Sat, 15 Oct 2016 16:57:16 +0200
 
+kwindowsystem (5.27.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Sat, 08 Oct 2016 11:33:24 +0000
+
 kwindowsystem (5.26.0-1) unstable; urgency=medium
 
   [ Automatic packaging ]
@@ -88,6 +189,12 @@ kwindowsystem (5.26.0-1) unstable; urgency=medium
 
  -- Maximiliano Curia <maxy@debian.org>  Thu, 29 Sep 2016 11:57:02 +0200
 
+kwindowsystem (5.26.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Mon, 12 Sep 2016 08:34:12 +0000
+
 kwindowsystem (5.25.0-1) unstable; urgency=medium
 
   [ Automatic packaging ]
@@ -99,6 +206,18 @@ kwindowsystem (5.25.0-1) unstable; urgency=medium
 
  -- Maximiliano Curia <maxy@debian.org>  Thu, 18 Aug 2016 17:18:33 +0200
 
+kwindowsystem (5.25.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Sat, 13 Aug 2016 20:16:37 +0000
+
+kwindowsystem (5.24.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Mon, 11 Jul 2016 07:42:52 +0000
+
 kwindowsystem (5.23.0-1) unstable; urgency=medium
 
   [ Automatic packaging ]
@@ -106,6 +225,12 @@ kwindowsystem (5.23.0-1) unstable; urgency=medium
   * Update symbols files from buildds logs (5.22.0-1).
 
  -- Maximiliano Curia <maxy@debian.org>  Sat, 18 Jun 2016 08:24:07 +0200
+
+kwindowsystem (5.23.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Mon, 13 Jun 2016 09:40:04 +0000
 
 kwindowsystem (5.22.0-1) unstable; urgency=medium
 
@@ -116,6 +241,12 @@ kwindowsystem (5.22.0-1) unstable; urgency=medium
   * Refresh patches
 
  -- Maximiliano Curia <maxy@debian.org>  Thu, 19 May 2016 00:19:06 +0200
+
+kwindowsystem (5.22.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Tue, 17 May 2016 07:37:54 +0000
 
 kwindowsystem (5.21.0-1) experimental; urgency=medium
 
@@ -133,6 +264,18 @@ kwindowsystem (5.21.0-1) experimental; urgency=medium
   * Update build-deps and deps with the info from cmake
 
  -- Maximiliano Curia <maxy@debian.org>  Thu, 05 May 2016 15:02:43 +0200
+
+kwindowsystem (5.21.0-0neon) xenial; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Mon, 11 Apr 2016 09:24:16 +0000
+
+kwindowsystem (5.20.0-0neon) wily; urgency=medium
+
+  * New release
+
+ -- Neon CI <neon@kde.org>  Fri, 01 Apr 2016 11:08:38 +0000
 
 kwindowsystem (5.19.0-1) experimental; urgency=medium
 
@@ -161,11 +304,33 @@ kwindowsystem (5.15.0-1) unstable; urgency=medium
 
  -- Maximiliano Curia <maxy@debian.org>  Fri, 09 Oct 2015 19:16:25 +0200
 
+kwindowsystem (5.15.0-0ubuntu2) xenial; urgency=medium
+
+  * Fix autopackagetests by adding allow-stderr to the requirements.
+
+ -- Philip Muškovac <yofel@kubuntu.org>  Tue, 03 Nov 2015 15:34:50 +0100
+
+kwindowsystem (5.15.0-0ubuntu1) wily; urgency=medium
+
+  [ Scarlett Clark ]
+  * Vivid backport
+
+  [ Jonathan Riddell ]
+  * new upstream release
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Wed, 07 Oct 2015 13:58:18 +0100
+
 kwindowsystem (5.14.0-1) unstable; urgency=medium
 
   * New upstream release (5.14.0).
 
  -- Maximiliano Curia <maxy@debian.org>  Tue, 15 Sep 2015 13:49:10 +0200
+
+kwindowsystem (5.14.0-0ubuntu1) wily; urgency=medium
+
+  * new upstream release
+
+ -- Clive Johnston <clivejo@aol.com>  Thu, 17 Sep 2015 13:28:09 +0100
 
 kwindowsystem (5.13.0-3) unstable; urgency=medium
 
@@ -194,11 +359,31 @@ kwindowsystem (5.13.0-1) unstable; urgency=medium
 
  -- Maximiliano Curia <maxy@debian.org>  Thu, 13 Aug 2015 12:20:50 +0200
 
+kwindowsystem (5.13.0-0ubuntu1) wily; urgency=medium
+
+  [ Jonathan Riddell ]
+  * new upstream release
+
+  [ José Manuel Santamaría Lema ]
+  * Update symbols files.
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Mon, 10 Aug 2015 13:34:13 +0200
+
 kwindowsystem (5.12.0-1) unstable; urgency=medium
 
   * New upstream release (5.12.0).
 
  -- Maximiliano Curia <maxy@debian.org>  Thu, 09 Jul 2015 12:43:35 +0200
+
+kwindowsystem (5.12.0-0ubuntu1) wily; urgency=medium
+
+  [ José Manuel Santamaría Lema ]
+  * Update installed files.
+
+  [ Scarlett Clark ]
+  * New upstream release
+
+ -- Scarlett Clark <sgclark@kubuntu.org>  Mon, 03 Aug 2015 16:10:58 +0200
 
 kwindowsystem (5.11.0-1) unstable; urgency=medium
 
@@ -208,6 +393,31 @@ kwindowsystem (5.11.0-1) unstable; urgency=medium
   * New upstream release (5.11.0).
 
  -- Maximiliano Curia <maxy@debian.org>  Fri, 26 Jun 2015 13:45:08 +0200
+
+kwindowsystem (5.10.0-0ubuntu3) wily; urgency=medium
+
+  * Add kubuntu_skip-failed-tests.diff to get it into the archive
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Mon, 22 Jun 2015 23:01:00 +0200
+
+kwindowsystem (5.10.0-0ubuntu2) wily; urgency=medium
+
+  * Disable test_depends_on_stack_pointer, keep it around incase the
+    tests fail again
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Mon, 15 Jun 2015 06:39:32 +0200
+
+kwindowsystem (5.10.0-0ubuntu1) wily; urgency=medium
+
+  [ Maximiliano Curia ]
+  * New upstream release (5.10.0).
+  * Update symbols files from buildds logs (5.9.0-1).
+  * Update symbols files.
+
+  [ Jonathan Riddell ]
+  * New upstream release
+
+ -- Jonathan Riddell <jriddell@ubuntu.com>  Wed, 03 Jun 2015 20:43:32 +0200
 
 kwindowsystem (5.9.0-1) experimental; urgency=medium
 
@@ -313,7 +523,7 @@ kwindowsystem (5.2.0-0ubuntu1) utopic; urgency=medium
 kwindowsystem (5.1.0-0ubuntu1) utopic; urgency=medium
 
   [ Scarlett Clark ]
-  * Update copyright to match licensing to source, + minor cleanup. 
+  * Update copyright to match licensing to source, + minor cleanup.
 
   [ José Manuel Santamaría Lema ]
   * Update libraries *.install paths so a soname bump doesn't go
