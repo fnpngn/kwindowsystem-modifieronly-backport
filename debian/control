@@ -6,7 +6,7 @@ Uploaders: Maximiliano Curia <maxy@debian.org>
 Build-Depends: cmake (>= 3.0~),
                debhelper (>= 11~),
                doxygen,
-               extra-cmake-modules (>= 5.42.0~),
+               extra-cmake-modules (>= 5.43.0~),
                graphviz,
                libqt5sql5-sqlite:native,
                libqt5x11extras5-dev (>= 5.7.0~),
@@ -21,8 +21,8 @@ Build-Depends: cmake (>= 3.0~),
                qttools5-dev-tools (>= 5.4),
 Standards-Version: 4.1.3
 Homepage: https://projects.kde.org/projects/frameworks/kwindowsystem
-Vcs-Browser: https://anonscm.debian.org/git/pkg-kde/frameworks/kwindowsystem.git
-Vcs-Git: https://anonscm.debian.org/git/pkg-kde/frameworks/kwindowsystem.git
+Vcs-Browser: https://salsa.debian.org/qt-kde-team/kde/kwindowsystem
+Vcs-Git: https://salsa.debian.org/qt-kde-team/kde/kwindowsystem.git
 
 Package: libkf5windowsystem-data
 Architecture: all
@@ -53,15 +53,15 @@ Description: development files for kwindowsystem
  lowlevel classes.
  .
  Contains development files for kwindowsystem.
-Breaks: libkf5crash-dev (<< 5.42),
-        libkf5kdelibs4support-dev (<< 5.42),
-        libkf5khtml-dev (<< 5.42),
-        libkf5notifications-dev (<< 5.42),
-        libkf5plasma-dev (<< 5.42),
-        libkf5runner-dev (<< 5.42),
-        libkf5textwidgets-dev (<< 5.42),
-        libkf5wallet-dev (<< 5.42),
-        libkf5xmlgui-dev (<< 5.42),
+Breaks: libkf5crash-dev (<< 5.43),
+        libkf5kdelibs4support-dev (<< 5.43),
+        libkf5khtml-dev (<< 5.43),
+        libkf5notifications-dev (<< 5.43),
+        libkf5plasma-dev (<< 5.43),
+        libkf5runner-dev (<< 5.43),
+        libkf5textwidgets-dev (<< 5.43),
+        libkf5wallet-dev (<< 5.43),
+        libkf5xmlgui-dev (<< 5.43),
 
 Package: libkf5windowsystem-doc
 Architecture: all
@@ -88,23 +88,23 @@ Description: Convenience access to certain properties and features of the window
  window manager and allows asking the window manager to change them
  using a more high-level interface than the NETWinInfo/NETRootInfo
  low level classes.
-Breaks: kinit (<< 5.42),
-        kio (<< 5.42),
-        libkf5crash5 (<< 5.42),
-        libkf5globalaccel-bin (<< 5.42),
+Breaks: kinit (<< 5.43),
+        kio (<< 5.43),
+        libkf5crash5 (<< 5.43),
+        libkf5globalaccel-bin (<< 5.43),
         libkf5globalaccelprivate5 (<< 5.42),
-        libkf5kdelibs4support5 (<< 5.42),
+        libkf5kdelibs4support5 (<< 5.43),
         libkf5kdelibs4support5-bin (<< 5.42),
-        libkf5khtml-bin (<< 5.42),
-        libkf5khtml5 (<< 5.42),
-        libkf5kiowidgets5 (<< 5.42),
-        libkf5notifications5 (<< 5.42),
-        libkf5plasma5 (<< 5.42),
-        libkf5plasmaquick5 (<< 5.42),
-        libkf5textwidgets5 (<< 5.42),
-        libkf5wallet-bin (<< 5.42),
-        libkf5wallet5 (<< 5.42),
-        libkf5xmlgui5 (<< 5.42),
-        plasma-framework (<< 5.42),
-        qml-module-org-kde-kquickcontrols (<< 5.42),
-        qml-module-org-kde-kwindowsystem (<< 5.42),
+        libkf5khtml-bin (<< 5.43),
+        libkf5khtml5 (<< 5.43),
+        libkf5kiowidgets5 (<< 5.43),
+        libkf5notifications5 (<< 5.43),
+        libkf5plasma5 (<< 5.43),
+        libkf5plasmaquick5 (<< 5.43),
+        libkf5textwidgets5 (<< 5.43),
+        libkf5wallet-bin (<< 5.43),
+        libkf5wallet5 (<< 5.43),
+        libkf5xmlgui5 (<< 5.43),
+        plasma-framework (<< 5.43),
+        qml-module-org-kde-kquickcontrols (<< 5.43),
+        qml-module-org-kde-kwindowsystem (<< 5.43),
