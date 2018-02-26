@@ -1,3 +1,13 @@
+kwindowsystem (5.43.0-1) experimental; urgency=medium
+
+  * Use the salsa canonical urls
+  * New upstream release (5.43.0).
+  * Update build-deps and deps with the info from cmake
+  * Bump group breaks (5.43)
+  * Release to experimental
+
+ -- Maximiliano Curia <maxy@debian.org>  Mon, 26 Feb 2018 11:44:13 +0100
+
 kwindowsystem (5.42.0-2) sid; urgency=medium
 
   * New revision
