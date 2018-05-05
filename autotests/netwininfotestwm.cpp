@@ -75,6 +75,7 @@ private Q_SLOTS:
     void testFrameExtents();
     void testFrameExtentsKDE();
     void testFrameOverlap();
+    void testFullscreenMonitors();
 
 private:
     bool hasAtomFlag(const xcb_atom_t *atoms, int atomsLenght, const QByteArray &actionName);
@@ -89,6 +90,7 @@ private:
     QScopedPointer<QProcess> m_xvfb;
     xcb_window_t m_rootWindow;
     xcb_window_t m_testWindow;
+    QByteArray m_displayNumber;
 };
 
 void NetWinInfoTestWM::initTestCase()
@@ -130,6 +132,7 @@ void NetWinInfoTestWM::init()
 
     displayNumber.prepend(QByteArray(":"));
     displayNumber.remove(displayNumber.size() -1, 1);
+    m_displayNumber = displayNumber;
 
     // create X connection
     int screen = 0;
@@ -426,6 +429,7 @@ void NetWinInfoTestWM::testState_data()
     const QByteArray maxHoriz         = QByteArrayLiteral("_NET_WM_STATE_MAXIMIZED_HORZ");
     const QByteArray shaded           = QByteArrayLiteral("_NET_WM_STATE_SHADED");
     const QByteArray skipTaskbar      = QByteArrayLiteral("_NET_WM_STATE_SKIP_TASKBAR");
+    const QByteArray skipSwitcher     = QByteArrayLiteral("_KDE_NET_WM_STATE_SKIP_SWITCHER");
     const QByteArray keepAbove        = QByteArrayLiteral("_NET_WM_STATE_ABOVE");
     const QByteArray staysOnTop       = QByteArrayLiteral("_NET_WM_STATE_STAYS_ON_TOP");
     const QByteArray skipPager        = QByteArrayLiteral("_NET_WM_STATE_SKIP_PAGER");
@@ -447,6 +451,7 @@ void NetWinInfoTestWM::testState_data()
     QTest::newRow("fullScreen")       << NET::States(NET::FullScreen)       << (QVector<QByteArray>() << fullScreen);
     QTest::newRow("keepBelow")        << NET::States(NET::KeepBelow)        << (QVector<QByteArray>() << keepBelow);
     QTest::newRow("demandsAttention") << NET::States(NET::DemandsAttention) << (QVector<QByteArray>() << demandsAttention);
+    QTest::newRow("skipSwitcher")     << NET::States(NET::SkipSwitcher)     << (QVector<QByteArray>() << skipSwitcher);
 
     // TODO: it's possible to be keep above and below at the same time?!?
     QTest::newRow("all") << NET::States(NET::Modal |
@@ -459,11 +464,12 @@ void NetWinInfoTestWM::testState_data()
                                    NET::KeepBelow |
                                    NET::Hidden |
                                    NET::FullScreen |
-                                   NET::DemandsAttention)
+                                   NET::DemandsAttention |
+                                   NET::SkipSwitcher)
                          << (QVector<QByteArray>() << modal << sticky << maxVert << maxHoriz
                              << shaded << skipTaskbar << keepAbove
                              << skipPager << hidden << fullScreen
-                             << keepBelow << demandsAttention << staysOnTop);
+                             << keepBelow << demandsAttention << staysOnTop << skipSwitcher);
 }
 
 void NetWinInfoTestWM::testState()
@@ -562,6 +568,88 @@ void NetWinInfoTestWM::testVisibleName()
     xcb_flush(connection());
     waitForPropertyChange(&info, atom, NET::WMVisibleName);
     QCOMPARE(info.visibleName(), "bar");
+}
+
+class MockWinInfo : public NETWinInfo
+{
+public:
+    MockWinInfo(xcb_connection_t *connection, xcb_window_t window, xcb_window_t rootWindow)
+        : NETWinInfo(connection, window, rootWindow, NET::WMAllProperties, NET::WM2AllProperties, NET::WindowManager)
+    {
+    }
+
+protected:
+    void changeFullscreenMonitors(NETFullscreenMonitors topology) override
+    {
+        setFullscreenMonitors(topology);
+    }
+};
+
+void NetWinInfoTestWM::testFullscreenMonitors()
+{
+    // test case for BUG 391960
+    QVERIFY(connection());
+    const uint32_t maskValues[] = {
+                     XCB_EVENT_MASK_SUBSTRUCTURE_REDIRECT |
+                     XCB_EVENT_MASK_KEY_PRESS |
+                     XCB_EVENT_MASK_PROPERTY_CHANGE |
+                     XCB_EVENT_MASK_COLOR_MAP_CHANGE |
+                     XCB_EVENT_MASK_SUBSTRUCTURE_REDIRECT |
+                     XCB_EVENT_MASK_SUBSTRUCTURE_NOTIFY |
+                     XCB_EVENT_MASK_FOCUS_CHANGE | // For NotifyDetailNone
+                     XCB_EVENT_MASK_EXPOSURE
+    };
+    QScopedPointer<xcb_generic_error_t, QScopedPointerPodDeleter> redirectCheck(xcb_request_check(connection(),
+                                                                        xcb_change_window_attributes_checked(connection(),
+                                                                                                                m_rootWindow,
+                                                                                                                XCB_CW_EVENT_MASK,
+                                                                                                                maskValues)));
+    QVERIFY(redirectCheck.isNull());
+
+    KXUtils::Atom atom(connection(), QByteArrayLiteral("_NET_WM_FULLSCREEN_MONITORS"));
+
+    // create client connection
+    auto clientConnection = xcb_connect(m_displayNumber.constData(), nullptr);
+    QVERIFY(clientConnection);
+    QVERIFY(!xcb_connection_has_error(clientConnection));
+
+    NETWinInfo clientInfo(clientConnection, m_testWindow, m_rootWindow, NET::WMAllProperties, NET::WM2AllProperties);
+    NETFullscreenMonitors topology;
+    topology.top = 1;
+    topology.bottom = 2;
+    topology.left = 3;
+    topology.right = 4;
+    clientInfo.setFullscreenMonitors(topology);
+    xcb_flush(clientConnection);
+
+    MockWinInfo info(connection(), m_testWindow, m_rootWindow);
+
+    while (true) {
+        KXUtils::ScopedCPointer<xcb_generic_event_t> event(xcb_wait_for_event(connection()));
+        if (event.isNull()) {
+            break;
+        }
+        if ((event->response_type & ~0x80) != XCB_CLIENT_MESSAGE) {
+            continue;
+        }
+
+        NET::Properties dirtyProtocols;
+        NET::Properties2 dirtyProtocols2;
+        QCOMPARE(info.fullscreenMonitors().isSet(), false);
+        info.event(event.data(), &dirtyProtocols, &dirtyProtocols2);
+        QCOMPARE(info.fullscreenMonitors().isSet(), true);
+        break;
+    }
+    xcb_flush(connection());
+    // now the property should be updated
+    waitForPropertyChange(&info, atom, NET::Property(0), NET::WM2FullscreenMonitors);
+
+    QCOMPARE(info.fullscreenMonitors().top, 1);
+    QCOMPARE(info.fullscreenMonitors().bottom, 2);
+    QCOMPARE(info.fullscreenMonitors().left, 3);
+    QCOMPARE(info.fullscreenMonitors().right, 4);
+
+    xcb_disconnect(clientConnection);
 }
 
 QTEST_GUILESS_MAIN(NetWinInfoTestWM)

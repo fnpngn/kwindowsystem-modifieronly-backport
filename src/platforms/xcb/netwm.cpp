@@ -1003,6 +1003,9 @@ void NETRootInfo::setSupported()
         if (p->states & SkipPager) {
             atoms[pnum++] = p->atom(_NET_WM_STATE_SKIP_PAGER);
         }
+        if (p->states & SkipSwitcher) {
+            atoms[pnum++] = p->atom(_KDE_NET_WM_STATE_SKIP_SWITCHER);
+        }
         if (p->states & Hidden) {
             atoms[pnum++] = p->atom(_NET_WM_STATE_HIDDEN);
         }
@@ -1316,6 +1319,8 @@ void NETRootInfo::updateSupportedProperties(xcb_atom_t atom)
         p->states |= SkipTaskbar;
     } else if (atom == p->atom(_NET_WM_STATE_SKIP_PAGER)) {
         p->states |= SkipPager;
+    } else if (atom == p->atom(_KDE_NET_WM_STATE_SKIP_SWITCHER)) {
+        p->states |= SkipSwitcher;
     } else if (atom == p->atom(_NET_WM_STATE_HIDDEN)) {
         p->states |= Hidden;
     } else if (atom == p->atom(_NET_WM_STATE_FULLSCREEN)) {
@@ -2841,20 +2846,24 @@ void NETWinInfo::setStrut(NETStrut strut)
 
 void NETWinInfo::setFullscreenMonitors(NETFullscreenMonitors topology)
 {
-    if (p->role != Client) {
-        return;
+    if (p->role == Client) {
+        const uint32_t data[5] = {
+            uint32_t(topology.top), uint32_t(topology.bottom), uint32_t(topology.left), uint32_t(topology.right), 1
+        };
+
+        send_client_message(p->conn, netwm_sendevent_mask, p->root, p->window, p->atom(_NET_WM_FULLSCREEN_MONITORS), data);
+    } else {
+        p->fullscreen_monitors = topology;
+
+        uint32_t data[4];
+        data[0] = topology.top;
+        data[1] = topology.bottom;
+        data[2] = topology.left;
+        data[3] = topology.right;
+
+        xcb_change_property(p->conn, XCB_PROP_MODE_REPLACE, p->window, p->atom(_NET_WM_FULLSCREEN_MONITORS),
+                            XCB_ATOM_CARDINAL, 32, 4, (const void *) data);
     }
-
-    p->fullscreen_monitors = topology;
-
-    uint32_t data[4];
-    data[0] = topology.top;
-    data[1] = topology.bottom;
-    data[2] = topology.left;
-    data[3] = topology.right;
-
-    xcb_change_property(p->conn, XCB_PROP_MODE_REPLACE, p->window, p->atom(_NET_WM_FULLSCREEN_MONITORS),
-                        XCB_ATOM_CARDINAL, 32, 4, (const void *) data);
 }
 
 void NETWinInfo::setState(NET::States state, NET::States mask)
@@ -2969,6 +2978,14 @@ void NETWinInfo::setState(NET::States state, NET::States mask)
             xcb_send_event(p->conn, false, p->root, netwm_sendevent_mask, (const char *) &event);
         }
 
+        if ((mask & SkipSwitcher) && ((p->state & SkipSwitcher) != (state & SkipSwitcher))) {
+            event.data.data32[0] = (state & SkipSwitcher) ? 1 : 0;
+            event.data.data32[1] = p->atom(_KDE_NET_WM_STATE_SKIP_SWITCHER);
+            event.data.data32[2] = 0l;
+
+            xcb_send_event(p->conn, false, p->root, netwm_sendevent_mask, (const char *) &event);
+        }
+
         if ((mask & Hidden) && ((p->state & Hidden) != (state & Hidden))) {
             event.data.data32[0] = (state & Hidden) ? 1 : 0;
             event.data.data32[1] = p->atom(_NET_WM_STATE_HIDDEN);
@@ -3065,6 +3082,9 @@ void NETWinInfo::setState(NET::States state, NET::States mask)
         }
         if (p->state & SkipPager) {
             data[count++] = p->atom(_NET_WM_STATE_SKIP_PAGER);
+        }
+        if (p->state & SkipSwitcher) {
+            data[count++] = p->atom(_KDE_NET_WM_STATE_SKIP_SWITCHER);
         }
 
 #ifdef NETWMDEBUG
@@ -3629,6 +3649,8 @@ void NETWinInfo::event(xcb_generic_event_t *event, NET::Properties *properties, 
                     mask |= SkipTaskbar;
                 } else if ((xcb_atom_t) message->data.data32[i] == p->atom(_NET_WM_STATE_SKIP_PAGER)) {
                     mask |= SkipPager;
+                } else if ((xcb_atom_t) message->data.data32[i] == p->atom(_KDE_NET_WM_STATE_SKIP_SWITCHER)) {
+                    mask |= SkipSwitcher;
                 } else if ((xcb_atom_t) message->data.data32[i] == p->atom(_NET_WM_STATE_HIDDEN)) {
                     mask |= Hidden;
                 } else if ((xcb_atom_t) message->data.data32[i] == p->atom(_NET_WM_STATE_FULLSCREEN)) {
@@ -3775,6 +3797,8 @@ void NETWinInfo::event(xcb_generic_event_t *event, NET::Properties *properties, 
             dirty2 |= WM2OpaqueRegion;
         } else if (pe->atom == p->atom(_KDE_NET_WM_DESKTOP_FILE)) {
             dirty2 = WM2DesktopFileName;
+        } else if (pe->atom == p->atom(_NET_WM_FULLSCREEN_MONITORS)) {
+            dirty2 = WM2FullscreenMonitors;
         }
 
         do_update = true;
@@ -4034,6 +4058,10 @@ void NETWinInfo::update(NET::Properties dirtyProperties, NET::Properties2 dirtyP
 
             else if (state == p->atom(_NET_WM_STATE_SKIP_PAGER)) {
                 p->state |= SkipPager;
+            }
+
+            else if (state == p->atom(_KDE_NET_WM_STATE_SKIP_SWITCHER)) {
+                p->state |= SkipSwitcher;
             }
 
             else if (state == p->atom(_NET_WM_STATE_HIDDEN)) {
