@@ -1,3 +1,12 @@
+kwindowsystem (5.45.0-1) unstable; urgency=medium
+
+  * New upstream release (5.45.0).
+  * Update build-deps and deps with the info from cmake
+  * Bump group breaks (5.45)
+  * Release to unstable
+
+ -- Maximiliano Curia <maxy@debian.org>  Sat, 05 May 2018 08:11:03 +0200
+
 kwindowsystem (5.44.0-1) sid; urgency=medium
 
   * New upstream release (5.44.0).

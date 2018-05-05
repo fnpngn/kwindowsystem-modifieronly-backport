@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.0)
 
-set(KF5_VERSION "5.44.0") # handled by release scripts
+set(KF5_VERSION "5.45.0") # handled by release scripts
 project(KWindowSystem VERSION ${KF5_VERSION})
 
 # ECM setup
 include(FeatureSummary)
-find_package(ECM 5.44.0  NO_MODULE)
+find_package(ECM 5.45.0  NO_MODULE)
 set_package_properties(ECM PROPERTIES TYPE REQUIRED DESCRIPTION "Extra CMake Modules." URL "https://projects.kde.org/projects/kdesupport/extra-cmake-modules")
 feature_summary(WHAT REQUIRED_PACKAGES_NOT_FOUND FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
@@ -17,6 +17,7 @@ include(CMakePackageConfigHelpers)
 include(ECMSetupVersion)
 include(ECMGenerateHeaders)
 include(CMakeFindFrameworks)
+include(ECMQtDeclareLoggingCategory)
 
 include(ECMAddQch)
 include(ECMPoQmTools)
@@ -30,7 +31,7 @@ ecm_setup_version(PROJECT VARIABLE_PREFIX KWINDOWSYSTEM
                         SOVERSION 5)
 
 # Dependencies
-set(REQUIRED_QT_VERSION 5.7.0)
+set(REQUIRED_QT_VERSION 5.8.0)
 find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED Widgets)
 
 include(KDEInstallDirs)
