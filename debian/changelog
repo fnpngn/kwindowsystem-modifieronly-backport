@@ -1,3 +1,15 @@
+kwindowsystem (5.49.0-1) unstable; urgency=medium
+
+  * New upstream release (5.48.0).
+  * Update symbols files from buildds logs (5.47.0-1).
+  * Update build-deps and deps with the info from cmake
+  * New upstream release (5.49.0).
+  * Update build-deps and deps with the info from cmake
+  * Bump group breaks (5.49)
+  * Release to unstable
+
+ -- Maximiliano Curia <maxy@debian.org>  Fri, 17 Aug 2018 16:19:06 +0200
+
 kwindowsystem (5.47.0-1) unstable; urgency=medium
 
   * New upstream release (5.47.0).

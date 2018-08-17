@@ -83,7 +83,7 @@ public:
     void activate();
 
 protected:
-    bool nativeEvent(const QByteArray &eventType, void *message, long *result) Q_DECL_OVERRIDE;
+    bool nativeEvent(const QByteArray &eventType, void *message, long *result) override;
 
 private:
     bool activated;
@@ -447,7 +447,7 @@ void KWindowSystem::forceActiveWindow(WId win, long time)
     //to bring a window to the front while the user is active in a different apllication we
     //have to atach our self to the current active window
     HWND hwndActiveWin = GetForegroundWindow();
-    int  idActive      = GetWindowThreadProcessId(hwndActiveWin, NULL);
+    int  idActive      = GetWindowThreadProcessId(hwndActiveWin, nullptr);
     if (AttachThreadInput(GetCurrentThreadId(), idActive, TRUE)) {
         SetForegroundWindow(hwnd);
         SetFocus(hwnd);
@@ -489,7 +489,7 @@ QPixmap KWindowSystem::icon(WId win, int width, int height, bool scale)
             size = ICON_SMALL;
         }
         HICON hIcon = (HICON)SendMessage(reinterpret_cast<HWND>(win), WM_GETICON, size, 0);
-        if (hIcon != NULL) {
+        if (hIcon != nullptr) {
             pm = QtWin::fromHICON(hIcon);
         }
     }
@@ -596,7 +596,7 @@ void KWindowSystem::raiseWindow(WId win)
     //to bring a window to the front while the user is active in a different apllication we
     //have to atach our self to the current active window
     HWND hwndActiveWin = GetForegroundWindow();
-    int  idActive      = GetWindowThreadProcessId(hwndActiveWin, NULL);
+    int  idActive      = GetWindowThreadProcessId(hwndActiveWin, nullptr);
     if (AttachThreadInput(GetCurrentThreadId(), idActive, TRUE)) {
         SetForegroundWindow(reinterpret_cast<HWND>(win));
         AttachThreadInput(GetCurrentThreadId(), idActive, FALSE);

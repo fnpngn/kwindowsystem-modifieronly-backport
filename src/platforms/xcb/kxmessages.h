@@ -55,7 +55,7 @@ public:
     /**
      * Creates an instance which will receive X messages.
      *
-     * @param accept_broadcast if non-NULL, all broadcast messages with
+     * @param accept_broadcast if non-nullptr, all broadcast messages with
      *                         this message type will be received.
      * @param parent the parent of this widget
      */
@@ -67,14 +67,14 @@ public:
      *
      * @param connection The xcb connection
      * @param rootWindow The rootWindow to use
-     * @param accept_broadcast if non-NULL, all broadcast messages with
+     * @param accept_broadcast if non-nullptr, all broadcast messages with
      *                         this message type will be received.
      * @param parent the parent of this object
      * @since 5.8
      **/
     explicit KXMessages(xcb_connection_t *connection, xcb_window_t rootWindow, const char *accept_broadcast = nullptr, QObject *parent = nullptr);
 
-    virtual ~KXMessages();
+    ~KXMessages() override;
     /**
      * Broadcasts the given message with the given message type.
      * @param msg_type the type of the message

@@ -135,7 +135,7 @@ public:
     xcb_connection_t *connection;
     xcb_window_t rootWindow;
 
-    bool nativeEventFilter(const QByteArray &eventType, void *message, long *result) Q_DECL_OVERRIDE
+    bool nativeEventFilter(const QByteArray &eventType, void *message, long *result) override
     {
         Q_UNUSED(result);
 	// A faster comparison than eventType != "xcb_generic_event_t"
@@ -285,7 +285,7 @@ void KXMessages::sendMessage(WId w_P, const char *msg_type_P, const QString &mes
 bool KXMessages::sendMessageX(Display *disp, WId w_P, const char *msg_type_P,
                               const QString &message_P)
 {
-    if (disp == NULL) {
+    if (disp == nullptr) {
         return false;
     }
     Atom a2 = XInternAtom(disp, msg_type_P, false);
