@@ -232,7 +232,7 @@ void KWindowInfoX11Test::testState()
     if (state == NET::States(NET::SkipSwitcher) && qstrcmp(rootInfo.wmName(), "Openbox") == 0) {
         QSKIP("Openbox won't keep unknown states, SkipSwitcher is kde specific");
     }
-    QCOMPARE(info3.state(), state);
+    QCOMPARE(int(info3.state()), int(state));
     QVERIFY(info3.hasState(state));
 }
 

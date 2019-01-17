@@ -2028,12 +2028,13 @@ void NETRootInfo::update(NET::Properties properties, NET::Properties2 properties
             fprintf(stderr, "NETRootInfo::update: client list null, creating\n");
 #endif
 
+            clientsToAdd.reserve(clients.count());
             for (int i = 0; i < clients.count(); i++) {
                 clientsToAdd.append(clients[i]);
             }
         }
 
-        if (clients.count() > 0) {
+        if (!clients.isEmpty()) {
             p->clients_count = clients.count();
             p->clients = new xcb_window_t[clients.count()];
             for (int i = 0; i < clients.count(); i++) {
@@ -2063,7 +2064,7 @@ void NETRootInfo::update(NET::Properties properties, NET::Properties2 properties
 
         const QVector<xcb_window_t> wins = get_array_reply<xcb_window_t>(p->conn, cookies[c++], XCB_ATOM_WINDOW);
 
-        if (wins.count() > 0) {
+        if (!wins.isEmpty()) {
             p->stacking_count = wins.count();
             p->stacking = new xcb_window_t[wins.count()];
             for (int i = 0; i < wins.count(); i++) {
@@ -2203,7 +2204,7 @@ void NETRootInfo::update(NET::Properties properties, NET::Properties2 properties
 
         const QVector<xcb_window_t> wins = get_array_reply<xcb_window_t>(p->conn, cookies[c++], XCB_ATOM_CARDINAL);
 
-        if (wins.count() > 0) {
+        if (!wins.isEmpty()) {
             p->virtual_roots_count = wins.count();
             p->virtual_roots = new xcb_window_t[wins.count()];
             for (int i = 0; i < wins.count(); i++) {
@@ -4152,7 +4153,7 @@ void NETWinInfo::update(NET::Properties dirtyProperties, NET::Properties2 dirtyP
 
         const QVector<xcb_atom_t> types = get_array_reply<xcb_atom_t>(p->conn, cookies[c++], XCB_ATOM_ATOM);
 
-        if (types.count() > 0) {
+        if (!types.isEmpty()) {
 #ifdef NETWMDEBUG
             fprintf(stderr, "NETWinInfo::update: getting window type (%ld)\n", types.count());
 #endif
@@ -4381,7 +4382,7 @@ void NETWinInfo::update(NET::Properties dirtyProperties, NET::Properties2 dirtyP
         p->allowed_actions = NET::Actions();
 
         const QVector<xcb_atom_t> actions = get_array_reply<xcb_atom_t>(p->conn, cookies[c++], XCB_ATOM_ATOM);
-        if (actions.count() > 0) {
+        if (!actions.isEmpty()) {
 #ifdef NETWMDEBUG
             fprintf(stderr, "NETWinInfo::update: updating allowed actions (%ld)\n", actions.count());
 #endif

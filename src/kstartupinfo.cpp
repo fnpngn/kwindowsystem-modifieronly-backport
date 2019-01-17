@@ -56,7 +56,7 @@ DEALINGS IN THE SOFTWARE.
 #include <process.h>
 #endif
 #include <stdlib.h>
-#include <QtCore/QTimer>
+#include <QTimer>
 #include <QActionEvent>
 #if KWINDOWSYSTEM_HAVE_X11
 #include <qx11info_x11.h>
@@ -384,7 +384,7 @@ void KStartupInfo::Private::got_remove_startup_info(const QString &msg_P)
 {
     KStartupInfoId id(msg_P);
     KStartupInfoData data(msg_P);
-    if (data.pids().count() > 0) {
+    if (!data.pids().isEmpty()) {
         if (!id.isNull()) {
             remove_startup_pids(id, data);
         } else {
@@ -454,10 +454,9 @@ void KStartupInfo::Private::remove_startup_pids(const KStartupInfoId &id_P,
     } else {
         return;
     }
-    for (QList< pid_t >::ConstIterator it2 = data_P.pids().constBegin();
-            it2 != data_P.pids().constEnd();
-            ++it2) {
-        data->d->remove_pid(*it2);    // remove all pids from the info
+    const auto pids = data_P.pids();
+    for (auto pid : pids) {
+        data->d->remove_pid(pid);    // remove all pids from the info
     }
     if (data->pids().count() == 0) { // all pids removed -> remove info
         removeAllStartupInfoInternal(id_P);
@@ -714,7 +713,7 @@ void KStartupInfo::appStarted(const QByteArray &startup_id)
         return;
     }
 #if KWINDOWSYSTEM_HAVE_X11
-    if (QX11Info::isPlatformX11() && !qgetenv("DISPLAY").isEmpty()) {  // don't rely on QX11Info::display()
+    if (QX11Info::isPlatformX11() && !qEnvironmentVariableIsEmpty("DISPLAY")) {  // don't rely on QX11Info::display()
         Display *disp = XOpenDisplay(nullptr);
         if (disp != nullptr) {
             KStartupInfo::sendFinishX(disp, id);
@@ -1292,7 +1291,6 @@ KStartupInfoData::KStartupInfoData(const QString &txt_P) : d(new Private)
     const QString hostname_str = QString::fromLatin1("HOSTNAME="); // added to version 1 (2014)
     const QString pid_str = QString::fromLatin1("PID=");           // added to version 1 (2014)
     const QString silent_str = QString::fromLatin1("SILENT=");
-    const QString timestamp_str = QString::fromLatin1("TIMESTAMP=");
     const QString screen_str = QString::fromLatin1("SCREEN=");
     const QString xinerama_str = QString::fromLatin1("XINERAMA=");
     const QString launched_by_str = QString::fromLatin1("LAUNCHED_BY=");
