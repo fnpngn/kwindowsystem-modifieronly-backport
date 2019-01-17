@@ -8,7 +8,7 @@ Openbox won't keep unknown states and SkipSwitcher is kde specific
  1 file changed, 5 insertions(+)
 
 diff --git a/autotests/kwindowinfox11test.cpp b/autotests/kwindowinfox11test.cpp
-index 180e05a..c5a231b 100644
+index 857d5a9..26e6761 100644
 --- a/autotests/kwindowinfox11test.cpp
 +++ b/autotests/kwindowinfox11test.cpp
 @@ -227,6 +227,11 @@ void KWindowInfoX11Test::testState()
@@ -20,6 +20,6 @@ index 180e05a..c5a231b 100644
 +    if (state == NET::States(NET::SkipSwitcher) && qstrcmp(rootInfo.wmName(), "Openbox") == 0) {
 +        QSKIP("Openbox won't keep unknown states, SkipSwitcher is kde specific");
 +    }
-     QCOMPARE(info3.state(), state);
+     QCOMPARE(int(info3.state()), int(state));
      QVERIFY(info3.hasState(state));
  }

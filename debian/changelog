@@ -1,3 +1,18 @@
+kwindowsystem (5.54.0-1) unstable; urgency=medium
+
+  * New upstream release (5.52.0).
+  * Update build-deps and deps with the info from cmake
+  * Update install files
+  * New upstream release (5.53.0).
+  * Update build-deps and deps with the info from cmake
+  * Rediff patches
+  * New upstream release (5.54.0).
+  * Update build-deps and deps with the info from cmake
+  * Bump group breaks (5.54)
+  * Release to unstable
+
+ -- Maximiliano Curia <maxy@debian.org>  Thu, 17 Jan 2019 19:27:28 -0300
+
 kwindowsystem (5.51.0-1) unstable; urgency=medium
 
   * New upstream release (5.50.0).
