@@ -976,6 +976,9 @@ void NETRootInfo::setSupported()
         if (p->windowTypes & OnScreenDisplayMask) {
             atoms[pnum++] = p->atom(_KDE_NET_WM_WINDOW_TYPE_ON_SCREEN_DISPLAY);
         }
+        if (p->windowTypes & CriticalNotificationMask) {
+            atoms[pnum++] = p->atom(_KDE_NET_WM_WINDOW_TYPE_CRITICAL_NOTIFICATION);
+        }
     }
 
     if (p->properties & WMState) {
@@ -1024,6 +1027,9 @@ void NETRootInfo::setSupported()
 
         if (p->states & StaysOnTop) {
             atoms[pnum++] = p->atom(_NET_WM_STATE_STAYS_ON_TOP);
+        }
+        if (p->states & Focused) {
+            atoms[pnum++] = p->atom(_NET_WM_STATE_FOCUSED);
         }
     }
 
@@ -1298,6 +1304,8 @@ void NETRootInfo::updateSupportedProperties(xcb_atom_t atom)
         p->windowTypes |= TopMenuMask;
     } else if (atom == p->atom(_KDE_NET_WM_WINDOW_TYPE_ON_SCREEN_DISPLAY)) {
         p->windowTypes |= OnScreenDisplayMask;
+    } else if (atom == p->atom(_KDE_NET_WM_WINDOW_TYPE_CRITICAL_NOTIFICATION)) {
+        p->windowTypes |= CriticalNotificationMask;
     }
 
     else if (atom == p->atom(_NET_WM_STATE)) {
@@ -1331,10 +1339,10 @@ void NETRootInfo::updateSupportedProperties(xcb_atom_t atom)
         p->states |= KeepBelow;
     } else if (atom == p->atom(_NET_WM_STATE_DEMANDS_ATTENTION)) {
         p->states |= DemandsAttention;
-    }
-
-    else if (atom == p->atom(_NET_WM_STATE_STAYS_ON_TOP)) {
+    } else if (atom == p->atom(_NET_WM_STATE_STAYS_ON_TOP)) {
         p->states |= StaysOnTop;
+    } else if (atom == p->atom(_NET_WM_STATE_FOCUSED)) {
+        p->states |= Focused;
     }
 
     else if (atom == p->atom(_NET_WM_STRUT)) {
@@ -1994,7 +2002,7 @@ void NETRootInfo::update(NET::Properties properties, NET::Properties2 properties
         QList<xcb_window_t> clientsToAdd;
 
         QVector<xcb_window_t> clients = get_array_reply<xcb_window_t>(p->conn, cookies[c++], XCB_ATOM_WINDOW);
-        qSort(clients);
+        std::sort(clients.begin(), clients.end());
 
         if (p->clients) {
             if (p->role == Client) {
@@ -3035,6 +3043,7 @@ void NETWinInfo::setState(NET::States state, NET::States mask)
             xcb_send_event(p->conn, false, p->root, netwm_sendevent_mask, (const char *) &event);
         }
 
+        //Focused is not added here as it is effectively "read only" set by the WM, a client setting it would be silly
     } else {
         p->state &= ~mask;
         p->state |= state;
@@ -3063,6 +3072,9 @@ void NETWinInfo::setState(NET::States state, NET::States mask)
         }
         if (p->state & DemandsAttention) {
             data[count++] = p->atom(_NET_WM_STATE_DEMANDS_ATTENTION);
+        }
+        if (p->state & Focused) {
+            data[count++] = p->atom(_NET_WM_STATE_FOCUSED);
         }
 
         // Policy
@@ -3208,6 +3220,12 @@ void NETWinInfo::setWindowType(WindowType type)
 
     case OnScreenDisplay:
         data[0] = p->atom(_KDE_NET_WM_WINDOW_TYPE_ON_SCREEN_DISPLAY);
+        data[1] = p->atom(_NET_WM_WINDOW_TYPE_NOTIFICATION);
+        len = 1;
+        break;
+
+    case CriticalNotification:
+        data[0] = p->atom(_KDE_NET_WM_WINDOW_TYPE_CRITICAL_NOTIFICATION);
         data[1] = p->atom(_NET_WM_WINDOW_TYPE_NOTIFICATION);
         len = 1;
         break;
@@ -3664,6 +3682,8 @@ void NETWinInfo::event(xcb_generic_event_t *event, NET::Properties *properties, 
                     mask |= DemandsAttention;
                 } else if ((xcb_atom_t) message->data.data32[i] == p->atom(_NET_WM_STATE_STAYS_ON_TOP)) {
                     mask |= StaysOnTop;
+                }  else if ((xcb_atom_t) message->data.data32[i] == p->atom(_NET_WM_STATE_FOCUSED)) {
+                    mask |= Focused;
                 }
             }
 
@@ -4088,6 +4108,10 @@ void NETWinInfo::update(NET::Properties dirtyProperties, NET::Properties2 dirtyP
             else if (state == p->atom(_NET_WM_STATE_STAYS_ON_TOP)) {
                 p->state |= StaysOnTop;
             }
+
+            else if (state == p->atom(_NET_WM_STATE_FOCUSED)) {
+                p->state |= Focused;
+            }
         }
     }
 
@@ -4233,6 +4257,10 @@ void NETWinInfo::update(NET::Properties dirtyProperties, NET::Properties2 dirtyP
                 else if (type == p->atom(_KDE_NET_WM_WINDOW_TYPE_ON_SCREEN_DISPLAY)) {
                     p->types[pos++] = OnScreenDisplay;
                 }
+
+                else if (type == p->atom(_KDE_NET_WM_WINDOW_TYPE_CRITICAL_NOTIFICATION)) {
+                    p->types[pos++] = CriticalNotification;
+                }
             }
         }
     }
@@ -4304,7 +4332,7 @@ void NETWinInfo::update(NET::Properties dirtyProperties, NET::Properties2 dirtyP
 
         QVector<uint32_t> data = get_array_reply<uint32_t>(p->conn, cookies[c++], XCB_ATOM_CARDINAL);
 
-        if (data.count() == 0) {
+        if (data.isEmpty()) {
             data = get_array_reply<uint32_t>(p->conn, cookies[c++], XCB_ATOM_CARDINAL);
         } else {
             xcb_discard_reply(p->conn, cookies[c++].sequence);
@@ -4620,6 +4648,7 @@ case type: \
         CHECK_TYPE_MASK(ComboBox)
         CHECK_TYPE_MASK(DNDIcon)
         CHECK_TYPE_MASK(OnScreenDisplay)
+        CHECK_TYPE_MASK(CriticalNotification)
 #undef CHECK_TYPE_MASK
     default:
         break;

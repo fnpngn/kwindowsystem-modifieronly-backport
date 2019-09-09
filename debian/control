@@ -6,17 +6,19 @@ Uploaders: Maximiliano Curia <maxy@debian.org>
 Build-Depends: cmake (>= 3.5~),
                debhelper (>= 11~),
                doxygen,
-               extra-cmake-modules (>= 5.54.0~),
+               extra-cmake-modules (>= 5.61.0~),
                graphviz,
                libqt5sql5-sqlite:native,
-               libqt5x11extras5-dev (>= 5.9.0~),
+               libqt5x11extras5-dev (>= 5.11.0~),
                libx11-dev,
+               libxcb-icccm4-dev,
                libxcb-keysyms1-dev,
+               libxcb-res0-dev,
                libxcb1-dev,
                libxrender-dev,
                pkg-config,
                pkg-kde-tools (>= 0.15.15ubuntu1~),
-               qtbase5-dev (>= 5.9.0~),
+               qtbase5-dev (>= 5.11.0~),
                qttools5-dev (>= 5.4),
                qttools5-dev-tools (>= 5.4),
 Standards-Version: 4.1.4
@@ -42,7 +44,7 @@ Package: libkf5windowsystem-dev
 Section: libdevel
 Architecture: any
 Depends: libkf5windowsystem5 (= ${binary:Version}),
-         qtbase5-dev (>= 5.9.0~),
+         qtbase5-dev (>= 5.11.0~),
          ${misc:Depends},
          ${shlibs:Depends},
 Recommends: libkf5windowsystem-doc (= ${source:Version})

@@ -1,15 +1,15 @@
 cmake_minimum_required(VERSION 3.5)
 
-set(KF5_VERSION "5.54.0") # handled by release scripts
+set(KF5_VERSION "5.61.0") # handled by release scripts
 project(KWindowSystem VERSION ${KF5_VERSION})
 
 # ECM setup
 include(FeatureSummary)
-find_package(ECM 5.54.0  NO_MODULE)
+find_package(ECM 5.61.0  NO_MODULE)
 set_package_properties(ECM PROPERTIES TYPE REQUIRED DESCRIPTION "Extra CMake Modules." URL "https://projects.kde.org/projects/kdesupport/extra-cmake-modules")
 feature_summary(WHAT REQUIRED_PACKAGES_NOT_FOUND FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
-set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH} ${ECM_KDE_MODULE_DIR})
+set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
 
 include(GenerateExportHeader)
@@ -31,7 +31,7 @@ ecm_setup_version(PROJECT VARIABLE_PREFIX KWINDOWSYSTEM
                         SOVERSION 5)
 
 # Dependencies
-set(REQUIRED_QT_VERSION 5.9.0)
+set(REQUIRED_QT_VERSION 5.11.0)
 find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED Widgets)
 
 include(KDEInstallDirs)
@@ -54,7 +54,7 @@ endif()
 set(KWINDOWSYSTEM_HAVE_X11 ${X11_FOUND})
 
 if(X11_FOUND)
-    find_package(XCB COMPONENTS XCB KEYSYMS)
+    find_package(XCB COMPONENTS XCB KEYSYMS RES)
     find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED X11Extras)
     set_package_properties(X11_Xrender PROPERTIES DESCRIPTION "X Rendering Extension (libXrender)"
                            URL "http://www.x.org" TYPE RECOMMENDED
@@ -102,7 +102,7 @@ install(EXPORT KF5WindowSystemTargets DESTINATION "${CMAKECONFIG_INSTALL_DIR}" F
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/kwindowsystem_version.h
         DESTINATION ${KDE_INSTALL_INCLUDEDIR_KF5} COMPONENT Devel )
 
-install( FILES kwindowsystem.categories DESTINATION ${KDE_INSTALL_CONFDIR} )
+install(FILES kwindowsystem.categories  DESTINATION  ${KDE_INSTALL_LOGGINGCATEGORIESDIR})
 
 
 feature_summary(WHAT ALL FATAL_ON_MISSING_REQUIRED_PACKAGES)

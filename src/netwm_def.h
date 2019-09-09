@@ -378,7 +378,12 @@ public:
             indicates an On Screen Display window (such as volume feedback)
             @since 5.6
         **/
-        OnScreenDisplay = 16 // NON STANDARD
+        OnScreenDisplay = 16, // NON STANDARD
+        /**
+            indicates a critical notification (such as battery is running out)
+            @since 5.58
+        **/
+        CriticalNotification = 17, // NON STANDARD
     };
 
     /**
@@ -403,6 +408,7 @@ public:
         ComboBoxMask     = 1u << 14, ///< @see ComboBox
         DNDIconMask      = 1u << 15, ///< @see DNDIcon
         OnScreenDisplayMask = 1u << 16, ///< NON STANDARD @see OnScreenDisplay @since 5.6
+        CriticalNotificationMask = 1u << 17, ///< NON STANDARD @see CriticalNotification @since 5.58
         AllTypesMask     = 0U - 1 ///< All window types.
     };
     Q_DECLARE_FLAGS(WindowTypes, WindowTypeMask)
@@ -499,7 +505,13 @@ public:
 
            @since 5.45
         **/
-        SkipSwitcher = 1u << 12
+        SkipSwitcher = 1u << 12,
+        /**
+          indicates that a client should render as though it has focus
+          Only the window manager is allowed to change it.
+          @since 5.58
+         **/
+        Focused = 1u << 13,
     };
     Q_DECLARE_FLAGS(States, State)
 

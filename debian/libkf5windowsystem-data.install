@@ -1,2 +1,2 @@
-etc/xdg/kwindowsystem.categories
 usr/share/locale/*/*/kwindowsystem5_qt.qm
+usr/share/qlogging-categories5/kwindowsystem.categories
