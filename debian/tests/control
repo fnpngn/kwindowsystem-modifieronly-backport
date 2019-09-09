@@ -1,8 +1,15 @@
 Tests: testsuite
-Depends: @, @builddeps@, build-essential,
-         xvfb, xauth, dbus (>= 1.8), openbox, xserver-xephyr, libgl1-mesa-dri
+Depends: build-essential,
+         dbus (>= 1.8),
+         libgl1-mesa-dri,
+         openbox,
+         xauth,
+         xserver-xephyr,
+         xvfb,
+         @,
+         @builddeps@,
 Restrictions: build-needed, allow-stderr
 
 Tests: acc
-Depends: @, dh-acc, exuberant-ctags
+Depends: dh-acc, exuberant-ctags, @
 Restrictions: allow-stderr

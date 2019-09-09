@@ -216,7 +216,7 @@ void NetRootInfoTestWM::testSupported()
     NETRootInfo rootInfo(connection(), m_supportWindow, s_wmName,
                          NET::WMAllProperties, NET::AllTypesMask, NET::States(~0u), NET::WM2AllProperties, NET::Actions(~0u));
     int count = 0;
-    for (int i = 0; i < 32; ++i) {
+    for (int i = 0; i < 33; ++i) {
         if (i == 12) {
             continue;
         }
@@ -231,7 +231,7 @@ void NetRootInfoTestWM::testSupported()
         QVERIFY(rootInfo.isSupported(NET::WindowTypeMask(1 << i)));
         count++;
     }
-    for (int i = 0; i < 12; ++i) {
+    for (int i = 0; i < 13; ++i) {
         QVERIFY(rootInfo.isSupported(NET::State(1 << i)));
         count++;
     }
@@ -243,8 +243,8 @@ void NetRootInfoTestWM::testSupported()
     count += 1;
     // XAWState, WMGeometry, WM2TransientFor, WM2GroupLeader, WM2WindowClass, WM2WindowRole, WM2ClientMachine
     count -= 7;
-    // WM2BlockCompositing has two properties
-    count +=1;
+    // WM2BlockCompositing has 3 properties
+    count += 2;
 
     QVERIFY(supported  != XCB_ATOM_NONE);
     QVERIFY(utf8String != XCB_ATOM_NONE);
