@@ -1,16 +1,19 @@
 cmake_minimum_required(VERSION 3.5)
 
-set(KF5_VERSION "5.61.0") # handled by release scripts
+set(KF5_VERSION "5.62.0") # handled by release scripts
 project(KWindowSystem VERSION ${KF5_VERSION})
 
 # ECM setup
 include(FeatureSummary)
-find_package(ECM 5.61.0  NO_MODULE)
+find_package(ECM 5.62.0  NO_MODULE)
 set_package_properties(ECM PROPERTIES TYPE REQUIRED DESCRIPTION "Extra CMake Modules." URL "https://projects.kde.org/projects/kdesupport/extra-cmake-modules")
 feature_summary(WHAT REQUIRED_PACKAGES_NOT_FOUND FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
 set(CMAKE_MODULE_PATH ${ECM_MODULE_PATH})
 
+include(KDEInstallDirs)
+include(KDECMakeSettings)
+include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
 
 include(GenerateExportHeader)
 include(CMakePackageConfigHelpers)
@@ -25,6 +28,12 @@ include(ECMPoQmTools)
 option(BUILD_QCH "Build API documentation in QCH format (for e.g. Qt Assistant, Qt Creator & KDevelop)" OFF)
 add_feature_info(QCH ${BUILD_QCH} "API documentation in QCH format (for e.g. Qt Assistant, Qt Creator & KDevelop)")
 
+# TODO KF6: remove
+option(KWINDOWSYSTEM_NO_WIDGETS "Disable deprecated API including QWidget usage, so that KWindowSystem does not link to QtWidgets. Warning: this is binary and source incompatible.")
+if (KWINDOWSYSTEM_NO_WIDGETS)
+    add_compile_definitions(KWINDOWSYSTEM_NO_DEPRECATED)
+endif()
+
 ecm_setup_version(PROJECT VARIABLE_PREFIX KWINDOWSYSTEM
                         VERSION_HEADER "${CMAKE_CURRENT_BINARY_DIR}/kwindowsystem_version.h"
                         PACKAGE_VERSION_FILE "${CMAKE_CURRENT_BINARY_DIR}/KF5WindowSystemConfigVersion.cmake"
@@ -33,10 +42,6 @@ ecm_setup_version(PROJECT VARIABLE_PREFIX KWINDOWSYSTEM
 # Dependencies
 set(REQUIRED_QT_VERSION 5.11.0)
 find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED Widgets)
-
-include(KDEInstallDirs)
-include(KDEFrameworkCompilerSettings NO_POLICY_SCOPE)
-include(KDECMakeSettings)
 
 if (APPLE)
     cmake_find_frameworks(Carbon)

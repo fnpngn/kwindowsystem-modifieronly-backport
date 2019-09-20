@@ -1,4 +1,4 @@
-# SymbolsHelper-Confirmed: 5.47.0 alpha amd64 arm64 armel armhf hppa hurd-i386 i386 m68k mips mips64el mipsel powerpc powerpcspe ppc64 ppc64el riscv64 s390x sh4 sparc64 x32
+# SymbolsHelper-Confirmed: 5.62.0 amd64
 KF5WindowSystemWaylandPlugin.so libkf5windowsystem5 #MINVER#
  qt_plugin_instance@Base 5.13.0
  qt_plugin_query_metadata@Base 5.13.0
@@ -161,6 +161,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN12KStartupInfo14silenceStartupEb@Base 4.96.0
  _ZN12KStartupInfo15resetStartupEnvEv@Base 4.96.0
  _ZN12KStartupInfo15setNewStartupIdEP7QWidgetRK10QByteArray@Base 4.96.0
+ _ZN12KStartupInfo15setNewStartupIdEP7QWindowRK10QByteArray@Base 5.62.0
  (subst)_ZN12KStartupInfo15windowStartupIdE{quintptr}@Base 4.96.0
  _ZN12KStartupInfo16gotRemoveStartupERK14KStartupInfoIdRK16KStartupInfoData@Base 4.96.0
  _ZN12KStartupInfo16gotStartupChangeERK14KStartupInfoIdRK16KStartupInfoData@Base 4.96.0
@@ -195,6 +196,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN13KWindowSystem13connectNotifyERK11QMetaMethod@Base 4.96.0
  _ZN13KWindowSystem13isPlatformX11Ev@Base 5.25.0
  (subst)_ZN13KWindowSystem13setMainWindowEP7QWidget{quintptr}@Base 4.96.0
+ _ZN13KWindowSystem13setMainWindowEP7QWindowy@Base 5.62.0
  _ZN13KWindowSystem13stackingOrderEv@Base 4.96.0
  (subst)_ZN13KWindowSystem13windowChangedE{quintptr}6QFlagsIN3NET8PropertyEES0_INS1_9Property2EE@Base 4.98.0
  (subst)_ZN13KWindowSystem13windowChangedE{quintptr}@Base 4.96.0

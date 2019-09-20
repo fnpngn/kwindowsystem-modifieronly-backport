@@ -142,7 +142,7 @@ void KWindowEffectsTest::testSlideWindowWidget()
 {
     QFETCH(KWindowEffects::SlideFromLocation, location);
 
-    KWindowEffects::slideWindow(m_widget.data(), location);
+    KWindowEffects::slideWindow(m_widget->effectiveWinId(), location);
     performSlideWindowTest(m_widget->effectiveWinId(), -1, location);
 }
 
@@ -150,11 +150,11 @@ void KWindowEffectsTest::testSlideWindowWidgetRemove()
 {
     xcb_window_t window = m_widget->effectiveWinId();
     // first install the atom
-    KWindowEffects::slideWindow(m_widget.data(), KWindowEffects::TopEdge);
+    KWindowEffects::slideWindow(m_widget->effectiveWinId(), KWindowEffects::TopEdge);
     performSlideWindowTest(window, -1, KWindowEffects::TopEdge);
 
     // now delete it
-    KWindowEffects::slideWindow(m_widget.data(), KWindowEffects::NoEdge);
+    KWindowEffects::slideWindow(m_widget->effectiveWinId(), KWindowEffects::NoEdge);
     performSlideWindowRemoveTest(window);
 }
 
@@ -334,14 +334,12 @@ void KWindowEffectsTest::testBlur()
     QCOMPARE(reply->format, uint8_t(32));
     QCOMPARE(reply->value_len, uint32_t(blur.rectCount() * 4));
     uint32_t *data = static_cast<uint32_t *>(xcb_get_property_value(reply.data()));
-    QVector<QRect> rects = blur.rects();
-    for (int i = 0; i < rects.count(); ++i) {
-        int counter = i * 4;
-        const QRect &rect = rects.at(i);
-        QCOMPARE(data[counter++], uint32_t(rect.x()));
-        QCOMPARE(data[counter++], uint32_t(rect.y()));
-        QCOMPARE(data[counter++], uint32_t(rect.width()));
-        QCOMPARE(data[counter++], uint32_t(rect.height()));
+    int dataOffset = 0;
+    for (const QRect& rect : blur) {
+        QCOMPARE(data[dataOffset++], uint32_t(rect.x()));
+        QCOMPARE(data[dataOffset++], uint32_t(rect.y()));
+        QCOMPARE(data[dataOffset++], uint32_t(rect.width()));
+        QCOMPARE(data[dataOffset++], uint32_t(rect.height()));
     }
 }
 

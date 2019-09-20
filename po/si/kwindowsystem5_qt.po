@@ -18,7 +18,7 @@ msgstr ""
 "X-Qt-Contexts: true\n"
 
 #: platforms/osx/kwindowsystem.cpp:578 platforms/windows/kwindowsystem.cpp:630
-#: platforms/xcb/kwindowsystem.cpp:987
+#: platforms/xcb/kwindowsystem.cpp:988
 #, fuzzy, qt-format
 #| msgid "Desktop %1"
 msgctxt "KWindowSystem|"
