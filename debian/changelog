@@ -1,3 +1,14 @@
+kwindowsystem (5.62.0-1) unstable; urgency=medium
+
+  * Update reprotest args variable
+  * New upstream release (5.62.0).
+  * Update build-deps and deps with the info from cmake
+  * Disable autopkgtest
+  * Update symbols file
+  * Release to unstable
+
+ -- Maximiliano Curia <maxy@debian.org>  Fri, 20 Sep 2019 10:13:15 -0700
+
 kwindowsystem (5.61.0-1) experimental; urgency=medium
 
   * New revision

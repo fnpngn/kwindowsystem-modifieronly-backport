@@ -16,11 +16,11 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=1; plural=0;\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Qt-Contexts: true\n"
 
 #: platforms/osx/kwindowsystem.cpp:578 platforms/windows/kwindowsystem.cpp:630
-#: platforms/xcb/kwindowsystem.cpp:987
+#: platforms/xcb/kwindowsystem.cpp:988
 #, fuzzy, qt-format
 #| msgid "Desktop %1"
 msgctxt "KWindowSystem|"
