@@ -1,19 +1,9 @@
 /*
- *   Copyright 2013 Martin Gräßlin <mgraesslin@kde.org>
- *
- *   This library is free software; you can redistribute it and/or
- *   modify it under the terms of the GNU Lesser General Public
- *   License as published by the Free Software Foundation; either
- *   version 2.1 of the License, or (at your option) any later version.
- *
- *   This library is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *   Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public
- *   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- */
+    SPDX-FileCopyrightText: 2013 Martin Gräßlin <mgraesslin@kde.org>
+
+    SPDX-License-Identifier: LGPL-2.1-or-later
+*/
+
 #include "nettesthelper.h"
 #include <netwm.h>
 #include <qtest_widgets.h>
@@ -95,7 +85,6 @@ private:
 
 void NetWinInfoTestWM::initTestCase()
 {
-    qsrand(QDateTime::currentMSecsSinceEpoch());
 }
 
 void NetWinInfoTestWM::cleanupTestCase()
@@ -446,7 +435,6 @@ void NetWinInfoTestWM::testState_data()
     QTest::newRow("shaded")           << NET::States(NET::Shaded)           << (QVector<QByteArray>() << shaded);
     QTest::newRow("skipTaskbar")      << NET::States(NET::SkipTaskbar)      << (QVector<QByteArray>() << skipTaskbar);
     QTest::newRow("keepAbove")        << NET::States(NET::KeepAbove)        << (QVector<QByteArray>() << keepAbove << staysOnTop);
-    QTest::newRow("staysOnTop")       << NET::States(NET::StaysOnTop)       << (QVector<QByteArray>() << keepAbove << staysOnTop);
     QTest::newRow("skipPager")        << NET::States(NET::SkipPager)        << (QVector<QByteArray>() << skipPager);
     QTest::newRow("hidden")           << NET::States(NET::Hidden)           << (QVector<QByteArray>() << hidden);
     QTest::newRow("fullScreen")       << NET::States(NET::FullScreen)       << (QVector<QByteArray>() << fullScreen);

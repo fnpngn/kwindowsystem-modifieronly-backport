@@ -1,26 +1,8 @@
 /*
+    SPDX-FileCopyrightText: 2000 Troll Tech AS
+    SPDX-FileCopyrightText: 2003 Lubos Lunak <l.lunak@kde.org>
 
-  Copyright (c) 2000 Troll Tech AS
-  Copyright (c) 2003 Lubos Lunak <l.lunak@kde.org>
-
-  Permission is hereby granted, free of charge, to any person obtaining a
-  copy of this software and associated documentation files (the "Software"),
-  to deal in the Software without restriction, including without limitation
-  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-  and/or sell copies of the Software, and to permit persons to whom the
-  Software is furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-  DEALINGS IN THE SOFTWARE.
-
+    SPDX-License-Identifier: MIT
 */
 
 #ifndef   netwm_h
@@ -681,6 +663,7 @@ public:
     */
     void sendPing(xcb_window_t window, xcb_timestamp_t timestamp);
 
+#if KWINDOWSYSTEM_ENABLE_DEPRECATED_SINCE(5, 0)
     /**
        This function takes the passed XEvent and returns an OR'ed list of
        NETRootInfo properties that have changed in the properties argument.
@@ -696,8 +679,8 @@ public:
        @deprecated since 5.0 use event(xcb_generic_event_t*, NET::Properties*, NET::Properties2*)
 
     **/
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
-    KWINDOWSYSTEM_DEPRECATED void event(xcb_generic_event_t *event, unsigned long *properties, int properties_size);
+    KWINDOWSYSTEM_DEPRECATED_VERSION(5, 0, "Use NETRootInfo::event(xcb_generic_event_t*, NET::Properties*, NET::Properties2*)")
+    void event(xcb_generic_event_t *event, unsigned long *properties, int properties_size);
 #endif
     /**
      * This function takes the passed xcb_generic_event_t and returns the updated properties in the passed in arguments.
@@ -980,13 +963,14 @@ public:
                NET::Properties properties, NET::Properties2 properties2,
                Role role = Client);
 
+#if KWINDOWSYSTEM_ENABLE_DEPRECATED_SINCE(5, 0)
     /**
         This constructor differs from the above one only in the way it accepts
         the list of properties the client is interested in.
         @deprecated since 5.0 use above ctor
     **/
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
-    KWINDOWSYSTEM_DEPRECATED NETWinInfo(xcb_connection_t *connection, xcb_window_t window,
+    KWINDOWSYSTEM_DEPRECATED_VERSION(5, 0, "Use NETWinInfo(xcb_connection_t *, xcb_window_t, xcb_window_t, NET::Properties, NET::Properties2, Role")
+    NETWinInfo(xcb_connection_t *connection, xcb_window_t window,
                xcb_window_t rootWindow, NET::Properties properties,
                Role role = Client);
 #endif
@@ -1058,6 +1042,7 @@ public:
     **/
     NETExtendedStrut extendedStrut() const;
 
+    // Still used internally, e.g. by KWindowSystem::strutChanged() logic
     /**
        @deprecated use strutPartial()
        Returns the strut specified by this client.
@@ -1186,6 +1171,7 @@ public:
     **/
     void setExtendedStrut(const NETExtendedStrut &extended_strut);
 
+    // Still used internally, e.g. by KWindowSystem::strutChanged() logic
     /**
        @deprecated use setExtendedStrut()
        Set the strut for the application window.
@@ -1304,6 +1290,20 @@ public:
        @since 4.4
     **/
     NETStrut frameOverlap() const;
+
+    /**
+       Sets the extents of the drop-shadow drawn by the client.
+
+       @since 5.65
+    **/
+    void setGtkFrameExtents(NETStrut strut);
+
+    /**
+       Returns the extents of the drop-shadow drawn by a GTK client.
+
+       @since 5.65
+    **/
+    NETStrut gtkFrameExtents() const;
 
     /**
        Returns an icon.  If width and height are passed, the icon returned will be
@@ -1518,6 +1518,7 @@ public:
     **/
     NETFullscreenMonitors fullscreenMonitors() const;
 
+#if KWINDOWSYSTEM_ENABLE_DEPRECATED_SINCE(5, 0)
     /**
        This function takes the passed XEvent and returns an OR'ed list of
        NETWinInfo properties that have changed in the properties argument.
@@ -1532,8 +1533,8 @@ public:
        @param properties_size size of the passed properties array
        @deprecated since 5.0 use event(xcb_generic_event_t*, NET::Properties*, NET::Properties2*)
     **/
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
-    KWINDOWSYSTEM_DEPRECATED void event(xcb_generic_event_t *event, unsigned long *properties, int properties_size);
+    KWINDOWSYSTEM_DEPRECATED_VERSION(5, 0, "Use NETWinInfo::event(xcb_generic_event_t*, NET::Properties*, NET::Properties2*)")
+    void event(xcb_generic_event_t *event, unsigned long *properties, int properties_size);
 #endif
     /**
      * This function takes the passed in xcb_generic_event_t and returns the updated properties
@@ -1604,6 +1605,30 @@ public:
      * @see setDesktopFileName
      **/
     const char *desktopFileName() const;
+
+    /**
+     * Sets the @p name as the D-BUS service name for the application menu.
+     * @since 5.69
+     **/
+    void setAppMenuServiceName(const char *name);
+
+    /**
+     * Sets the @p name as the D-BUS object path for the application menu.
+     * @since 5.69
+     **/
+    void setAppMenuObjectPath(const char *path);
+
+    /**
+     * @returns The menu service name of the window's application if present.
+     * @since 5.69
+     **/
+    const char *appMenuServiceName() const;
+
+    /**
+     * @returns The menu object path of the window's application if present.
+     * @since 5.69
+     **/
+    const char *appMenuObjectPath() const;
 
     /**
        Sentinel value to indicate that the client wishes to be visible on

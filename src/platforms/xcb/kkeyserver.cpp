@@ -1,21 +1,10 @@
 /*
-    Copyright (C) 2001 Ellis Whitehead <ellis@kde.org>
+    SPDX-FileCopyrightText: 2001 Ellis Whitehead <ellis@kde.org>
 
     Win32 port:
-    Copyright (C) 2004 Jarosław Staniek <staniek@kde.org>
+    SPDX-FileCopyrightText: 2004 Jarosław Staniek <staniek@kde.org>
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+    SPDX-License-Identifier: LGPL-2.1-or-later
 */
 
 #include "kkeyserver_x11.h"
@@ -467,9 +456,9 @@ inline void checkDisplay()
 {
     // Some non-GUI apps might try to use us.
     if (!QX11Info::display()) {
-        qCCritical(LOG_KKEYSERVER_X11) << "QX11Info::display() returns 0.  I'm probably going to crash now." << endl;
+        qCCritical(LOG_KKEYSERVER_X11) << "QX11Info::display() returns 0.  I'm probably going to crash now.";
         qCCritical(LOG_KKEYSERVER_X11) << "If this is a KApplication initialized without GUI stuff, change it to be "
-                    "initialized with GUI stuff." << endl;
+                    "initialized with GUI stuff.";
     }
 }
 #else // NDEBUG
@@ -769,11 +758,11 @@ bool keyQtToSymX(int keyQt, int *keySym)
         }
     }
 
-    for (uint i = 0; i < sizeof(g_rgQtToSymX) / sizeof(TransKey); i++) {
-        if (g_rgQtToSymX[i].keySymQt == symQt) {
-            if ((keyQt & Qt::KeypadModifier) && !is_keypad_key(g_rgQtToSymX[i].keySymX))
+    for (const TransKey &tk : g_rgQtToSymX) {
+        if (tk.keySymQt == symQt) {
+            if ((keyQt & Qt::KeypadModifier) && !is_keypad_key(tk.keySymX))
                 continue;
-            *keySym = g_rgQtToSymX[i].keySymX;
+            *keySym = tk.keySymX;
             return true;
         }
     }
@@ -808,11 +797,12 @@ bool symXModXToKeyQt(uint32_t keySym, uint16_t modX, int *keyQt)
     }
 
     else {
-        for (uint i = 0; i < sizeof(g_rgQtToSymX) / sizeof(TransKey); i++)
-            if (g_rgQtToSymX[i].keySymX == keySym) {
-                *keyQt = g_rgQtToSymX[i].keySymQt;
+        for (const TransKey &tk : g_rgQtToSymX) {
+            if (tk.keySymX == keySym) {
+                *keyQt = tk.keySymQt;
                 break;
             }
+        }
     }
 
     if (*keyQt == Qt::Key_unknown) {
@@ -829,7 +819,7 @@ bool symXModXToKeyQt(uint32_t keySym, uint16_t modX, int *keyQt)
     return false;
 }
 
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 38)
 bool symXToKeyQt(uint keySym, int *keyQt)
 {
     return symXModXToKeyQt(keySym, 0, keyQt) & ~Qt::KeyboardModifierMask;

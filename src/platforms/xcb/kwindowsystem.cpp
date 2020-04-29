@@ -1,21 +1,10 @@
 /*
     This file is part of the KDE libraries
-    Copyright (C) 1999 Matthias Ettrich (ettrich@kde.org)
-    Copyright (C) 2007 Lubos Lunak (l.lunak@kde.org)
-    Copyright 2014 Martin Gräßlin <mgraesslin@kde.org>
+    SPDX-FileCopyrightText: 1999 Matthias Ettrich <ettrich@kde.org>
+    SPDX-FileCopyrightText: 2007 Lubos Lunak <l.lunak@kde.org>
+    SPDX-FileCopyrightText: 2014 Martin Gräßlin <mgraesslin@kde.org>
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+    SPDX-License-Identifier: LGPL-2.1-or-later
 */
 
 #include "kwindowsystem.h"
@@ -58,8 +47,9 @@ static inline const QRect &displayGeometry()
         static QList<QMetaObject::Connection> connections;
         auto dirtify = [&] {
             isDirty = true;
-            foreach (const QMetaObject::Connection &con, connections)
+            for (const QMetaObject::Connection &con : qAsConst(connections)) {
                 QObject::disconnect(con);
+            }
             connections.clear();
         };
 
@@ -295,7 +285,7 @@ bool NETEventFilter::nativeEventFilter(xcb_generic_event_t *ev)
         if (dirtyProperties || dirtyProperties2) {
             emit s_q->windowChanged(eventWindow);
             emit s_q->windowChanged(eventWindow, dirtyProperties, dirtyProperties2);
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 0)
             unsigned long dirty[ 2 ] = {dirtyProperties, dirtyProperties2};
             emit s_q->windowChanged(eventWindow, dirty);
             emit s_q->windowChanged(eventWindow, dirtyProperties);
@@ -450,7 +440,7 @@ void KWindowSystemPrivateX11::connectNotify(const QMetaMethod &signal)
     } else if (signal == QMetaMethod::fromSignal(static_cast<void (KWindowSystem::*)(WId, NET::Properties, NET::Properties2)>(&KWindowSystem::windowChanged))) {
         what = INFO_WINDOWS;
     }
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 0)
     else if (signal == QMetaMethod::fromSignal(static_cast<void (KWindowSystem::*)(WId, const unsigned long *)>(&KWindowSystem::windowChanged))) {
         what = INFO_WINDOWS;
     } else if (signal == QMetaMethod::fromSignal(static_cast<void (KWindowSystem::*)(WId, uint)>(&KWindowSystem::windowChanged))) {
@@ -676,15 +666,13 @@ void KWindowSystemPrivateX11::demandAttention(WId win, bool set)
     info.setState(set ? NET::DemandsAttention : NET::States(), NET::DemandsAttention);
 }
 
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 0)
 WId KWindowSystemPrivateX11::transientFor(WId win)
 {
     KWindowInfo info(win, NET::Properties(), NET::WM2TransientFor);
     return info.transientFor();
 }
-#endif
 
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
 WId KWindowSystemPrivateX11::groupLeader(WId win)
 {
     KWindowInfo info(win, NET::Properties(), NET::WM2GroupLeader);

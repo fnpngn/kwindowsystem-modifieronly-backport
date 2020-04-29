@@ -1,26 +1,8 @@
 /*
+    SPDX-FileCopyrightText: 2000 Troll Tech AS
+    SPDX-FileCopyrightText: 2003 Lubos Lunak <l.lunak@kde.org>
 
-  Copyright (c) 2000 Troll Tech AS
-  Copyright (c) 2003 Lubos Lunak <l.lunak@kde.org>
-
-  Permission is hereby granted, free of charge, to any person obtaining a
-  copy of this software and associated documentation files (the "Software"),
-  to deal in the Software without restriction, including without limitation
-  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-  and/or sell copies of the Software, and to permit persons to whom the
-  Software is furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-  DEALINGS IN THE SOFTWARE.
-
+    SPDX-License-Identifier: MIT
 */
 
 //#define NETWMDEBUG
@@ -36,6 +18,7 @@
 #if KWINDOWSYSTEM_HAVE_X11 //FIXME
 
 #include <qx11info_x11.h>
+#include <QHash>
 
 #include <kwindowsystem.h>
 #include <kxutils_p.h>
@@ -172,6 +155,8 @@ static void refdec_nwi(NETWinInfoPrivate *p)
         delete [] p->activities;
         delete [] p->client_machine;
         delete [] p->desktop_file;
+        delete [] p->appmenu_object_path;
+        delete [] p->appmenu_service_name;
 
         int i;
         for (i = 0; i < p->icons.size(); i++) {
@@ -594,7 +579,7 @@ void NETRootInfo::setDefaultProperties()
     p->windowTypes = NormalMask | DesktopMask | DockMask
                                     | ToolbarMask | MenuMask | DialogMask;
     p->states = Modal | Sticky | MaxVert | MaxHoriz | Shaded
-                              | SkipTaskbar | StaysOnTop;
+                              | SkipTaskbar | KeepAbove;
     p->properties2 = NET::Properties2();
     p->actions = NET::Actions();
     p->clientProperties = NET::Properties();
@@ -1017,6 +1002,8 @@ void NETRootInfo::setSupported()
         }
         if (p->states & KeepAbove) {
             atoms[pnum++] = p->atom(_NET_WM_STATE_ABOVE);
+            // deprecated variant
+            atoms[pnum++] = p->atom(_NET_WM_STATE_STAYS_ON_TOP);
         }
         if (p->states & KeepBelow) {
             atoms[pnum++] = p->atom(_NET_WM_STATE_BELOW);
@@ -1025,9 +1012,6 @@ void NETRootInfo::setSupported()
             atoms[pnum++] = p->atom(_NET_WM_STATE_DEMANDS_ATTENTION);
         }
 
-        if (p->states & StaysOnTop) {
-            atoms[pnum++] = p->atom(_NET_WM_STATE_STAYS_ON_TOP);
-        }
         if (p->states & Focused) {
             atoms[pnum++] = p->atom(_NET_WM_STATE_FOCUSED);
         }
@@ -1144,6 +1128,10 @@ void NETRootInfo::setSupported()
 
     if (p->properties2 & WM2OpaqueRegion) {
         atoms[pnum++] = p->atom(_NET_WM_OPAQUE_REGION);
+    }
+
+    if (p->properties2 & WM2GTKFrameExtents) {
+        atoms[pnum++] = p->atom(_GTK_FRAME_EXTENTS);
     }
 
     xcb_change_property(p->conn, XCB_PROP_MODE_REPLACE, p->root, p->atom(_NET_SUPPORTED),
@@ -1340,7 +1328,7 @@ void NETRootInfo::updateSupportedProperties(xcb_atom_t atom)
     } else if (atom == p->atom(_NET_WM_STATE_DEMANDS_ATTENTION)) {
         p->states |= DemandsAttention;
     } else if (atom == p->atom(_NET_WM_STATE_STAYS_ON_TOP)) {
-        p->states |= StaysOnTop;
+        p->states |= KeepAbove;
     } else if (atom == p->atom(_NET_WM_STATE_FOCUSED)) {
         p->states |= Focused;
     }
@@ -1445,6 +1433,18 @@ void NETRootInfo::updateSupportedProperties(xcb_atom_t atom)
 
     else if (atom == p->atom(_NET_WM_OPAQUE_REGION)) {
         p->properties2 |= WM2OpaqueRegion;
+    }
+
+    else if (atom == p->atom(_GTK_FRAME_EXTENTS)) {
+        p->properties2 |= WM2GTKFrameExtents;
+    }
+
+    else if (atom == p->atom(_KDE_NET_WM_APPMENU_OBJECT_PATH)) {
+        p->properties2 |= WM2AppMenuObjectPath;
+    }
+
+    else if (atom == p->atom(_KDE_NET_WM_APPMENU_SERVICE_NAME)) {
+        p->properties2 |= WM2AppMenuServiceName;
     }
 }
 
@@ -1674,7 +1674,7 @@ NET::Properties NETRootInfo::event(xcb_generic_event_t *ev)
     return props;
 }
 
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 0)
 void NETRootInfo::event(xcb_generic_event_t *ev, unsigned long *properties, int properties_size)
 {
     unsigned long props[ PROPERTIES_SIZE ] = { 0, 0, 0, 0, 0 };
@@ -1992,7 +1992,7 @@ void NETRootInfo::update(NET::Properties properties, NET::Properties2 properties
         p->actions = NET::Actions();
 
         const QVector<xcb_atom_t> atoms = get_array_reply<xcb_atom_t>(p->conn, cookies[c++], XCB_ATOM_ATOM);
-        Q_FOREACH (const xcb_atom_t atom, atoms) {
+        for (const xcb_atom_t atom : atoms) {
             updateSupportedProperties(atom);
         }
     }
@@ -2602,6 +2602,8 @@ NETWinInfo::NETWinInfo(xcb_connection_t *connection, xcb_window_t window, xcb_wi
     p->icon_sizes = nullptr;
     p->activities = (char *) nullptr;
     p->desktop_file = nullptr;
+    p->appmenu_object_path = nullptr;
+    p->appmenu_service_name = nullptr;
     p->blockCompositing = false;
     p->urgency = false;
     p->input = true;
@@ -2622,7 +2624,7 @@ NETWinInfo::NETWinInfo(xcb_connection_t *connection, xcb_window_t window, xcb_wi
     update(p->properties, p->properties2);
 }
 
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 0)
 NETWinInfo::NETWinInfo(xcb_connection_t *connection, xcb_window_t window, xcb_window_t rootWindow,
                        NET::Properties properties, Role role)
 {
@@ -2665,6 +2667,8 @@ NETWinInfo::NETWinInfo(xcb_connection_t *connection, xcb_window_t window, xcb_wi
     p->icon_sizes = nullptr;
     p->activities = (char *) nullptr;
     p->desktop_file = nullptr;
+    p->appmenu_object_path = nullptr;
+    p->appmenu_service_name = nullptr;
     p->blockCompositing = false;
     p->urgency = false;
     p->input = true;
@@ -3017,19 +3021,18 @@ void NETWinInfo::setState(NET::States state, NET::States mask)
             event.data.data32[2] = 0l;
 
             xcb_send_event(p->conn, false, p->root, netwm_sendevent_mask, (const char *) &event);
-        }
 
-        if ((mask & KeepBelow) && ((p->state & KeepBelow) != (state & KeepBelow))) {
-            event.data.data32[0] = (state & KeepBelow) ? 1 : 0;
-            event.data.data32[1] = p->atom(_NET_WM_STATE_BELOW);
+            // deprecated variant
+            event.data.data32[0] = (state & KeepAbove) ? 1 : 0;
+            event.data.data32[1] = p->atom(_NET_WM_STATE_STAYS_ON_TOP);
             event.data.data32[2] = 0l;
 
             xcb_send_event(p->conn, false, p->root, netwm_sendevent_mask, (const char *) &event);
         }
 
-        if ((mask & StaysOnTop) && ((p->state & StaysOnTop) != (state & StaysOnTop))) {
-            event.data.data32[0] = (state & StaysOnTop) ? 1 : 0;
-            event.data.data32[1] = p->atom(_NET_WM_STATE_STAYS_ON_TOP);
+        if ((mask & KeepBelow) && ((p->state & KeepBelow) != (state & KeepBelow))) {
+            event.data.data32[0] = (state & KeepBelow) ? 1 : 0;
+            event.data.data32[1] = p->atom(_NET_WM_STATE_BELOW);
             event.data.data32[2] = 0l;
 
             xcb_send_event(p->conn, false, p->root, netwm_sendevent_mask, (const char *) &event);
@@ -3080,12 +3083,11 @@ void NETWinInfo::setState(NET::States state, NET::States mask)
         // Policy
         if (p->state & KeepAbove) {
             data[count++] = p->atom(_NET_WM_STATE_ABOVE);
+            // deprecated variant
+            data[count++] = p->atom(_NET_WM_STATE_STAYS_ON_TOP);
         }
         if (p->state & KeepBelow) {
             data[count++] = p->atom(_NET_WM_STATE_BELOW);
-        }
-        if (p->state & StaysOnTop) {
-            data[count++] = p->atom(_NET_WM_STATE_STAYS_ON_TOP);
         }
         if (p->state & Sticky) {
             data[count++] = p->atom(_NET_WM_STATE_STICKY);
@@ -3221,13 +3223,13 @@ void NETWinInfo::setWindowType(WindowType type)
     case OnScreenDisplay:
         data[0] = p->atom(_KDE_NET_WM_WINDOW_TYPE_ON_SCREEN_DISPLAY);
         data[1] = p->atom(_NET_WM_WINDOW_TYPE_NOTIFICATION);
-        len = 1;
+        len = 2;
         break;
 
     case CriticalNotification:
         data[0] = p->atom(_KDE_NET_WM_WINDOW_TYPE_CRITICAL_NOTIFICATION);
         data[1] = p->atom(_NET_WM_WINDOW_TYPE_NOTIFICATION);
-        len = 1;
+        len = 2;
         break;
 
     default:
@@ -3502,6 +3504,63 @@ NETStrut NETWinInfo::frameOverlap() const
     return p->frame_overlap;
 }
 
+void NETWinInfo::setGtkFrameExtents(NETStrut strut)
+{
+    p->gtk_frame_extents = strut;
+
+    uint32_t d[4];
+    d[0] = strut.left;
+    d[1] = strut.right;
+    d[2] = strut.top;
+    d[3] = strut.bottom;
+
+    xcb_change_property(p->conn, XCB_PROP_MODE_REPLACE, p->window, p->atom(_GTK_FRAME_EXTENTS),
+                        XCB_ATOM_CARDINAL, 32, 4, (const void *) d);
+}
+
+NETStrut NETWinInfo::gtkFrameExtents() const
+{
+    return p->gtk_frame_extents;
+}
+
+void NETWinInfo::setAppMenuObjectPath(const char *name)
+{
+    if (p->role != Client) {
+        return;
+    }
+
+    delete[] p->appmenu_object_path;
+    p->appmenu_object_path = nstrdup(name);
+
+    xcb_change_property(p->conn, XCB_PROP_MODE_REPLACE, p->window, p->atom(_KDE_NET_WM_APPMENU_OBJECT_PATH),
+                        XCB_ATOM_STRING, 8, strlen(p->appmenu_object_path),
+                        (const void *) p->appmenu_object_path);
+}
+
+void NETWinInfo::setAppMenuServiceName(const char *name)
+{
+    if (p->role != Client) {
+        return;
+    }
+
+    delete[] p->appmenu_service_name;
+    p->appmenu_service_name = nstrdup(name);
+
+    xcb_change_property(p->conn, XCB_PROP_MODE_REPLACE, p->window, p->atom(_KDE_NET_WM_APPMENU_SERVICE_NAME),
+                        XCB_ATOM_STRING, 8, strlen(p->appmenu_service_name),
+                        (const void *) p->appmenu_service_name);
+}
+
+const char *NETWinInfo::appMenuObjectPath() const
+{
+    return p->appmenu_object_path;
+}
+
+const char *NETWinInfo::appMenuServiceName() const
+{
+    return p->appmenu_service_name;
+}
+
 void NETWinInfo::kdeGeometry(NETRect &frame, NETRect &window)
 {
     if (p->win_geom.size.width == 0 || p->win_geom.size.height == 0) {
@@ -3681,7 +3740,7 @@ void NETWinInfo::event(xcb_generic_event_t *event, NET::Properties *properties, 
                 } else if ((xcb_atom_t) message->data.data32[i] == p->atom(_NET_WM_STATE_DEMANDS_ATTENTION)) {
                     mask |= DemandsAttention;
                 } else if ((xcb_atom_t) message->data.data32[i] == p->atom(_NET_WM_STATE_STAYS_ON_TOP)) {
-                    mask |= StaysOnTop;
+                    mask |= KeepAbove;
                 }  else if ((xcb_atom_t) message->data.data32[i] == p->atom(_NET_WM_STATE_FOCUSED)) {
                     mask |= Focused;
                 }
@@ -3820,6 +3879,12 @@ void NETWinInfo::event(xcb_generic_event_t *event, NET::Properties *properties, 
             dirty2 = WM2DesktopFileName;
         } else if (pe->atom == p->atom(_NET_WM_FULLSCREEN_MONITORS)) {
             dirty2 = WM2FullscreenMonitors;
+        } else if (pe->atom == p->atom(_GTK_FRAME_EXTENTS)) {
+            dirty2 |= WM2GTKFrameExtents;
+        } else if (pe->atom == p->atom(_KDE_NET_WM_APPMENU_SERVICE_NAME)) {
+            dirty2 |= WM2AppMenuServiceName;
+        } else if (pe->atom == p->atom(_KDE_NET_WM_APPMENU_OBJECT_PATH)) {
+            dirty2 |= WM2AppMenuObjectPath;
         }
 
         do_update = true;
@@ -3851,7 +3916,7 @@ void NETWinInfo::event(xcb_generic_event_t *event, NET::Properties *properties, 
     }
 }
 
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 0)
 void NETWinInfo::event(xcb_generic_event_t *ev, unsigned long *properties, int properties_size)
 {
     NET::Properties p;
@@ -4011,6 +4076,18 @@ void NETWinInfo::update(NET::Properties dirtyProperties, NET::Properties2 dirtyP
         cookies[c++] = xcb_get_property(p->conn, false, p->window, p->atom(_KDE_NET_WM_DESKTOP_FILE), p->atom(UTF8_STRING), 0, MAX_PROP_SIZE);
     }
 
+    if (dirty2 & WM2GTKFrameExtents) {
+        cookies[c++] = xcb_get_property(p->conn, false, p->window, p->atom(_GTK_FRAME_EXTENTS), XCB_ATOM_CARDINAL, 0, 4);
+    }
+
+    if (dirty2 & WM2AppMenuObjectPath) {
+        cookies[c++] = xcb_get_property(p->conn, false, p->window, p->atom(_KDE_NET_WM_APPMENU_OBJECT_PATH), XCB_ATOM_STRING, 0, MAX_PROP_SIZE);
+    }
+
+    if (dirty2 & WM2AppMenuServiceName) {
+        cookies[c++] = xcb_get_property(p->conn, false, p->window, p->atom(_KDE_NET_WM_APPMENU_SERVICE_NAME), XCB_ATOM_STRING, 0, MAX_PROP_SIZE);
+    }
+
     c = 0;
 
     if (dirty & XAWMState) {
@@ -4047,7 +4124,7 @@ void NETWinInfo::update(NET::Properties dirtyProperties, NET::Properties2 dirtyP
         fprintf(stderr, "NETWinInfo::update: updating window state (%ld)\n", states.count());
 #endif
 
-        Q_FOREACH (const xcb_atom_t state, states) {
+        for (const xcb_atom_t state : states) {
 #ifdef NETWMDEBUG
             const QByteArray ba = get_atom_name(p->conn, state);
             fprintf(stderr, "NETWinInfo::update:   adding window state %ld '%s'\n",
@@ -4106,7 +4183,7 @@ void NETWinInfo::update(NET::Properties dirtyProperties, NET::Properties2 dirtyP
             }
 
             else if (state == p->atom(_NET_WM_STATE_STAYS_ON_TOP)) {
-                p->state |= StaysOnTop;
+                p->state |= KeepAbove;
             }
 
             else if (state == p->atom(_NET_WM_STATE_FOCUSED)) {
@@ -4184,7 +4261,7 @@ void NETWinInfo::update(NET::Properties dirtyProperties, NET::Properties2 dirtyP
             p->has_net_support = true;
             int pos = 0;
 
-            Q_FOREACH (const xcb_atom_t type, types) {
+            for (const xcb_atom_t type : types) {
 #ifdef NETWMDEBUG
                 const QByteArray name = get_atom_name(p->conn, type);
                 fprintf(stderr,  "NETWinInfo::update:   examining window type %ld %s\n",
@@ -4415,7 +4492,7 @@ void NETWinInfo::update(NET::Properties dirtyProperties, NET::Properties2 dirtyP
             fprintf(stderr, "NETWinInfo::update: updating allowed actions (%ld)\n", actions.count());
 #endif
 
-            Q_FOREACH (const xcb_atom_t action, actions) {
+            for (const xcb_atom_t action : actions) {
 #ifdef NETWMDEBUG
                 const QByteArray name = get_atom_name(p->conn, action);
                 fprintf(stderr,
@@ -4594,6 +4671,38 @@ void NETWinInfo::update(NET::Properties dirtyProperties, NET::Properties2 dirtyP
         const QByteArray id = get_string_reply(p->conn, cookies[c++], p->atom(UTF8_STRING));
         if (id.length() > 0) {
             p->desktop_file = nstrndup(id.constData(), id.length());
+        }
+    }
+
+    if (dirty2 & WM2GTKFrameExtents) {
+        p->gtk_frame_extents = NETStrut();
+
+        QVector<uint32_t> data = get_array_reply<uint32_t>(p->conn, cookies[c++], XCB_ATOM_CARDINAL);
+        if (data.count() == 4) {
+            p->gtk_frame_extents.left   = data[0];
+            p->gtk_frame_extents.right  = data[1];
+            p->gtk_frame_extents.top    = data[2];
+            p->gtk_frame_extents.bottom = data[3];
+        }
+    }
+
+    if (dirty2 & WM2AppMenuObjectPath) {
+        delete[] p->appmenu_object_path;
+        p->appmenu_object_path = nullptr;
+
+        const QByteArray id = get_string_reply(p->conn, cookies[c++], XCB_ATOM_STRING);
+        if (id.length() > 0) {
+            p->appmenu_object_path = nstrndup(id.constData(), id.length());
+        }
+    }
+
+    if (dirty2 & WM2AppMenuServiceName) {
+        delete[] p->appmenu_service_name;
+        p->appmenu_service_name = nullptr;
+
+        const QByteArray id = get_string_reply(p->conn, cookies[c++], XCB_ATOM_STRING);
+        if (id.length() > 0) {
+            p->appmenu_service_name = nstrndup(id.constData(), id.length());
         }
     }
 }

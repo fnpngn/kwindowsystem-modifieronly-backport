@@ -1,19 +1,8 @@
 /*
- *   Copyright 2009 Marco Martin <notmart@gmail.com>
- *
- *   This library is free software; you can redistribute it and/or
- *   modify it under the terms of the GNU Lesser General Public
- *   License as published by the Free Software Foundation; either
- *   version 2.1 of the License, or (at your option) any later version.
- *
- *   This library is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *   Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public
- *   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- */
+    SPDX-FileCopyrightText: 2009 Marco Martin <notmart@gmail.com>
+
+    SPDX-License-Identifier: LGPL-2.1-or-later
+*/
 
 #ifndef KWINDOWEFFECTS_H
 #define KWINDOWEFFECTS_H
@@ -36,7 +25,9 @@ enum Effect {
     PresentWindowsGroup = 4,
     HighlightWindows = 5,
     BlurBehind = 7,
+#if KWINDOWSYSTEM_ENABLE_DEPRECATED_SINCE(5, 67)
     Dashboard = 8,
+#endif
     BackgroundContrast = 9
 };
 
@@ -64,7 +55,7 @@ KWINDOWSYSTEM_EXPORT bool isEffectAvailable(Effect effect);
  */
 KWINDOWSYSTEM_EXPORT void slideWindow(WId id, SlideFromLocation location, int offset = -1);
 
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
+#if KWINDOWSYSTEM_ENABLE_DEPRECATED_SINCE(5, 62)
 /**
  * Mark a window as sliding from screen edge
  * This is an overloaded member function provided for convenience
@@ -74,7 +65,8 @@ KWINDOWSYSTEM_EXPORT void slideWindow(WId id, SlideFromLocation location, int of
  *               Desktop and Floating won't have effect.
  * @deprecated since 5.62, use slideWindow(widget->effectiveWinId(), location);
  */
-KWINDOWSYSTEM_DEPRECATED_EXPORT void slideWindow(QWidget *widget, SlideFromLocation location);
+KWINDOWSYSTEM_DEPRECATED_VERSION(5, 62, "Use KWindowEffects::slideWindow(WId, SlideFromLocation, int)")
+KWINDOWSYSTEM_EXPORT void slideWindow(QWidget *widget, SlideFromLocation location);
 #endif
 
 /**
@@ -152,14 +144,18 @@ KWINDOWSYSTEM_EXPORT void enableBlurBehind(WId window, bool enable = true, const
  */
 KWINDOWSYSTEM_EXPORT void enableBackgroundContrast(WId window, bool enable = true, qreal contrast = 1, qreal intensity = 1, qreal saturation = 1, const QRegion &region = QRegion());
 
+#if KWINDOWSYSTEM_ENABLE_DEPRECATED_SINCE(5, 67)
 /**
  * Instructs the window manager to handle the given window as dashboard window as
  * Dashboard windows should be handled diffrently and may have special effects
  * applied to them.
  *
  * @param window The window for which to enable the blur effect
+ * @deprecated since 5.67, support for dashboard windows was removed
  */
+KWINDOWSYSTEM_DEPRECATED_VERSION(5, 67, "Support for dashboard windows was removed")
 KWINDOWSYSTEM_EXPORT void markAsDashboard(WId window);
+#endif
 }
 
 #endif

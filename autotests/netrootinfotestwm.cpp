@@ -1,19 +1,9 @@
 /*
- *   Copyright 2013 Martin Gräßlin <mgraesslin@kde.org>
- *
- *   This library is free software; you can redistribute it and/or
- *   modify it under the terms of the GNU Lesser General Public
- *   License as published by the Free Software Foundation; either
- *   version 2.1 of the License, or (at your option) any later version.
- *
- *   This library is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *   Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public
- *   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- */
+    SPDX-FileCopyrightText: 2013 Martin Gräßlin <mgraesslin@kde.org>
+
+    SPDX-License-Identifier: LGPL-2.1-or-later
+*/
+
 #include "nettesthelper.h"
 #include <netwm.h>
 #include <qtest_widgets.h>
@@ -81,7 +71,6 @@ void NetRootInfoTestWM::cleanupTestCase()
 
 void NetRootInfoTestWM::initTestCase()
 {
-    qsrand(QDateTime::currentMSecsSinceEpoch());
 }
 
 void NetRootInfoTestWM::init()
@@ -245,6 +234,8 @@ void NetRootInfoTestWM::testSupported()
     count -= 7;
     // WM2BlockCompositing has 3 properties
     count += 2;
+    // Add _GTK_FRAME_EXTENTS
+    ++count;
 
     QVERIFY(supported  != XCB_ATOM_NONE);
     QVERIFY(utf8String != XCB_ATOM_NONE);

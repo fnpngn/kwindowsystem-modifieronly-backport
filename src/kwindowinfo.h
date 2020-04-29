@@ -1,19 +1,9 @@
-/* This file is part of the KDE libraries
-    Copyright (C) 1999 Matthias Ettrich (ettrich@kde.org)
-    Copyright (C) 2007 Lubos Lunak (l.lunak@kde.org)
+/*
+    This file is part of the KDE libraries
+    SPDX-FileCopyrightText: 1999 Matthias Ettrich <ettrich@kde.org>
+    SPDX-FileCopyrightText: 2007 Lubos Lunak <l.lunak@kde.org>
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+    SPDX-License-Identifier: LGPL-2.1-or-later
 */
 /*
  * kwindowinfo.h. Part of the KDE project.
@@ -582,6 +572,24 @@ public:
      * @since 5.29
      */
     int pid() const;
+
+    /**
+     * Returns service name of a window's application menu if present.
+     *
+     * Requires NET::WMPid passed as properties parameter to the constructor.
+     *
+     * @since 5.69
+     */
+    QByteArray applicationMenuServiceName() const;
+
+    /**
+     * Returns object path of a window's application menu if present.
+     *
+     * Requires NET::WMPid passed as properties parameter to the constructor.
+     *
+     * @since 5.69
+     */
+    QByteArray applicationMenuObjectPath() const;
 
     /**
      * Copy constructor.

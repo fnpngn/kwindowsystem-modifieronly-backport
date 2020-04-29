@@ -13,8 +13,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
-"PO-Revision-Date: 2019-09-05 09:24\n"
-"Last-Translator: Guo Yunhe (guoyunhe)\n"
+"PO-Revision-Date: 2020-03-25 19:51\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -22,13 +21,12 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Qt-Contexts: true\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: crowdin.com\n"
 "X-Crowdin-Project: kdeorg\n"
 "X-Crowdin-Language: zh-CN\n"
 "X-Crowdin-File: /kf5-trunk/messages/frameworks/kwindowsystem5_qt.pot\n"
 
-#: platforms/osx/kwindowsystem.cpp:578 platforms/windows/kwindowsystem.cpp:630
-#: platforms/xcb/kwindowsystem.cpp:988
+#: platforms/osx/kwindowsystem.cpp:567 platforms/windows/kwindowsystem.cpp:619
+#: platforms/xcb/kwindowsystem.cpp:976
 #, qt-format
 msgctxt "KWindowSystem|"
 msgid "Desktop %1"

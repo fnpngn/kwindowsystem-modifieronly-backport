@@ -1,19 +1,9 @@
 /*
- *   Copyright 2013 Martin Gräßlin <mgraesslin@kde.org>
- *
- *   This library is free software; you can redistribute it and/or
- *   modify it under the terms of the GNU Lesser General Public
- *   License as published by the Free Software Foundation; either
- *   version 2.1 of the License, or (at your option) any later version.
- *
- *   This library is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *   Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public
- *   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- */
+    SPDX-FileCopyrightText: 2013 Martin Gräßlin <mgraesslin@kde.org>
+
+    SPDX-License-Identifier: LGPL-2.1-or-later
+*/
+
 #include "nettesthelper.h"
 #include "kwindowsystem.h"
 #include "netwm.h"
@@ -277,7 +267,7 @@ void KWindowSystemX11Test::testWindowTitleChanged()
 
     QSignalSpy propertiesChangedSpy(KWindowSystem::self(), SIGNAL(windowChanged(WId,NET::Properties,NET::Properties2)));
     QVERIFY(propertiesChangedSpy.isValid());
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
+#if KWINDOWSYSTEM_ENABLE_DEPRECATED_SINCE(5, 0)
     QSignalSpy propertyChangedSpy(KWindowSystem::self(), SIGNAL(windowChanged(WId,uint)));
     QVERIFY(propertyChangedSpy.isValid());
 #endif
@@ -309,7 +299,7 @@ void KWindowSystemX11Test::testWindowTitleChanged()
     }
     QVERIFY(gotWMName);
 
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
+#if KWINDOWSYSTEM_ENABLE_DEPRECATED_SINCE(5, 0)
     gotWMName = false;
     QCOMPARE(propertyChangedSpy.isEmpty(), false);
     for (auto it = propertyChangedSpy.constBegin(); it != propertyChangedSpy.constEnd(); ++it) {
