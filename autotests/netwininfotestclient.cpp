@@ -1,19 +1,9 @@
 /*
- *   Copyright 2013 Martin Gräßlin <mgraesslin@kde.org>
- *
- *   This library is free software; you can redistribute it and/or
- *   modify it under the terms of the GNU Lesser General Public
- *   License as published by the Free Software Foundation; either
- *   version 2.1 of the License, or (at your option) any later version.
- *
- *   This library is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *   Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public
- *   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- */
+    SPDX-FileCopyrightText: 2013 Martin Gräßlin <mgraesslin@kde.org>
+
+    SPDX-License-Identifier: LGPL-2.1-or-later
+*/
+
 #include "nettesthelper.h"
 #include <netwm.h>
 #include <qtest_widgets.h>
@@ -62,12 +52,16 @@ private Q_SLOTS:
     void testUserTime();
     void testStartupId();
     void testDesktopFileName();
+    void testAppMenuObjectPath();
+    void testAppMenuServiceName();
     void testHandledIcons_data();
     void testHandledIcons();
     void testPid();
     void testName();
     void testIconName();
+#if KWINDOWSYSTEM_ENABLE_DEPRECATED_SINCE(5, 0)
     void testStrut();
+#endif
     void testExtendedStrut();
     void testIconGeometry();
     void testWindowType_data();
@@ -109,7 +103,6 @@ private:
 
 void NetWinInfoTestClient::initTestCase()
 {
-    qsrand(QDateTime::currentMSecsSinceEpoch());
 }
 
 void NetWinInfoTestClient::cleanupTestCase()
@@ -285,6 +278,36 @@ void NetWinInfoTestClient::testStartupId()
     QCOMPARE(info.startupId(), "foo");
 }
 
+void NetWinInfoTestClient::testAppMenuObjectPath()
+{
+    ATOM(_KDE_NET_WM_APPMENU_OBJECT_PATH)
+    INFO
+
+    QVERIFY(!info.appMenuObjectPath());
+
+    xcb_change_property(connection(), XCB_PROP_MODE_REPLACE, m_testWindow,
+                        atom, XCB_ATOM_STRING, 8, 3, "foo");
+    xcb_flush(connection());
+
+    waitForPropertyChange(&info, atom, NET::Property(0), NET::WM2AppMenuObjectPath);
+    QCOMPARE(info.appMenuObjectPath(), "foo");
+}
+
+void NetWinInfoTestClient::testAppMenuServiceName()
+{
+    ATOM(_KDE_NET_WM_APPMENU_SERVICE_NAME)
+    INFO
+
+    QVERIFY(!info.appMenuServiceName());
+
+    xcb_change_property(connection(), XCB_PROP_MODE_REPLACE, m_testWindow,
+                        atom, XCB_ATOM_STRING, 8, 3, "foo");
+    xcb_flush(connection());
+
+    waitForPropertyChange(&info, atom, NET::Property(0), NET::WM2AppMenuServiceName);
+    QCOMPARE(info.appMenuServiceName(), "foo");
+}
+
 void NetWinInfoTestClient::testDesktopFileName()
 {
     QVERIFY(connection());
@@ -407,6 +430,7 @@ void NetWinInfoTestClient::testName()
     performNameTest(atom, &NETWinInfo::name, &NETWinInfo::setName, NET::WMName);
 }
 
+#if KWINDOWSYSTEM_ENABLE_DEPRECATED_SINCE(5, 0)
 void NetWinInfoTestClient::testStrut()
 {
     QVERIFY(connection());
@@ -448,6 +472,7 @@ void NetWinInfoTestClient::testStrut()
     QCOMPARE(extents.right,  newExtents.right);
     QCOMPARE(extents.top,    newExtents.top);
 }
+#endif
 
 void NetWinInfoTestClient::testExtendedStrut()
 {

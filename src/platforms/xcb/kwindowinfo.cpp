@@ -1,21 +1,10 @@
 /*
     This file is part of the KDE libraries
-    Copyright (C) 1999 Matthias Ettrich (ettrich@kde.org)
-    Copyright (C) 2007 Lubos Lunak (l.lunak@kde.org)
-    Copyright 2014 Martin Gräßlin <mgraesslin@kde.org>
+    SPDX-FileCopyrightText: 1999 Matthias Ettrich <ettrich@kde.org>
+    SPDX-FileCopyrightText: 2007 Lubos Lunak <l.lunak@kde.org>
+    SPDX-FileCopyrightText: 2014 Martin Gräßlin <mgraesslin@kde.org>
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+    SPDX-License-Identifier: LGPL-2.1-or-later
 */
 
 #include "kwindowinfo_p_x11.h"
@@ -47,9 +36,11 @@ KWindowInfoPrivateX11::KWindowInfoPrivateX11(WId _win, NET::Properties propertie
     : KWindowInfoPrivate(_win, properties, properties2)
     , KWindowInfoPrivateDesktopFileNameExtension()
     , KWindowInfoPrivatePidExtension()
+    , KWindowInfoPrivateAppMenuExtension()
 {
     installDesktopFileNameExtension(this);
     installPidExtension(this);
+    installAppMenuExtension(this);
 
     KXErrorHandler handler;
     if (properties & NET::WMVisibleIconName) {
@@ -331,7 +322,11 @@ QStringList KWindowInfoPrivateX11::activities() const
 #endif
 
     const QStringList result = QString::fromLatin1(m_info->activities()).split(
+#if QT_VERSION < QT_VERSION_CHECK(5, 15, 0)
         QLatin1Char(','), QString::SkipEmptyParts);
+#else
+        QLatin1Char(','), Qt::SkipEmptyParts);
+#endif
 
     return result.contains(QStringLiteral(KDE_ALL_ACTIVITIES_UUID)) ?
         QStringList() : result;
@@ -455,6 +450,26 @@ QByteArray KWindowInfoPrivateX11::desktopFileName() const
     }
 #endif
     return QByteArray(m_info->desktopFileName());
+}
+
+QByteArray KWindowInfoPrivateX11::applicationMenuObjectPath() const
+{
+#if !defined(KDE_NO_WARNING_OUTPUT)
+    if (!(m_info->passedProperties2() & NET::WM2AppMenuObjectPath)) {
+        qWarning() << "Pass NET::WM2AppMenuObjectPath to KWindowInfo";
+    }
+#endif
+    return QByteArray(m_info->appMenuObjectPath());
+}
+
+QByteArray KWindowInfoPrivateX11::applicationMenuServiceName() const
+{
+#if !defined(KDE_NO_WARNING_OUTPUT)
+    if (!(m_info->passedProperties2() & NET::WM2AppMenuServiceName)) {
+        qWarning() << "Pass NET::WM2AppMenuServiceName to KWindowInfo";
+    }
+#endif
+    return QByteArray(m_info->appMenuServiceName());
 }
 
 int KWindowInfoPrivateX11::pid() const

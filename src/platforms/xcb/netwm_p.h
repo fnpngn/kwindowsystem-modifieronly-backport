@@ -1,26 +1,8 @@
 /*
+    SPDX-FileCopyrightText: 2000 Troll Tech AS
+    SPDX-FileCopyrightText: 2003 Lubos Lunak <l.lunak@kde.org>
 
-  Copyright (c) 2000 Troll Tech AS
-  Copyright (c) 2003 Lubos Lunak <l.lunak@kde.org>
-
-  Permission is hereby granted, free of charge, to any person obtaining a
-  copy of this software and associated documentation files (the "Software"),
-  to deal in the Software without restriction, including without limitation
-  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-  and/or sell copies of the Software, and to permit persons to whom the
-  Software is furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-  DEALINGS IN THE SOFTWARE.
-
+    SPDX-License-Identifier: MIT
 */
 
 #ifndef   netwm_p_h
@@ -171,6 +153,7 @@ struct NETWinInfoPrivate {
     NETStrut strut;
     NETStrut frame_strut; // strut?
     NETStrut frame_overlap;
+    NETStrut gtk_frame_extents;
     NETRArray<NET::WindowType> types;
     char *name, *visible_name, *icon_name, *visible_icon_name;
     int desktop;
@@ -182,7 +165,7 @@ struct NETWinInfoPrivate {
     xcb_window_t transient_for, window_group;
     xcb_pixmap_t icon_pixmap, icon_mask;
     NET::Actions allowed_actions;
-    char *class_class, *class_name, *window_role, *client_machine, *desktop_file;
+    char *class_class, *class_name, *window_role, *client_machine, *desktop_file, *appmenu_object_path, *appmenu_service_name;
 
     NET::Properties properties;
     NET::Properties2 properties2;

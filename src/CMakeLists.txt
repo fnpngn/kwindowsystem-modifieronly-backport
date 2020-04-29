@@ -11,14 +11,29 @@ set(kwindowsystem_SRCS
     kwindoweffects.cpp
     kwindoweffects_dummy.cpp
     kwindowinfo.cpp
+    kwindowshadow.cpp
     kwindowsystem.cpp
     platforms/wayland/kwindowsystem.cpp
     pluginwrapper.cpp
     kwindowsystemplugininterface.cpp
     ${kwindowsystem_QM_LOADER}
     )
-ecm_qt_declare_logging_category(kwindowsystem_SRCS HEADER kwindowsystem_debug.h IDENTIFIER LOG_KWINDOWSYSTEM CATEGORY_NAME org.kde.kwindowsystem DEFAULT_SEVERITY Warning)
-ecm_qt_declare_logging_category(kwindowsystem_SRCS HEADER kwindowsystem_xcb_debug.h IDENTIFIER LOG_KKEYSERVER_X11 CATEGORY_NAME org.kde.kwindowsystem.keyserver.x11 DEFAULT_SEVERITY Warning)
+ecm_qt_declare_logging_category(kwindowsystem_SRCS
+    HEADER kwindowsystem_debug.h
+    IDENTIFIER LOG_KWINDOWSYSTEM
+    CATEGORY_NAME org.kde.kwindowsystem
+    DEFAULT_SEVERITY Warning
+    DESCRIPTION "KWindowSystem"
+    EXPORT KWINDOWSYSTEM
+)
+ecm_qt_declare_logging_category(kwindowsystem_SRCS
+    HEADER kwindowsystem_xcb_debug.h
+    IDENTIFIER LOG_KKEYSERVER_X11
+    CATEGORY_NAME org.kde.kwindowsystem.keyserver.x11
+    DEFAULT_SEVERITY Warning
+    DESCRIPTION "KKeyServer (KWindowSystem)"
+    EXPORT KWINDOWSYSTEM
+)
 
 if (KWINDOWSYSTEM_HAVE_X11)
   set(kwindowsystem_SRCS ${kwindowsystem_SRCS}
@@ -69,8 +84,16 @@ if (WIN32)
 endif ()
 
 add_library(KF5WindowSystem ${kwindowsystem_SRCS})
-generate_export_header(KF5WindowSystem BASE_NAME KWindowSystem)
 add_library(KF5::WindowSystem ALIAS KF5WindowSystem)
+
+ecm_generate_export_header(KF5WindowSystem
+    BASE_NAME KWindowSystem
+    GROUP_BASE_NAME KF
+    VERSION ${KF5_VERSION}
+    DEPRECATED_BASE_VERSION 0
+    DEPRECATION_VERSIONS 5.0 5.18 5.38 5.62 5.67 5.69
+    EXCLUDE_DEPRECATED_BEFORE_AND_AT ${EXCLUDE_DEPRECATED_BEFORE_AND_AT}
+)
 
 target_include_directories(KF5WindowSystem INTERFACE "$<INSTALL_INTERFACE:${KDE_INSTALL_INCLUDEDIR_KF5}/KWindowSystem>")
 
@@ -101,6 +124,7 @@ ecm_generate_headers(KWindowSystem_HEADERS
   KUserTimestamp
   KWindowEffects
   KWindowInfo
+  KWindowShadow,KWindowShadowTile
   KWindowSystem
 
   REQUIRED_HEADERS KWindowSystem_HEADERS
@@ -121,6 +145,7 @@ install(
     FILES
         kwindoweffects_p.h
         kwindowinfo_p.h
+        kwindowshadow_p.h
         kwindowsystem_p.h
         kwindowsystemplugininterface_p.h
     DESTINATION
@@ -143,10 +168,13 @@ if(BUILD_QCH)
         MD_MAINPAGE "${CMAKE_SOURCE_DIR}/README.md"
         LINK_QCHS
             Qt5Gui_QCH
+        INCLUDE_DIRS
+            ${CMAKE_CURRENT_BINARY_DIR}
         BLANK_MACROS
             KWINDOWSYSTEM_EXPORT
             KWINDOWSYSTEM_DEPRECATED
             KWINDOWSYSTEM_DEPRECATED_EXPORT
+            "KWINDOWSYSTEM_DEPRECATED_VERSION(x, y, t)"
         TAGFILE_INSTALL_DESTINATION ${KDE_INSTALL_QTQCHDIR}
         QCH_INSTALL_DESTINATION ${KDE_INSTALL_QTQCHDIR}
         COMPONENT Devel
@@ -154,6 +182,12 @@ if(BUILD_QCH)
 endif()
 
 add_subdirectory(platforms)
+
+ecm_qt_install_logging_categories(
+    EXPORT KWINDOWSYSTEM
+    FILE kwindowsystem.categories
+    DESTINATION ${KDE_INSTALL_LOGGINGCATEGORIESDIR}
+)
 
 include(ECMGeneratePriFile)
 ecm_generate_pri_file(BASE_NAME KWindowSystem LIB_NAME KF5WindowSystem DEPS "gui" FILENAME_VAR PRI_FILENAME INCLUDE_INSTALL_DIR ${KDE_INSTALL_INCLUDEDIR_KF5}/KWindowSystem)

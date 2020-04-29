@@ -1,26 +1,13 @@
 /*
- * Copyright 2014 Martin Gräßlin <mgraesslin@kde.org>
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) version 3, or any
- * later version accepted by the membership of KDE e.V. (or its
- * successor approved by the membership of KDE e.V.), which shall
- * act as a proxy defined in Section 6 of version 3 of the license.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- */
+    SPDX-FileCopyrightText: 2014 Martin Gräßlin <mgraesslin@kde.org>
+
+    SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
+*/
+
 #include "kwindoweffects_p.h"
 #include "pluginwrapper_p.h"
 #include <QGuiApplication>
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 62)
 #include <QWidget>
 #endif
 
@@ -55,10 +42,12 @@ void highlightWindows(WId controller, const QList< WId > &ids)
     KWindowSystemPluginWrapper::self().effects()->highlightWindows(controller, ids);
 }
 
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 67)
 void markAsDashboard(WId window)
 {
     KWindowSystemPluginWrapper::self().effects()->markAsDashboard(window);
 }
+#endif
 
 void presentWindows(WId controller, const QList< WId > &ids)
 {
@@ -75,7 +64,7 @@ void slideWindow(WId id, SlideFromLocation location, int offset)
     KWindowSystemPluginWrapper::self().effects()->slideWindow(id, location, offset);
 }
 
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 62)
 void slideWindow(QWidget *widget, SlideFromLocation location)
 {
     slideWindow(widget->effectiveWinId(), location, -1);

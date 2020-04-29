@@ -1,19 +1,8 @@
-/* This file is part of the KDE libraries
+/*  This file is part of the KDE libraries
 
-    Copyright 2012 David Faure <faure@kde.org>
+    SPDX-FileCopyrightText: 2012 David Faure <faure@kde.org>
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+    SPDX-License-Identifier: LGPL-2.1-or-later
 */
 
 #include <kxmessages.h>
@@ -27,7 +16,7 @@ class KXMessages_UnitTest : public QObject
 public:
     enum BroadcastType {
         BroadcastMessageObject,
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
+#if KWINDOWSYSTEM_ENABLE_DEPRECATED_SINCE(5, 0)
         BroadcastStaticDisplay,
 #endif
         BroadcastStaticConnection
@@ -58,12 +47,12 @@ void KXMessages_UnitTest::testStart_data()
     QTest::addColumn<KXMessages_UnitTest::ReceiverType>("receiverType");
 
     QTest::newRow("object")     << BroadcastMessageObject << ReceiverTypeDefault;
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
+#if KWINDOWSYSTEM_ENABLE_DEPRECATED_SINCE(5, 0)
     QTest::newRow("display")    << BroadcastStaticDisplay << ReceiverTypeDefault;
 #endif
     QTest::newRow("connection") << BroadcastStaticConnection << ReceiverTypeDefault;
     QTest::newRow("object/xcb")     << BroadcastMessageObject << ReceiverTypeConnection;
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
+#if KWINDOWSYSTEM_ENABLE_DEPRECATED_SINCE(5, 0)
     QTest::newRow("display/xcb")    << BroadcastStaticDisplay << ReceiverTypeConnection;
 #endif
     QTest::newRow("connection/xcb") << BroadcastStaticConnection << ReceiverTypeConnection;
@@ -97,7 +86,7 @@ void KXMessages_UnitTest::testStart()
         case KXMessages_UnitTest::BroadcastMessageObject:
             m_msgs.broadcastMessage(type, message);
             break;
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
+#if KWINDOWSYSTEM_ENABLE_DEPRECATED_SINCE(5, 0)
         case KXMessages_UnitTest::BroadcastStaticDisplay:
             QVERIFY(KXMessages::broadcastMessageX(QX11Info::display(), type.constData(), message));
             break;

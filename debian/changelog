@@ -1,3 +1,17 @@
+kwindowsystem (5.69.0-1) experimental; urgency=medium
+
+  * Team upload.
+
+  [ Sandro Knauß ]
+  * Add Rules-Requires-Root field to control.
+  * New upstream release (5.69.0).
+  * Update build-deps and deps with the info from cmake.
+  * Enable hardening all.
+  * Update symbols from build for 5.69.0.
+  * Remove not needed injection of linker flags.
+
+ -- Sandro Knauß <hefee@debian.org>  Thu, 30 Apr 2020 00:55:58 +0200
+
 kwindowsystem (5.62.0-3) unstable; urgency=medium
 
   * Team upload.

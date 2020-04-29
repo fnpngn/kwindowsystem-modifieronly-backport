@@ -1,26 +1,8 @@
 /*
+  SPDX-FileCopyrightText: 2000 Troll Tech AS
+  SPDX-FileCopyrightText: 2003 Lubos Lunak <l.lunak@kde.org>
 
-  Copyright (c) 2000 Troll Tech AS
-  Copyright (c) 2003 Lubos Lunak <l.lunak@kde.org>
-
-  Permission is hereby granted, free of charge, to any person obtaining a
-  copy of this software and associated documentation files (the "Software"),
-  to deal in the Software without restriction, including without limitation
-  the rights to use, copy, modify, merge, publish, distribute, sublicense,
-  and/or sell copies of the Software, and to permit persons to whom the
-  Software is furnished to do so, subject to the following conditions:
-
-  The above copyright notice and this permission notice shall be included in
-  all copies or substantial portions of the Software.
-
-  THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-  IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-  FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-  THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-  LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-  FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-  DEALINGS IN THE SOFTWARE.
-
+  SPDX-License-Identifier: MIT
 */
 
 #ifndef   netwm_def_h
@@ -333,6 +315,8 @@ public:
            indicates that this is a dialog window
         **/
         Dialog   = 5,
+        // cannot deprecate to compiler: used both by clients & manager, later needs to keep supporting it for now
+        // KF6: remove
         /**
                @deprecated has unclear meaning and is KDE-only
         **/
@@ -472,10 +456,12 @@ public:
            windows).
         **/
         KeepAbove    = 1u << 6,
+#if KWINDOWSYSTEM_ENABLE_DEPRECATED_SINCE(5, 0)
         /**
-           @deprecated This is an obsolete name for KeepAbove.
+           @deprecated Since 5.0. This is an obsolete name for KeepAbove.
         **/
         StaysOnTop   = KeepAbove,   // NOT STANDARD
+#endif
         /**
            indicates that a window should not be included on a pager.
         **/
@@ -706,6 +692,7 @@ public:
         @li WM2IconPixmap icon pixmap and mask in WM_HINTS (see ICCCM 4.1.2.4)
         @li WM2OpaqueRegion
         @li WM2DesktopFileName the base name of the desktop file name or the full path to the desktop file
+        @li WM2GTKFrameExtents extents of the shadow drawn by the client
     **/
     enum Property2 {
         WM2UserTime            = 1u << 0,
@@ -736,6 +723,9 @@ public:
         WM2IconPixmap          = 1u << 25, // @since 5.7
         WM2OpaqueRegion        = 1u << 25, // @since 5.7
         WM2DesktopFileName     = 1u << 26, // NOT STANDARD @since 5.28
+        WM2GTKFrameExtents     = 1u << 27, // NOT STANDARD @since 5.65
+        WM2AppMenuServiceName  = 1u << 28, // NOT STANDARD @since 5.69
+        WM2AppMenuObjectPath   = 1u << 29, // NOT STANDARD @since 5.69
         WM2AllProperties       = ~0u
     };
     Q_DECLARE_FLAGS(Properties2, Property2)

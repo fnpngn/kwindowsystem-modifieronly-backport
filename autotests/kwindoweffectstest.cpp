@@ -1,19 +1,8 @@
 /*
- *   Copyright 2013 Martin Gräßlin <mgraesslin@kde.org>
- *
- *   This library is free software; you can redistribute it and/or
- *   modify it under the terms of the GNU Lesser General Public
- *   License as published by the Free Software Foundation; either
- *   version 2.1 of the License, or (at your option) any later version.
- *
- *   This library is distributed in the hope that it will be useful,
- *   but WITHOUT ANY WARRANTY; without even the implied warranty of
- *   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- *   Lesser General Public License for more details.
- *
- *   You should have received a copy of the GNU Lesser General Public
- *   License along with this library.  If not, see <http://www.gnu.org/licenses/>.
- */
+    SPDX-FileCopyrightText: 2013 Martin Gräßlin <mgraesslin@kde.org>
+
+    SPDX-License-Identifier: LGPL-2.1-or-later
+*/
 
 #include <kwindoweffects.h>
 #include <kwindowsystem.h>
@@ -49,7 +38,9 @@ private Q_SLOTS:
     void testBlur_data();
     void testBlur();
     void testBlurDisable();
+#if KWINDOWSYSTEM_ENABLE_DEPRECATED_SINCE(5, 67)
     void testMarkAsDashboard();
+#endif
     void testEffectAvailable_data();
     void testEffectAvailable();
 
@@ -362,6 +353,7 @@ void KWindowEffectsTest::testBlurDisable()
     performAtomIsRemoveTest(m_window->winId(), m_blur);
 }
 
+#if KWINDOWSYSTEM_ENABLE_DEPRECATED_SINCE(5, 67)
 void KWindowEffectsTest::testMarkAsDashboard()
 {
     const QByteArray className = QByteArrayLiteral("dashboard");
@@ -390,6 +382,7 @@ void KWindowEffectsTest::testMarkAsDashboard()
     data = data + 10;
     QCOMPARE(QByteArray(data), className);
 }
+#endif
 
 void KWindowEffectsTest::testEffectAvailable_data()
 {
@@ -401,7 +394,9 @@ void KWindowEffectsTest::testEffectAvailable_data()
     QTest::newRow("PresentWindowsGroup") << KWindowEffects::PresentWindowsGroup << QByteArrayLiteral("_KDE_PRESENT_WINDOWS_GROUP");
     QTest::newRow("HighlightWindows") << KWindowEffects::HighlightWindows << QByteArrayLiteral("_KDE_WINDOW_HIGHLIGHT");
     QTest::newRow("BlurBehind") << KWindowEffects::BlurBehind << QByteArrayLiteral("_KDE_NET_WM_BLUR_BEHIND_REGION");
+#if KWINDOWSYSTEM_ENABLE_DEPRECATED_SINCE(5, 67)
     QTest::newRow("Dashboard") << KWindowEffects::Dashboard << QByteArrayLiteral("_WM_EFFECT_KDE_DASHBOARD");
+#endif
     QTest::newRow("BackgroundContrast") << KWindowEffects::BackgroundContrast << QByteArrayLiteral("_KDE_NET_WM_BACKGROUND_CONTRAST_REGION");
 }
 

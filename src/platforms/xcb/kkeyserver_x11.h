@@ -1,21 +1,10 @@
 /*
-    Copyright (C) 2001 Ellis Whitehead <ellis@kde.org>
+    SPDX-FileCopyrightText: 2001 Ellis Whitehead <ellis@kde.org>
 
     Win32 port:
-    Copyright (C) 2004 Jarosław Staniek <staniek@kde.org>
+    SPDX-FileCopyrightText: 2004 Jarosław Staniek <staniek@kde.org>
 
-    This library is free software; you can redistribute it and/or
-    modify it under the terms of the GNU Lesser General Public
-    License as published by the Free Software Foundation; either
-    version 2.1 of the License, or (at your option) any later version.
-
-    This library is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-    Lesser General Public License for more details.
-
-    You should have received a copy of the GNU Lesser General Public
-    License along with this library.  If not, see <http://www.gnu.org/licenses/>.
+    SPDX-License-Identifier: LGPL-2.1-or-later
 */
 
 #ifndef _KKEYSERVER_X11_H
@@ -140,7 +129,7 @@ KWINDOWSYSTEM_EXPORT bool keyQtToCodeX(int keyQt, int *keyCode);
  */
 KWINDOWSYSTEM_EXPORT bool keyQtToModX(int keyQt, uint *mod);
 
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
+#if KWINDOWSYSTEM_ENABLE_DEPRECATED_SINCE(5, 38)
 /**
  * Converts the given symbol to a Qt key code.
  * @param sym the symbol
@@ -148,7 +137,8 @@ KWINDOWSYSTEM_EXPORT bool keyQtToModX(int keyQt, uint *mod);
  * @return true if successful, false otherwise
  * @deprecated since 5.38, use symXModXToKeyQt in order to support numeric keypad keys too
  */
-KWINDOWSYSTEM_DEPRECATED_EXPORT bool symXToKeyQt(uint sym, int *keyQt);
+KWINDOWSYSTEM_DEPRECATED_VERSION(5, 38, "Use KKeyServer::symXModXToKeyQt(uint32_t, uint16_t, int *)")
+KWINDOWSYSTEM_EXPORT bool symXToKeyQt(uint sym, int *keyQt);
 #endif
 
 /**

@@ -1,26 +1,8 @@
-/****************************************************************************
+/*
+    SPDX-FileCopyrightText: 2001-2003 Lubos Lunak <l.lunak@kde.org>
 
- Copyright (C) 2001-2003 Lubos Lunak        <l.lunak@kde.org>
-
-Permission is hereby granted, free of charge, to any person obtaining a
-copy of this software and associated documentation files (the "Software"),
-to deal in the Software without restriction, including without limitation
-the rights to use, copy, modify, merge, publish, distribute, sublicense,
-and/or sell copies of the Software, and to permit persons to whom the
-Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.  IN NO EVENT SHALL
-THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
-FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
-DEALINGS IN THE SOFTWARE.
-
-****************************************************************************/
+    SPDX-License-Identifier: MIT
+*/
 
 // qDebug() can't be turned off in kdeinit
 #if 0
@@ -38,7 +20,7 @@ DEALINGS IN THE SOFTWARE.
 #include "netwm_def.h"
 #include "kwindowsystem_debug.h"
 
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 62)
 #include <QWidget>
 #endif
 #include <QDateTime>
@@ -111,7 +93,7 @@ struct Q_DECL_HIDDEN KStartupInfoId::Private
 struct Q_DECL_HIDDEN KStartupInfoData::Private
 {
     Private() : desktop(0), wmclass(""), hostname(""),
-        silent(KStartupInfoData::Unknown), screen(-1), xinerama(-1), launched_by(0) {}
+        silent(KStartupInfoData::Unknown), screen(-1), xinerama(-1) {}
 
     QString to_text() const;
     void remove_pid(pid_t pid);
@@ -127,7 +109,9 @@ struct Q_DECL_HIDDEN KStartupInfoData::Private
     KStartupInfoData::TriState silent;
     int screen;
     int xinerama;
-    WId launched_by;
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 69)
+    WId launched_by = 0;
+#endif
     QString application_id;
 };
 
@@ -219,7 +203,7 @@ KStartupInfo::KStartupInfo(int flags_P, QObject *parent_P)
     d->createConnections();
 }
 
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 0)
 KStartupInfo::KStartupInfo(bool clean_on_cantdetect_P, QObject *parent_P)
     : QObject(parent_P),
       d(new Private(clean_on_cantdetect_P ? CleanOnCantDetect : 0, this))
@@ -478,7 +462,7 @@ bool KStartupInfo::sendStartup(const KStartupInfoId &id_P, const KStartupInfoDat
     return true;
 }
 
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 18)
 bool KStartupInfo::sendStartupX(Display *disp_P, const KStartupInfoId &id_P,
                                 const KStartupInfoData &data_P)
 {
@@ -554,7 +538,7 @@ bool KStartupInfo::sendChange(const KStartupInfoId &id_P, const KStartupInfoData
     return true;
 }
 
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 18)
 bool KStartupInfo::sendChangeX(Display *disp_P, const KStartupInfoId &id_P,
                                const KStartupInfoData &data_P)
 {
@@ -608,7 +592,7 @@ bool KStartupInfo::sendFinish(const KStartupInfoId &id_P)
     return true;
 }
 
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 18)
 bool KStartupInfo::sendFinishX(Display *disp_P, const KStartupInfoId &id_P)
 {
     if (id_P.isNull()) {
@@ -658,7 +642,7 @@ bool KStartupInfo::sendFinish(const KStartupInfoId &id_P, const KStartupInfoData
     return true;
 }
 
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 18)
 bool KStartupInfo::sendFinishX(Display *disp_P, const KStartupInfoId &id_P,
                                const KStartupInfoData &data_P)
 {
@@ -773,7 +757,7 @@ void KStartupInfo::setStartupId(const QByteArray &startup_id)
     }
 }
 
-#ifndef KWINDOWSYSTEM_NO_DEPRECATED
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 62)
 void KStartupInfo::setNewStartupId(QWidget *window, const QByteArray &startup_id)
 {
     // Set the WA_NativeWindow attribute to force the creation of the QWindow.
@@ -1280,9 +1264,11 @@ QString KStartupInfoData::Private::to_text() const
     if (xinerama != -1) {
         ret += QStringLiteral(" XINERAMA=%1").arg(xinerama);
     }
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 69)
     if (launched_by != 0) {
         ret += QStringLiteral(" LAUNCHED_BY=%1").arg((qptrdiff)launched_by);
     }
+#endif
     if (!application_id.isEmpty()) {
         ret += QStringLiteral(" APPLICATION_ID=\"%1\"").arg(application_id);
     }
@@ -1319,8 +1305,10 @@ KStartupInfoData::KStartupInfoData(const QString &txt_P) : d(new Private)
             d->screen = get_num(*it);
         } else if ((*it).startsWith(QLatin1String("XINERAMA="))) {
             d->xinerama = get_num(*it);
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 69)
         } else if ((*it).startsWith(QLatin1String("LAUNCHED_BY="))) {
             d->launched_by = (WId) get_num(*it);
+#endif
         } else if ((*it).startsWith(QLatin1String("APPLICATION_ID="))) {
             d->application_id = get_str(*it);
         }
@@ -1377,9 +1365,11 @@ void KStartupInfoData::update(const KStartupInfoData &data_P)
     if (data_P.xinerama() != -1 && xinerama() != -1) { // don't overwrite
         d->xinerama = data_P.xinerama();
     }
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 69)
     if (data_P.launchedBy() != 0 && launchedBy() != 0) { // don't overwrite
         d->launched_by = data_P.launchedBy();
     }
+#endif
     if (!data_P.applicationId().isEmpty() && applicationId().isEmpty()) { // don't overwrite
         d->application_id = data_P.applicationId();
     }
@@ -1557,6 +1547,7 @@ int KStartupInfoData::xinerama() const
     return d->xinerama;
 }
 
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 69)
 void KStartupInfoData::setLaunchedBy(WId window)
 {
     d->launched_by = window;
@@ -1566,6 +1557,7 @@ WId KStartupInfoData::launchedBy() const
 {
     return d->launched_by;
 }
+#endif
 
 void KStartupInfoData::setApplicationId(const QString &desktop)
 {
@@ -1600,13 +1592,6 @@ static
 QString get_str(const QString &item_P)
 {
     int pos = item_P.indexOf(QLatin1Char('='));
-    if (item_P.length() > pos + 2 && item_P.at(pos + 1) == QLatin1Char('\"')) {
-        int pos2 = item_P.left(pos + 2).indexOf(QLatin1Char('\"'));
-        if (pos2 < 0) {
-            return QString();    // 01234
-        }
-        return item_P.mid(pos + 2, pos2 - 2 - pos);    // A="C"
-    }
     return item_P.mid(pos + 1);
 }
 
