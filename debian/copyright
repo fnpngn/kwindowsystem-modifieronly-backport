@@ -1,6 +1,7 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
 Upstream-Name: kwindowsystem
 Source: https://projects.kde.org/projects/frameworks/kwindowsystem
+Upstream-Contact: kde-frameworks-devel@kde.org
 
 Files: *
 Copyright: 2013, Aurélien Gâteau <agateau@kde.org>
