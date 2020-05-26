@@ -1,3 +1,18 @@
+kwindowsystem (5.70.0-1) unstable; urgency=medium
+
+  * Team upload.
+
+  [ Sandro Knauß ]
+  * Bump compat level to 13.
+  * New upstream release (5.70.0).
+  * Update build-deps and deps with the info from cmake.
+  * Wrap long lines in changelog entries: 5.61.0-1, 5.21.0-1.
+  * Set field Upstream-Contact in debian/copyright.
+  * Remove obsolete fields Contact, Name from debian/upstream/metadata
+    (already present in machine-readable debian/copyright).
+
+ -- Sandro Knauß <hefee@debian.org>  Tue, 26 May 2020 23:56:15 +0200
+
 kwindowsystem (5.69.0-1) experimental; urgency=medium
 
   * Team upload.
@@ -63,7 +78,8 @@ kwindowsystem (5.61.0-1) experimental; urgency=medium
   * Salsa CI automatic initialization by Tuco
   * New upstream release (5.61.0).
   * Move qdebug logging categories files.
-  * Drop upstream applied patch: netrootinfotestwm-testsupported-needs-to-also-count-skipS.patch
+  * Drop upstream applied patch:
+    netrootinfotestwm-testsupported-needs-to-also-count-skipS.patch
   * Update build-deps and deps with the info from cmake
   * Ignore reprotest build path variations
   * Add missing version to maintscript
@@ -437,7 +453,8 @@ kwindowsystem (5.22.0-0neon) xenial; urgency=medium
 kwindowsystem (5.21.0-1) experimental; urgency=medium
 
   [ Maximiliano Curia ]
-  * Replace the "Historical name" ddeb-migration by its "Modern, clearer" replacement dbgsym-migration.
+  * Replace the "Historical name" ddeb-migration by its "Modern, clearer"
+    replacement dbgsym-migration.
   * Add upstream metadata (DEP-12)
   * debian/control: Update Vcs-Browser and Vcs-Git fields
   * Update acc test script
