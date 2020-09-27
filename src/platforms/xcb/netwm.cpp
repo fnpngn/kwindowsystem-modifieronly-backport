@@ -19,6 +19,7 @@
 
 #include <qx11info_x11.h>
 #include <QHash>
+#include <QGuiApplication>
 
 #include <kwindowsystem.h>
 #include <kxutils_p.h>
@@ -2796,6 +2797,12 @@ void NETWinInfo::setIconGeometry(NETRect geometry)
     if (p->role != Client) {
         return;
     }
+
+    const qreal scaleFactor = qApp->devicePixelRatio();
+    geometry.pos.x *= scaleFactor;
+    geometry.pos.y *= scaleFactor;
+    geometry.size.width *= scaleFactor;
+    geometry.size.height *= scaleFactor;
 
     p->icon_geom = geometry;
 
