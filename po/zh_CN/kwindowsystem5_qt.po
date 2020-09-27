@@ -13,7 +13,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
-"PO-Revision-Date: 2020-03-25 19:51\n"
+"PO-Revision-Date: 2020-09-05 05:17\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
@@ -22,8 +22,10 @@ msgstr ""
 "X-Qt-Contexts: true\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Crowdin-Project: kdeorg\n"
+"X-Crowdin-Project-ID: 269464\n"
 "X-Crowdin-Language: zh-CN\n"
-"X-Crowdin-File: /kf5-trunk/messages/frameworks/kwindowsystem5_qt.pot\n"
+"X-Crowdin-File: /kf5-trunk/messages/kwindowsystem/kwindowsystem5_qt.pot\n"
+"X-Crowdin-File-ID: 5589\n"
 
 #: platforms/osx/kwindowsystem.cpp:567 platforms/windows/kwindowsystem.cpp:619
 #: platforms/xcb/kwindowsystem.cpp:976
