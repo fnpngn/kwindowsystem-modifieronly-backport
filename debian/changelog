@@ -1,3 +1,9 @@
+kwindowsystem (5.74.0-2) unstable; urgency=medium
+
+  * Team upload to unstable.
+
+ -- Sandro Knauß <hefee@debian.org>  Mon, 19 Oct 2020 23:12:59 +0200
+
 kwindowsystem (5.74.0-1) experimental; urgency=medium
 
   * Team upload.
