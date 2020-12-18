@@ -20,12 +20,10 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: KBabel 1.11.4\n"
-"X-Poedit-Country: INDIA\n"
 "X-Qt-Contexts: true\n"
 
 #: platforms/osx/kwindowsystem.cpp:567 platforms/windows/kwindowsystem.cpp:619
-#: platforms/xcb/kwindowsystem.cpp:976
+#: platforms/xcb/kwindowsystem.cpp:978
 #, fuzzy, qt-format
 msgctxt "KWindowSystem|"
 msgid "Desktop %1"
