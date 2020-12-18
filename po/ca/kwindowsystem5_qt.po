@@ -11,7 +11,7 @@
 # Orestes Mas <orestes@tsc.upc.edu>, 2010.
 msgid ""
 msgstr ""
-"Project-Id-Version: kwindowsystem5_qt\n"
+"Project-Id-Version: kwindowsystem\n"
 "Report-Msgid-Bugs-To: https://bugs.kde.org\n"
 "POT-Creation-Date: 2014-03-23 01:50+0000\n"
 "PO-Revision-Date: 2014-03-30 16:32+0200\n"
@@ -27,7 +27,7 @@ msgstr ""
 "X-Qt-Contexts: true\n"
 
 #: platforms/osx/kwindowsystem.cpp:567 platforms/windows/kwindowsystem.cpp:619
-#: platforms/xcb/kwindowsystem.cpp:976
+#: platforms/xcb/kwindowsystem.cpp:978
 #, qt-format
 msgctxt "KWindowSystem|"
 msgid "Desktop %1"

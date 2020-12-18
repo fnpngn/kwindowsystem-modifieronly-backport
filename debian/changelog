@@ -1,3 +1,14 @@
+kwindowsystem (5.77.0-1) experimental; urgency=medium
+
+  [ Norbert Preining ]
+  * Bump Standards-Version to 4.5.1 (No changes needed).
+  * New upstream release (5.77.0).
+  * Update build-deps and deps with the info from cmake.
+  * Add myself to Uploaders.
+  * Update maintainer to Debian Qt/KDE Maintainers.
+
+ -- Norbert Preining <norbert@preining.info>  Fri, 18 Dec 2020 10:03:56 +0900
+
 kwindowsystem (5.74.0-2) unstable; urgency=medium
 
   * Team upload to unstable.
