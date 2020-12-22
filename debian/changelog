@@ -1,3 +1,9 @@
+kwindowsystem (5.77.0-2) unstable; urgency=medium
+
+  * Release to unstable.
+
+ -- Norbert Preining <norbert@preining.info>  Tue, 22 Dec 2020 10:33:37 +0900
+
 kwindowsystem (5.77.0-1) experimental; urgency=medium
 
   [ Norbert Preining ]
