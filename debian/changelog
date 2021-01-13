@@ -1,3 +1,11 @@
+kwindowsystem (5.78.0-1) experimental; urgency=medium
+
+  [ Norbert Preining ]
+  * New upstream release (5.78.0).
+  * Update build-deps and deps with the info from cmake.
+
+ -- Norbert Preining <norbert@preining.info>  Wed, 13 Jan 2021 10:32:44 +0900
+
 kwindowsystem (5.77.0-2) unstable; urgency=medium
 
   * Release to unstable.

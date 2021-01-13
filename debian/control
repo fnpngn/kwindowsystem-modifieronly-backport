@@ -3,14 +3,14 @@ Section: libs
 Priority: optional
 Maintainer: Debian Qt/KDE Maintainers <debian-qt-kde@lists.debian.org>
 Uploaders: Maximiliano Curia <maxy@debian.org>,
-           Norbert Preining <norbert@preining.info>,
+           Norbert Preining <norbert@preining.info>
 Build-Depends: cmake (>= 3.5~),
                debhelper-compat (= 13),
                doxygen,
-               extra-cmake-modules (>= 5.77.0~),
+               extra-cmake-modules (>= 5.78.0~),
                graphviz,
                libqt5sql5-sqlite:native,
-               libqt5x11extras5-dev (>= 5.13.0~),
+               libqt5x11extras5-dev (>= 5.14.0~),
                libx11-dev,
                libxcb-icccm4-dev,
                libxcb-keysyms1-dev,
@@ -21,9 +21,9 @@ Build-Depends: cmake (>= 3.5~),
                libxrender-dev,
                pkg-config,
                pkg-kde-tools (>= 0.15.15ubuntu1~),
-               qtbase5-dev (>= 5.13.0~),
+               qtbase5-dev (>= 5.14.0~),
                qttools5-dev (>= 5.4),
-               qttools5-dev-tools (>= 5.4),
+               qttools5-dev-tools (>= 5.4)
 Standards-Version: 4.5.1
 Homepage: https://invent.kde.org/frameworks/kwindowsystem
 Vcs-Browser: https://salsa.debian.org/qt-kde-team/kde/kwindowsystem
@@ -46,8 +46,8 @@ Package: libkf5windowsystem-dev
 Section: libdevel
 Architecture: any
 Depends: libkf5windowsystem5 (= ${binary:Version}),
-         qtbase5-dev (>= 5.13.0~),
-         ${misc:Depends},
+         qtbase5-dev (>= 5.14.0~),
+         ${misc:Depends}
 Recommends: libkf5windowsystem-doc (= ${source:Version})
 Description: development files for kwindowsystem
  The class KWindowSystem provides information about the state of the
@@ -64,7 +64,7 @@ Breaks: libkf5crash-dev (<< 5.54),
         libkf5runner-dev (<< 5.54),
         libkf5textwidgets-dev (<< 5.54),
         libkf5wallet-dev (<< 5.54),
-        libkf5xmlgui-dev (<< 5.54),
+        libkf5xmlgui-dev (<< 5.54)
 
 Package: libkf5windowsystem-doc
 Architecture: all
@@ -84,7 +84,7 @@ Architecture: any
 Multi-Arch: same
 Depends: libkf5windowsystem-data (= ${source:Version}),
          ${misc:Depends},
-         ${shlibs:Depends},
+         ${shlibs:Depends}
 Recommends: kwayland-integration, qtwayland5
 Description: Convenience access to certain properties and features of the window manager
  The class KWindowSystem provides information about the state of the
@@ -110,4 +110,4 @@ Breaks: kinit (<< 5.54),
         libkf5xmlgui5 (<< 5.54),
         plasma-framework (<< 5.54),
         qml-module-org-kde-kquickcontrols (<< 5.54),
-        qml-module-org-kde-kwindowsystem (<< 5.54),
+        qml-module-org-kde-kwindowsystem (<< 5.54)
