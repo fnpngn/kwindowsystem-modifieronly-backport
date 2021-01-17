@@ -1,3 +1,16 @@
+kwindowsystem (5.78.0-2) unstable; urgency=medium
+
+  [ Helmut Grohne ]
+  * Reduce Build-Depends: (Closes: #980264)
+    + Drop unused graphviz.
+    + Annotate libxcb-icccm4-dev <!nocheck> as it is only used in
+      autotests/kwindowinfox11test.cpp.
+
+  [ Norbert Preining ]
+  * Release to unstable.
+
+ -- Norbert Preining <norbert@preining.info>  Sun, 17 Jan 2021 13:04:06 +0900
+
 kwindowsystem (5.78.0-1) experimental; urgency=medium
 
   [ Norbert Preining ]
