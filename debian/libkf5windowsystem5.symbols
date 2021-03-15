@@ -42,6 +42,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN10NETWinInfo10setOpacityEm@Base 4.96.0
  _ZN10NETWinInfo11kdeGeometryER7NETRectS1_@Base 4.96.0
  _ZN10NETWinInfo11setIconNameEPKc@Base 4.96.0
+ _ZN10NETWinInfo11setOpacityFEd@Base 5.80.0
  _ZN10NETWinInfo11setUserTimeEj@Base 4.96.0
  _ZN10NETWinInfo12setStartupIdEPKc@Base 4.96.0
  _ZN10NETWinInfo12virtual_hookEiPv@Base 4.96.0
@@ -481,6 +482,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZNK10NETWinInfo7opacityEv@Base 4.96.0
  _ZNK10NETWinInfo7urgencyEv@Base 5.2.0+git20140930
  _ZNK10NETWinInfo8iconNameEv@Base 4.96.0
+ _ZNK10NETWinInfo8opacityFEv@Base 5.80.0
  _ZNK10NETWinInfo8userTimeEv@Base 4.96.0
  _ZNK10NETWinInfo9iconSizesEv@Base 4.96.0
  _ZNK10NETWinInfo9protocolsEv@Base 5.2.0+git20140930
