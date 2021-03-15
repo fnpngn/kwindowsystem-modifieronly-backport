@@ -1,3 +1,12 @@
+kwindowsystem (5.80.0-1) experimental; urgency=medium
+
+  [ Norbert Preining ]
+  * New upstream version (5.80.0)
+  * Bump inter-frameworks dependencies.
+  * Update symbols.
+
+ -- Norbert Preining <norbert@preining.info>  Mon, 15 Mar 2021 15:10:36 +0900
+
 kwindowsystem (5.79.0-1) experimental; urgency=medium
 
   [ Norbert Preining ]

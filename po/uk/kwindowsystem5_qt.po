@@ -25,8 +25,8 @@ msgstr ""
 "%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
 "X-Qt-Contexts: true\n"
 
-#: platforms/osx/kwindowsystem.cpp:567 platforms/windows/kwindowsystem.cpp:619
-#: platforms/xcb/kwindowsystem.cpp:978
+#: platforms/osx/kwindowsystem.cpp:567 platforms/windows/kwindowsystem.cpp:627
+#: platforms/xcb/kwindowsystem.cpp:985
 #, qt-format
 msgctxt "KWindowSystem|"
 msgid "Desktop %1"
