@@ -10,7 +10,7 @@
 # Pino Toscano <toscano.pino@tiscali.it>, 2008.
 # Federico Zenith <federico.zenith@member.fsf.org>, 2008, 2012, 2013, 2014, 2015.
 # Innocenzo Ventre <innocenzo.ventre@gmail.com>, 2012.
-# Vincenzo Reale <smart2128@baslug.org>, 2014.
+# Vincenzo Reale <smart2128vr@gmail.com>, 2014.
 msgid ""
 msgstr ""
 "Project-Id-Version: kdelibs4\n"
