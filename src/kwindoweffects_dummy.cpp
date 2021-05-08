@@ -30,6 +30,7 @@ void KWindowEffectsPrivateDummy::slideWindow(WId id, KWindowEffects::SlideFromLo
     Q_UNUSED(offset)
 }
 
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 81)
 QList<QSize> KWindowEffectsPrivateDummy::windowSizes(const QList<WId> &ids)
 {
     QList<QSize> windowSizes;
@@ -39,24 +40,31 @@ QList<QSize> KWindowEffectsPrivateDummy::windowSizes(const QList<WId> &ids)
     }
     return windowSizes;
 }
+#endif
 
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 82)
 void KWindowEffectsPrivateDummy::presentWindows(WId controller, const QList<WId> &ids)
 {
     Q_UNUSED(controller)
     Q_UNUSED(ids)
 }
+#endif
 
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 82)
 void KWindowEffectsPrivateDummy::presentWindows(WId controller, int desktop)
 {
     Q_UNUSED(controller)
     Q_UNUSED(desktop)
 }
+#endif
 
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(5, 82)
 void KWindowEffectsPrivateDummy::highlightWindows(WId controller, const QList<WId> &ids)
 {
     Q_UNUSED(controller)
     Q_UNUSED(ids)
 }
+#endif
 
 void KWindowEffectsPrivateDummy::enableBlurBehind(WId window, bool enable, const QRegion &region)
 {

@@ -4,11 +4,11 @@
     SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
 */
 
-#include <QTest>
 #include "kkeyserver_x11.h"
+#include <QTest>
+#include <QX11Info>
 #include <X11/keysym.h>
 #include <xcb/xcb_keysyms.h>
-#include <QX11Info>
 
 class KKeyServerTest : public QObject
 {
@@ -22,7 +22,6 @@ private Q_SLOTS:
         // This makes me wonder why we have KKeyServer::modXShift :-)
         QCOMPARE(XCB_MOD_MASK_SHIFT, xcb_mod_mask_t(KKeyServer::modXShift()));
     }
-
 
     void cleanupTestCase()
     {
@@ -40,6 +39,7 @@ private Q_SLOTS:
 
         const uint numLock = KKeyServer::modXNumLock();
 
+        // clang-format off
         // Before adding any testcase below, check what `kcmshell5 keys` records, to make sure it matches
         QTest::newRow("a") << int(Qt::Key_A) << uint(0) << numLock << XK_A;
         QTest::newRow("CTRL_F1") << int(Qt::ControlModifier|Qt::Key_F1) << KKeyServer::modXCtrl() << numLock << XK_F1;
@@ -54,6 +54,7 @@ private Q_SLOTS:
         QTest::newRow("META_SHIFT_print") << int(Qt::MetaModifier|Qt::ShiftModifier|Qt::Key_Print) << (KKeyServer::modXMeta() | KKeyServer::modXShift()) << numLock << XK_Print;
         QTest::newRow("ALT_Tab") << int(Qt::AltModifier|Qt::Key_Tab) << (KKeyServer::modXAlt()) << numLock << XK_Tab;
         QTest::newRow("ALT_Shift_Tab") << int(Qt::AltModifier|Qt::ShiftModifier|Qt::Key_Tab) << (KKeyServer::modXAlt() | KKeyServer::modXShift()) << numLock << XK_Tab;
+        // clang-format on
     }
 
     void keyQtToSymX()
@@ -81,7 +82,7 @@ private Q_SLOTS:
         QFETCH(int, keySymX);
         int keyCodeQt;
 
-        //qDebug() << "modX=" << modX << "keySymX=0x" << QString::number(keySymX, 16) << "keyQt=0x" << QString::number(keyQt, 16);
+        // qDebug() << "modX=" << modX << "keySymX=0x" << QString::number(keySymX, 16) << "keyQt=0x" << QString::number(keyQt, 16);
 
         QVERIFY(KKeyServer::symXModXToKeyQt(keySymX, modX, &keyCodeQt));
         QCOMPARE(keyCodeQt, keyQt);
@@ -105,21 +106,33 @@ private Q_SLOTS:
         QVERIFY(keyCodeX != XCB_NO_SYMBOL);
         free(keyCodes);
 
-        xcb_key_press_event_t event{ XCB_KEY_PRESS, keyCodeX, 0, 0 /*time*/, 0 /*root*/, 0 /*event*/, 0 /*child*/, 0 /*root_x*/, 0 /*root_y*/, 0 /*event_x*/, 0 /*event_y*/,
-            uint16_t(modX | additionalState), 0 /*same_screen*/, 0 /*pad0*/ };
+        xcb_key_press_event_t event{XCB_KEY_PRESS,
+                                    keyCodeX,
+                                    0,
+                                    0 /*time*/,
+                                    0 /*root*/,
+                                    0 /*event*/,
+                                    0 /*child*/,
+                                    0 /*root_x*/,
+                                    0 /*root_y*/,
+                                    0 /*event_x*/,
+                                    0 /*event_y*/,
+                                    uint16_t(modX | additionalState),
+                                    0 /*same_screen*/,
+                                    0 /*pad0*/};
 
         int decodedKeyQt;
         const bool ok = KKeyServer::xcbKeyPressEventToQt(&event, &decodedKeyQt);
         QVERIFY(ok);
         if (decodedKeyQt != keyQt) {
-            qDebug() << "given modX=" << modX << "keySymX=0x" << QString::number(keySymX, 16) << "I expected keyQt=0x" << QString::number(keyQt, 16) << QKeySequence(keyQt).toString() << "got" << QString::number(decodedKeyQt, 16) << QKeySequence(decodedKeyQt).toString();
+            qDebug() << "given modX=" << modX << "keySymX=0x" << QString::number(keySymX, 16) << "I expected keyQt=0x" << QString::number(keyQt, 16)
+                     << QKeySequence(keyQt).toString() << "got" << QString::number(decodedKeyQt, 16) << QKeySequence(decodedKeyQt).toString();
         }
         QCOMPARE(decodedKeyQt, keyQt);
     }
 
 private:
     xcb_key_symbols_t *m_keySymbols;
-
 };
 
 QTEST_MAIN(KKeyServerTest)
