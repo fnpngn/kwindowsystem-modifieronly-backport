@@ -6,14 +6,14 @@
 
 #include "kwindowinfo.h"
 #include "kwindowsystem.h"
-#include "netwm.h"
 #include "nettesthelper.h"
+#include "netwm.h"
 
-#include <qtest_widgets.h>
 #include <QScreen>
 #include <QSignalSpy>
 #include <QSysInfo>
 #include <QX11Info>
+#include <qtest_widgets.h>
 
 #include <xcb/xcb_icccm.h>
 
@@ -27,7 +27,6 @@ Q_DECLARE_METATYPE(NET::WindowTypeMask)
 Q_DECLARE_METATYPE(NET::WindowTypes)
 Q_DECLARE_METATYPE(NET::Properties)
 Q_DECLARE_METATYPE(NET::Properties2)
-
 
 class KWindowInfoX11Test : public QObject
 {
@@ -76,7 +75,7 @@ void KWindowInfoX11Test::initTestCase()
     qRegisterMetaType<NET::Properties2>();
 }
 
-bool KWindowInfoX11Test::waitForWindow(QSignalSpy& spy, WId winId, NET::Properties property, NET::Properties2 property2) const
+bool KWindowInfoX11Test::waitForWindow(QSignalSpy &spy, WId winId, NET::Properties property, NET::Properties2 property2) const
 {
     // we need to wait, window manager has to react and update the property.
     bool foundOurWindow = false;
@@ -182,14 +181,14 @@ void KWindowInfoX11Test::testState_data()
 {
     QTest::addColumn<NET::States>("state");
 
-    QTest::newRow("max")          << NET::States(NET::Max);
-    QTest::newRow("maxHoriz")     << NET::States(NET::MaxHoriz);
-    QTest::newRow("shaded")       << NET::States(NET::Shaded);
-    QTest::newRow("skipTaskbar")  << NET::States(NET::SkipTaskbar);
-    QTest::newRow("skipPager")    << NET::States(NET::SkipPager);
-    QTest::newRow("keep above")   << NET::States(NET::KeepAbove);
-    QTest::newRow("keep below")   << NET::States(NET::KeepBelow);
-    QTest::newRow("fullscreen")   << NET::States(NET::FullScreen);
+    QTest::newRow("max") << NET::States(NET::Max);
+    QTest::newRow("maxHoriz") << NET::States(NET::MaxHoriz);
+    QTest::newRow("shaded") << NET::States(NET::Shaded);
+    QTest::newRow("skipTaskbar") << NET::States(NET::SkipTaskbar);
+    QTest::newRow("skipPager") << NET::States(NET::SkipPager);
+    QTest::newRow("keep above") << NET::States(NET::KeepAbove);
+    QTest::newRow("keep below") << NET::States(NET::KeepBelow);
+    QTest::newRow("fullscreen") << NET::States(NET::FullScreen);
 
     NETRootInfo info(QX11Info::connection(), NET::Supported);
     if (info.isSupported(NET::SkipSwitcher)) {
@@ -212,7 +211,7 @@ void KWindowInfoX11Test::testState()
         QVERIFY(!info.hasState(NET::States(1 << i)));
     }
 
-    QSignalSpy spy(KWindowSystem::self(), static_cast<void (KWindowSystem::*)(WId,NET::Properties,NET::Properties2)>(&KWindowSystem::windowChanged));
+    QSignalSpy spy(KWindowSystem::self(), static_cast<void (KWindowSystem::*)(WId, NET::Properties, NET::Properties2)>(&KWindowSystem::windowChanged));
     QVERIFY(spy.isValid());
     // now we have a clean window and can do fun stuff
     KWindowSystem::setState(window->winId(), state);
@@ -227,15 +226,15 @@ void KWindowInfoX11Test::testState()
 
 // This struct is defined here to avoid a dependency on xcb-icccm
 struct kde_wm_hints {
-    uint32_t      flags;
-    uint32_t      input;
-    int32_t       initial_state;
-    xcb_pixmap_t  icon_pixmap;
-    xcb_window_t  icon_window;
-    int32_t       icon_x;
-    int32_t       icon_y;
-    xcb_pixmap_t  icon_mask;
-    xcb_window_t  window_group;
+    uint32_t flags;
+    uint32_t input;
+    int32_t initial_state;
+    xcb_pixmap_t icon_pixmap;
+    xcb_window_t icon_window;
+    int32_t icon_x;
+    int32_t icon_y;
+    xcb_pixmap_t icon_mask;
+    xcb_window_t window_group;
 };
 
 void KWindowInfoX11Test::testDemandsAttention()
@@ -262,7 +261,7 @@ void KWindowInfoX11Test::testDemandsAttention()
     QVERIFY(info.valid());
     QVERIFY(!info.hasState(NET::DemandsAttention));
 
-    QSignalSpy spy(KWindowSystem::self(), static_cast<void (KWindowSystem::*)(WId,NET::Properties,NET::Properties2)>(&KWindowSystem::windowChanged));
+    QSignalSpy spy(KWindowSystem::self(), static_cast<void (KWindowSystem::*)(WId, NET::Properties, NET::Properties2)>(&KWindowSystem::windowChanged));
     QVERIFY(spy.isValid());
     // now we have a clean window and can do fun stuff
     KWindowSystem::demandAttention(window->winId());
@@ -314,8 +313,7 @@ void KWindowInfoX11Test::testDemandsAttention()
     hints.icon_x = 0;
     hints.icon_y = 0;
     hints.initial_state = 0;
-    xcb_change_property(QX11Info::connection(), XCB_PROP_MODE_REPLACE, win2.winId(),
-                        XCB_ATOM_WM_HINTS, XCB_ATOM_WM_HINTS, 32, 9, &hints);
+    xcb_change_property(QX11Info::connection(), XCB_PROP_MODE_REPLACE, win2.winId(), XCB_ATOM_WM_HINTS, XCB_ATOM_WM_HINTS, 32, 9, &hints);
     xcb_flush(QX11Info::connection());
 
     // window managers map urgency to demands attention
@@ -330,8 +328,7 @@ void KWindowInfoX11Test::testDemandsAttention()
 
     // remove urgency again
     hints.flags = 0;
-    xcb_change_property(QX11Info::connection(), XCB_PROP_MODE_REPLACE, win2.winId(),
-                        XCB_ATOM_WM_HINTS, XCB_ATOM_WM_HINTS, 32, 9, &hints);
+    xcb_change_property(QX11Info::connection(), XCB_PROP_MODE_REPLACE, win2.winId(), XCB_ATOM_WM_HINTS, XCB_ATOM_WM_HINTS, 32, 9, &hints);
     xcb_flush(QX11Info::connection());
     // TODO: test whether it gets removed again. At least KWin does not remove demands attention
 
@@ -384,6 +381,7 @@ void KWindowInfoX11Test::testWindowType_data()
     QTest::addColumn<NET::WindowType>("type");
     QTest::addColumn<NET::WindowType>("expectedType");
 
+    // clang-format off
     QTest::newRow("desktop")            << NET::DesktopMask      << NET::Desktop      << NET::Desktop;
     QTest::newRow("dock")               << NET::DockMask         << NET::Dock         << NET::Dock;
     QTest::newRow("toolbar")            << NET::ToolbarMask      << NET::Toolbar      << NET::Toolbar;
@@ -425,6 +423,7 @@ void KWindowInfoX11Test::testWindowType_data()
     QTest::newRow("DNDIcon-unknown")      << NET::NormalMask << NET::DNDIcon      << NET::Unknown;
     QTest::newRow("OnScreenDisplay-unknown") << NET::NormalMask << NET::OnScreenDisplay << NET::Unknown;
     QTest::newRow("CriticalNotification-unknown") << NET::NormalMask << NET::CriticalNotification << NET::Unknown;
+    // clang-format on
 }
 
 void KWindowInfoX11Test::testWindowType()
@@ -461,7 +460,7 @@ void KWindowInfoX11Test::testDesktop()
     }
 
     // set on all desktop
-    QSignalSpy spy(KWindowSystem::self(), static_cast<void (KWindowSystem::*)(WId,NET::Properties,NET::Properties2)>(&KWindowSystem::windowChanged));
+    QSignalSpy spy(KWindowSystem::self(), static_cast<void (KWindowSystem::*)(WId, NET::Properties, NET::Properties2)>(&KWindowSystem::windowChanged));
     QVERIFY(spy.isValid());
     KWindowSystem::setOnAllDesktops(window->winId(), true);
     QVERIFY(waitForWindow(spy, window->winId(), NET::WMDesktop));
@@ -497,7 +496,7 @@ void KWindowInfoX11Test::testActivities()
 {
     NETRootInfo rootInfo(QX11Info::connection(), NET::Supported | NET::SupportingWMCheck);
 
-    QSignalSpy spyReal(KWindowSystem::self(), static_cast<void (KWindowSystem::*)(WId,NET::Properties,NET::Properties2)>(&KWindowSystem::windowChanged));
+    QSignalSpy spyReal(KWindowSystem::self(), static_cast<void (KWindowSystem::*)(WId, NET::Properties, NET::Properties2)>(&KWindowSystem::windowChanged));
     QVERIFY(spyReal.isValid());
 
     KWindowInfo info(window->winId(), NET::Properties(), NET::WM2Activities);
@@ -530,7 +529,7 @@ void KWindowInfoX11Test::testActivities()
     QVERIFY(info3.activities()[0] == "test-activity");
 
     // Window on a two activities
-    KWindowSystem::self()->setOnActivities(window->winId(), QStringList() << "test-activity" << "test-activity2");
+    KWindowSystem::self()->setOnActivities(window->winId(), QStringList{"test-activity", "test-activity2"});
 
     QVERIFY(waitForWindow(spyReal, window->winId(), NET::Properties(), NET::WM2Activities));
 
@@ -557,8 +556,7 @@ void KWindowInfoX11Test::testWindowClass()
     QCOMPARE(info.windowClassClass(), QByteArrayLiteral("kwindowinfox11test"));
 
     // window class needs to be changed using xcb
-    xcb_change_property(QX11Info::connection(), XCB_PROP_MODE_REPLACE, window->winId(),
-                        XCB_ATOM_WM_CLASS, XCB_ATOM_STRING, 8, 7, "foo\0bar");
+    xcb_change_property(QX11Info::connection(), XCB_PROP_MODE_REPLACE, window->winId(), XCB_ATOM_WM_CLASS, XCB_ATOM_STRING, 8, 7, "foo\0bar");
     xcb_flush(QX11Info::connection());
 
     // it's just a property change so we can easily refresh
@@ -576,8 +574,7 @@ void KWindowInfoX11Test::testWindowRole()
 
     // window role needs to be changed using xcb
     KXUtils::Atom atom(QX11Info::connection(), QByteArrayLiteral("WM_WINDOW_ROLE"));
-    xcb_change_property(QX11Info::connection(), XCB_PROP_MODE_REPLACE, window->winId(),
-                        atom, XCB_ATOM_STRING, 8, 3, "bar");
+    xcb_change_property(QX11Info::connection(), XCB_PROP_MODE_REPLACE, window->winId(), atom, XCB_ATOM_STRING, 8, 3, "bar");
     xcb_flush(QX11Info::connection());
 
     // it's just a property change so we can easily refresh
@@ -596,8 +593,13 @@ void KWindowInfoX11Test::testClientMachine()
 
     // client machine needs to be set through xcb
     const QByteArray newHostName = oldHostName + "2";
-    xcb_change_property(QX11Info::connection(), XCB_PROP_MODE_REPLACE, window->winId(),
-                        XCB_ATOM_WM_CLIENT_MACHINE, XCB_ATOM_STRING, 8, newHostName.count(),
+    xcb_change_property(QX11Info::connection(),
+                        XCB_PROP_MODE_REPLACE,
+                        window->winId(),
+                        XCB_ATOM_WM_CLIENT_MACHINE,
+                        XCB_ATOM_STRING,
+                        8,
+                        newHostName.count(),
                         newHostName.data());
     xcb_flush(QX11Info::connection());
 
@@ -610,6 +612,7 @@ void KWindowInfoX11Test::testClientMachine()
 
 void KWindowInfoX11Test::testName()
 {
+    // clang-format off
     KWindowInfo info(window->winId(), NET::WMName | NET::WMVisibleName | NET::WMIconName | NET::WMVisibleIconName | NET::WMState | NET::XAWMState);
     QCOMPARE(info.name(),                     QStringLiteral("kwindowinfox11test"));
     QCOMPARE(info.visibleName(),              QStringLiteral("kwindowinfox11test"));
@@ -651,6 +654,7 @@ void KWindowInfoX11Test::testName()
     QCOMPARE(info3.iconName(),                 QStringLiteral("foobar"));
     QCOMPARE(info3.visibleIconName(),          QStringLiteral("foobar"));
     QCOMPARE(info3.visibleIconNameWithState(), QStringLiteral("(foobar)"));
+    // clang-format on
 }
 
 void KWindowInfoX11Test::testTransientFor()
@@ -665,8 +669,7 @@ void KWindowInfoX11Test::testTransientFor()
 
     // update the transient for of window1 to window2
     const uint32_t id = window2->winId();
-    xcb_change_property(QX11Info::connection(), XCB_PROP_MODE_REPLACE, window->winId(),
-                        XCB_ATOM_WM_TRANSIENT_FOR, XCB_ATOM_WINDOW, 32, 1, &id);
+    xcb_change_property(QX11Info::connection(), XCB_PROP_MODE_REPLACE, window->winId(), XCB_ATOM_WM_TRANSIENT_FOR, XCB_ATOM_WINDOW, 32, 1, &id);
     xcb_flush(QX11Info::connection());
 
     KWindowInfo info2(window->winId(), NET::Properties(), NET::WM2TransientFor);
@@ -683,8 +686,7 @@ void KWindowInfoX11Test::testGroupLeader()
     xcb_window_t rootWindow = QX11Info::appRootWindow();
 
     xcb_window_t leader = xcb_generate_id(connection);
-    xcb_create_window(connection, XCB_COPY_FROM_PARENT, leader, rootWindow, 0, 0, 1, 1,
-        0, XCB_WINDOW_CLASS_INPUT_OUTPUT, XCB_COPY_FROM_PARENT, 0, nullptr);
+    xcb_create_window(connection, XCB_COPY_FROM_PARENT, leader, rootWindow, 0, 0, 1, 1, 0, XCB_WINDOW_CLASS_INPUT_OUTPUT, XCB_COPY_FROM_PARENT, 0, nullptr);
 
     xcb_icccm_wm_hints_t hints = {};
     hints.flags = XCB_ICCCM_WM_HINT_WINDOW_GROUP;
@@ -740,12 +742,12 @@ void KWindowInfoX11Test::testGeometry()
     QCOMPARE(info.geometry().size(), window->geometry().size());
     QCOMPARE(info.frameGeometry().size(), window->frameGeometry().size());
 
-    QSignalSpy spy(KWindowSystem::self(), static_cast<void (KWindowSystem::*)(WId,NET::Properties,NET::Properties2)>(&KWindowSystem::windowChanged));
+    QSignalSpy spy(KWindowSystem::self(), static_cast<void (KWindowSystem::*)(WId, NET::Properties, NET::Properties2)>(&KWindowSystem::windowChanged));
     QVERIFY(spy.isValid());
 
     // this is tricky, KWin is smart and doesn't allow all geometries we pass in
     // setting to center of screen should work, though
-    QRect geo(window->windowHandle()->screen()->geometry().center() - QPoint(window->width()/2-5, window->height()/2-5),
+    QRect geo(window->windowHandle()->screen()->geometry().center() - QPoint(window->width() / 2 - 5, window->height() / 2 - 5),
               window->size() + QSize(10, 10));
     window->setGeometry(geo);
     waitForWindow(spy, window->winId(), NET::WMGeometry);
@@ -762,7 +764,7 @@ void KWindowInfoX11Test::testDesktopFileName()
     QVERIFY(info.valid());
     QCOMPARE(info.desktopFileName(), QByteArray());
 
-    QSignalSpy spy(KWindowSystem::self(), static_cast<void (KWindowSystem::*)(WId,NET::Properties,NET::Properties2)>(&KWindowSystem::windowChanged));
+    QSignalSpy spy(KWindowSystem::self(), static_cast<void (KWindowSystem::*)(WId, NET::Properties, NET::Properties2)>(&KWindowSystem::windowChanged));
     QVERIFY(spy.isValid());
 
     // create a NETWinInfo to set the desktop file name

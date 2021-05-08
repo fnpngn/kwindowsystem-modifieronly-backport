@@ -1,3 +1,12 @@
+kwindowsystem (5.82.0-1) experimental; urgency=medium
+
+  [ Norbert Preining ]
+  * New upstream release (5.82.0).
+  * Removed Maximiliano Curia from the uploaders, thanks for your work
+    on the package!
+
+ -- Norbert Preining <norbert@preining.info>  Sat, 08 May 2021 21:21:53 +0900
+
 kwindowsystem (5.81.0-1) experimental; urgency=medium
 
   [ Norbert Preining ]

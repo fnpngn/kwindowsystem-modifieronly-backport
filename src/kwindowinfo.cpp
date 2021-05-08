@@ -13,8 +13,8 @@
 
 #include "kwindowinfo_dummy_p.h"
 
-#include <QRect>
 #include <QGuiApplication>
+#include <QRect>
 
 // private
 KWindowInfoPrivate *KWindowInfoPrivate::create(WId window, NET::Properties properties, NET::Properties2 properties2)
@@ -258,8 +258,10 @@ KWindowInfo &KWindowInfo::operator=(const KWindowInfo &other)
     return *this;
 }
 
+// clang-format off
+
 #define DELEGATE(name, args) \
-    return d->name( args );
+    return d->name(args);
 
 bool KWindowInfo::valid(bool withdrawn_is_valid) const
 {

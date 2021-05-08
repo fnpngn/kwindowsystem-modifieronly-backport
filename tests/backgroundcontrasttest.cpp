@@ -6,14 +6,14 @@
 */
 
 #include <QApplication>
-#include <QWidget>
 #include <QPushButton>
-#include <QVBoxLayout>
 #include <QSlider>
+#include <QVBoxLayout>
+#include <QWidget>
 
 #include <kwindoweffects.h>
 
-class ContrastTestWindow: public QWidget
+class ContrastTestWindow : public QWidget
 {
 public:
     ContrastTestWindow();
@@ -26,18 +26,16 @@ private:
     QPushButton *m_btnRect;
     QPushButton *m_btnEllipse;
 
-    QSlider  *m_contSlider;
-    QSlider  *m_intSlider;
-    QSlider  *m_satSlider;
+    QSlider *m_contSlider;
+    QSlider *m_intSlider;
+    QSlider *m_satSlider;
     QWidget *m_area;
 
     qreal m_contrast;
     qreal m_intensity;
     qreal m_saturation;
 
-    enum {
-        Nothing, FullWindow, Rect, Ellipse
-    } m_state;
+    enum { Nothing, FullWindow, Rect, Ellipse } m_state;
 
     void setWindowAlpha(int alpha);
 
@@ -60,22 +58,22 @@ ContrastTestWindow::ContrastTestWindow()
     setAttribute(Qt::WA_NoSystemBackground, false);
     setWindowAlpha(92);
 
-    m_btnNothing    = new QPushButton("Nothing");
+    m_btnNothing = new QPushButton("Nothing");
     m_btnFullWindow = new QPushButton("Full window");
-    m_btnRect       = new QPushButton("Rectangle");
-    m_btnEllipse    = new QPushButton("Ellipse");
+    m_btnRect = new QPushButton("Rectangle");
+    m_btnEllipse = new QPushButton("Ellipse");
 
-    m_contSlider       = new QSlider();
+    m_contSlider = new QSlider();
     m_contSlider->setMaximum(200);
     m_contSlider->setValue(100);
     m_contSlider->setOrientation(Qt::Horizontal);
 
-    m_intSlider       = new QSlider();
+    m_intSlider = new QSlider();
     m_intSlider->setMaximum(200);
     m_intSlider->setValue(100);
     m_intSlider->setOrientation(Qt::Horizontal);
 
-    m_satSlider       = new QSlider();
+    m_satSlider = new QSlider();
     m_satSlider->setMaximum(200);
     m_satSlider->setValue(100);
     m_satSlider->setOrientation(Qt::Horizontal);
@@ -83,14 +81,14 @@ ContrastTestWindow::ContrastTestWindow()
     m_area = new QWidget;
     m_area->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Expanding);
 
-    connect(m_btnNothing,    &QPushButton::clicked, this, &ContrastTestWindow::disableContrast);
+    connect(m_btnNothing, &QPushButton::clicked, this, &ContrastTestWindow::disableContrast);
     connect(m_btnFullWindow, &QPushButton::clicked, this, &ContrastTestWindow::enableContrast);
-    connect(m_btnRect,       &QPushButton::clicked, this, &ContrastTestWindow::enableContrastRect);
-    connect(m_btnEllipse,    &QPushButton::clicked, this, &ContrastTestWindow::enableContrastEllipse);
+    connect(m_btnRect, &QPushButton::clicked, this, &ContrastTestWindow::enableContrastRect);
+    connect(m_btnEllipse, &QPushButton::clicked, this, &ContrastTestWindow::enableContrastEllipse);
 
-    connect(m_contSlider,    &QSlider::valueChanged, this, &ContrastTestWindow::updateContrast);
-    connect(m_intSlider,     &QSlider::valueChanged, this, &ContrastTestWindow::updateIntensity);
-    connect(m_satSlider,     &QSlider::valueChanged, this, &ContrastTestWindow::updateSaturation);
+    connect(m_contSlider, &QSlider::valueChanged, this, &ContrastTestWindow::updateContrast);
+    connect(m_intSlider, &QSlider::valueChanged, this, &ContrastTestWindow::updateIntensity);
+    connect(m_satSlider, &QSlider::valueChanged, this, &ContrastTestWindow::updateSaturation);
 
     QVBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(m_btnNothing);
@@ -101,40 +99,42 @@ ContrastTestWindow::ContrastTestWindow()
     layout->addWidget(m_intSlider);
     layout->addWidget(m_satSlider);
     layout->addWidget(m_area);
+
+    winId(); // force creation of the associated window
 }
 
 void ContrastTestWindow::disableContrast()
 {
     m_state = Nothing;
-    KWindowEffects::enableBackgroundContrast(winId(), false);
+    KWindowEffects::enableBackgroundContrast(windowHandle(), false);
     repaint();
 }
 void ContrastTestWindow::enableContrast()
 {
     m_state = FullWindow;
-    KWindowEffects::enableBackgroundContrast(winId(), true, m_contrast, m_intensity, m_saturation);
+    KWindowEffects::enableBackgroundContrast(windowHandle(), true, m_contrast, m_intensity, m_saturation);
     repaint();
 }
 void ContrastTestWindow::enableContrastRect()
 {
     m_state = Rect;
     QRegion rgn(m_area->geometry());
-    KWindowEffects::enableBackgroundContrast(winId(), true, m_contrast, m_intensity, m_saturation, rgn);
+    KWindowEffects::enableBackgroundContrast(windowHandle(), true, m_contrast, m_intensity, m_saturation, rgn);
     repaint();
 }
 void ContrastTestWindow::enableContrastEllipse()
 {
     m_state = Ellipse;
     QRegion rgn(m_area->geometry(), QRegion::Ellipse);
-    KWindowEffects::enableBackgroundContrast(winId(), true, m_contrast, m_intensity, m_saturation, rgn);
+    KWindowEffects::enableBackgroundContrast(windowHandle(), true, m_contrast, m_intensity, m_saturation, rgn);
     repaint();
 }
 
 void ContrastTestWindow::updateContrast(int contrast)
 {
-    m_contrast = (qreal)contrast/100;
+    m_contrast = (qreal)contrast / 100;
 
-    switch(m_state) {
+    switch (m_state) {
     case FullWindow:
         enableContrast();
         break;
@@ -151,9 +151,9 @@ void ContrastTestWindow::updateContrast(int contrast)
 
 void ContrastTestWindow::updateIntensity(int contrast)
 {
-    m_intensity = (qreal)contrast/100;
+    m_intensity = (qreal)contrast / 100;
 
-    switch(m_state) {
+    switch (m_state) {
     case FullWindow:
         enableContrast();
         break;
@@ -170,9 +170,9 @@ void ContrastTestWindow::updateIntensity(int contrast)
 
 void ContrastTestWindow::updateSaturation(int contrast)
 {
-    m_saturation = (qreal)contrast/100;
+    m_saturation = (qreal)contrast / 100;
 
-    switch(m_state) {
+    switch (m_state) {
     case FullWindow:
         enableContrast();
         break;
