@@ -1,11 +1,11 @@
-cmake_minimum_required(VERSION 3.5)
+cmake_minimum_required(VERSION 3.16)
 
-set(KF_VERSION "5.82.0") # handled by release scripts
+set(KF_VERSION "5.83.0") # handled by release scripts
 project(KWindowSystem VERSION ${KF_VERSION})
 
 # ECM setup
 include(FeatureSummary)
-find_package(ECM 5.82.0  NO_MODULE)
+find_package(ECM 5.83.0  NO_MODULE)
 set_package_properties(ECM PROPERTIES TYPE REQUIRED DESCRIPTION "Extra CMake Modules." URL "https://commits.kde.org/extra-cmake-modules")
 feature_summary(WHAT REQUIRED_PACKAGES_NOT_FOUND FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
@@ -48,7 +48,10 @@ ecm_setup_version(PROJECT VARIABLE_PREFIX KWINDOWSYSTEM
 
 # Dependencies
 set(REQUIRED_QT_VERSION 5.15.0)
-find_package(Qt5 ${REQUIRED_QT_VERSION} CONFIG REQUIRED Gui Widgets)
+find_package(Qt5Gui ${REQUIRED_QT_VERSION} CONFIG REQUIRED)
+if(NOT KWINDOWSYSTEM_NO_WIDGETS)
+    find_package(Qt5Widgets ${REQUIRED_QT_VERSION} CONFIG REQUIRED)
+endif()
 
 if (APPLE)
     cmake_find_frameworks(Carbon)
@@ -78,7 +81,6 @@ endif()
 # Subdirectories
 ecm_install_po_files_as_qm(po)
 
-add_definitions(-DQT_NO_FOREACH)
 add_definitions(-DQT_DISABLE_DEPRECATED_BEFORE=0x050f00)
 
 add_subdirectory(src)
