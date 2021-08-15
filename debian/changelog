@@ -1,3 +1,10 @@
+kwindowsystem (5.85.0-1) experimental; urgency=medium
+
+  [ Norbert Preining ]
+  * New upstream release (5.85.0).
+
+ -- Norbert Preining <norbert@preining.info>  Mon, 16 Aug 2021 00:06:23 +0900
+
 kwindowsystem (5.83.0-1) experimental; urgency=medium
 
   [ Norbert Preining ]
