@@ -8,6 +8,7 @@
 #ifndef netwm_def_h
 #define netwm_def_h
 #include <QFlags>
+#include <QRect>
 #include <kwindowsystem_export.h>
 
 /**
@@ -31,6 +32,17 @@ struct NETPoint {
         : x(0)
         , y(0)
     {
+    }
+
+    NETPoint(const QPoint &p)
+        : x(p.x())
+        , y(p.y())
+    {
+    }
+
+    QPoint toPoint() const
+    {
+        return {x, y};
     }
 
     /*
@@ -63,6 +75,16 @@ struct NETSize {
     {
     }
 
+    NETSize(const QSize &size)
+        : width(size.width())
+        , height(size.height())
+    {
+    }
+
+    QSize toSize() const
+    {
+        return {width, height};
+    }
     /*
        Public data member.
     **/
@@ -81,6 +103,21 @@ struct NETSize {
    appropriate class for representing a rectangle.
 **/
 struct NETRect {
+    NETRect()
+    {
+    }
+
+    NETRect(const QRect &rect)
+        : pos(rect.topLeft())
+        , size(rect.size())
+    {
+    }
+
+    QRect toRect() const
+    {
+        return QRect(pos.x, pos.y, size.width, size.height);
+    }
+
     /**
        Position of the rectangle.
 

@@ -170,8 +170,8 @@ public:
     QTimer *cleanup;
     int flags;
 
-    Private(int flags_P, KStartupInfo *q)
-        : q(q)
+    Private(int flags_P, KStartupInfo *qq)
+        : q(qq)
         , timeout(60)
 #if KWINDOWSYSTEM_HAVE_X11
         , msgs(NET_STARTUP_MSG)
@@ -1214,8 +1214,9 @@ QString KStartupInfoData::Private::to_text() const
     if (!icon.isEmpty()) {
         ret += QStringLiteral(" ICON=\"%1\"").arg(icon);
     }
-    if (desktop != 0)
+    if (desktop != 0) {
         ret += QStringLiteral(" DESKTOP=%1").arg(desktop == NET::OnAllDesktops ? NET::OnAllDesktops : desktop - 1); // spec counts from 0
+    }
     if (!wmclass.isEmpty()) {
         ret += QStringLiteral(" WMCLASS=\"%1\"").arg(QString(wmclass));
     }
@@ -1260,8 +1261,9 @@ KStartupInfoData::KStartupInfoData(const QString &txt_P)
             d->icon = get_str(*it);
         } else if ((*it).startsWith(QLatin1String("DESKTOP="))) {
             d->desktop = get_num(*it);
-            if (d->desktop != NET::OnAllDesktops)
+            if (d->desktop != NET::OnAllDesktops) {
                 ++d->desktop; // spec counts from 0
+            }
         } else if ((*it).startsWith(QLatin1String("WMCLASS="))) {
             d->wmclass = get_cstr(*it);
         } else if ((*it).startsWith(QLatin1String("HOSTNAME="))) { // added to version 1 (2014)
