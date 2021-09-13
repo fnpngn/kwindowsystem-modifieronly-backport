@@ -47,9 +47,6 @@ if (KWINDOWSYSTEM_HAVE_X11)
 endif()
 
 if (KWINDOWSYSTEM_HAVE_X11)
-   if(NOT X11_Xrender_LIB)
-      message(FATAL_ERROR "The XRender library could not be found. Please install the development package for it.")
-   endif()
    if(NOT X11_Xfixes_LIB)
       message(FATAL_ERROR "The XFixes library could not be found. Please install the development package for it.")
    endif()
@@ -58,19 +55,25 @@ if (KWINDOWSYSTEM_HAVE_X11)
             ${CMAKE_CURRENT_SOURCE_DIR}/platforms/xcb
    )
    target_link_libraries(KF5WindowSystem
+        PUBLIC
+            # public because they are used in kkeyserver_x11.h
+            X11::X11
         PRIVATE
+            XCB::XCB
             Qt5::X11Extras
-            ${X11_LIBRARIES}
-            ${X11_Xfixes_LIB}
-            ${X11_Xrender_LIB}
-            ${XCB_XCB_LIBRARY}
-            ${XCB_KEYSYMS_LIBRARY}
+            X11::Xfixes
+            XCB::KEYSYMS
    )
    target_sources(KF5WindowSystem PRIVATE
         platforms/xcb/kkeyserver.cpp
         platforms/xcb/kxmessages.cpp
         platforms/xcb/netwm.cpp
    )
+
+   # we install kkeyserver_x11.h which needs the X11 headers available
+   # if we don't add the include path here code that includes kkeyserver.h will fail
+   # to compile unless X11 is installed in /usr/include
+   target_include_directories(KF5WindowSystem PUBLIC ${XCB_XCB_INCLUDE_DIR})
 endif ()
 
 if (APPLE)
@@ -123,13 +126,6 @@ target_link_libraries(KF5WindowSystem
 )
 if(NOT KWINDOWSYSTEM_NO_WIDGETS)
     target_link_libraries(KF5WindowSystem PUBLIC Qt5::Widgets)
-endif()
-
-if(KWINDOWSYSTEM_HAVE_X11)
-    # we install kkeyserver_x11.h which needs the X11 headers available
-    # if we don't add the include path here code that includes kkeyserver.h will fail
-    # to compile unless X11 is installed in /usr/include
-    target_include_directories(KF5WindowSystem PUBLIC ${XCB_XCB_INCLUDE_DIR} ${X11_X11_INCLUDE_PATH})
 endif()
 
 set_target_properties(KF5WindowSystem PROPERTIES VERSION   ${KWINDOWSYSTEM_VERSION}

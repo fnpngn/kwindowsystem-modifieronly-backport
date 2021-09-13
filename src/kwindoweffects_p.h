@@ -36,4 +36,14 @@ protected:
     KWindowEffectsPrivate();
 };
 
+class KWINDOWSYSTEM_EXPORT KWindowEffectsPrivateV2 : public KWindowEffectsPrivate
+{
+public:
+    virtual void setBackgroundFrost(QWindow *window, QColor color, const QRegion &region = QRegion()) = 0;
+
+protected:
+    KWindowEffectsPrivateV2();
+    virtual ~KWindowEffectsPrivateV2();
+};
+
 #endif
