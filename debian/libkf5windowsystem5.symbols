@@ -1,4 +1,4 @@
-# SymbolsHelper-Confirmed: 5.69.0 amd64
+# SymbolsHelper-Confirmed: 5.86.0 amd64 arm64 armhf ppc64el s390x
 libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
 * Build-Depends-Package: libkf5windowsystem-dev
  _ZN10KKeyServer10xEventToQtEP7_XEventPi@Base 4.96.0
@@ -42,7 +42,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN10NETWinInfo10setOpacityEm@Base 4.96.0
  _ZN10NETWinInfo11kdeGeometryER7NETRectS1_@Base 4.96.0
  _ZN10NETWinInfo11setIconNameEPKc@Base 4.96.0
- _ZN10NETWinInfo11setOpacityFEd@Base 5.80.0
+ _ZN10NETWinInfo11setOpacityFEd@Base 5.79.0
  _ZN10NETWinInfo11setUserTimeEj@Base 4.96.0
  _ZN10NETWinInfo12setStartupIdEPKc@Base 4.96.0
  _ZN10NETWinInfo12virtual_hookEiPv@Base 4.96.0
@@ -292,17 +292,18 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN14KUserTimestamp13userTimestampEv@Base 4.96.0
  _ZN14KUserTimestamp19updateUserTimestampEm@Base 4.96.0
  _ZN14KWindowEffects11slideWindowEP7QWidgetNS_17SlideFromLocationE@Base 4.96.0
- _ZN14KWindowEffects11slideWindowEP7QWindowNS_17SlideFromLocationEi@Base 5.83.0
+ _ZN14KWindowEffects11slideWindowEP7QWindowNS_17SlideFromLocationEi@Base 5.82.0
  (subst)_ZN14KWindowEffects11slideWindowE{quintptr}NS_17SlideFromLocationEi@Base 4.96.0
  (subst)_ZN14KWindowEffects11windowSizesERK5QListI{quintptr}E@Base 4.96.0
  (subst)_ZN14KWindowEffects14presentWindowsE{quintptr}RK5QListI{quintptr}E@Base 4.96.0
  (subst)_ZN14KWindowEffects14presentWindowsE{quintptr}i@Base 4.96.0
  (subst)_ZN14KWindowEffects15markAsDashboardE{quintptr}@Base 4.96.0
- _ZN14KWindowEffects16enableBlurBehindEP7QWindowbRK7QRegion@Base 5.83.0
+ _ZN14KWindowEffects16enableBlurBehindEP7QWindowbRK7QRegion@Base 5.82.0
  (subst)_ZN14KWindowEffects16enableBlurBehindE{quintptr}bRK7QRegion@Base 4.96.0
  (subst)_ZN14KWindowEffects16highlightWindowsE{quintptr}RK5QListI{quintptr}E@Base 4.96.0
  _ZN14KWindowEffects17isEffectAvailableENS_6EffectE@Base 4.96.0
- _ZN14KWindowEffects24enableBackgroundContrastEP7QWindowbdddRK7QRegion@Base 5.83.0
+ _ZN14KWindowEffects18setBackgroundFrostEP7QWindow6QColorRK7QRegion@Base 5.86.0
+ _ZN14KWindowEffects24enableBackgroundContrastEP7QWindowbdddRK7QRegion@Base 5.82.0
  (subst)_ZN14KWindowEffects24enableBackgroundContrastE{quintptr}bdddRK7QRegion@Base 4.96.0
  _ZN15KSelectionOwner10timerEventEP11QTimerEvent@Base 4.96.0
  _ZN15KSelectionOwner11filterEventEPv@Base 4.96.0
@@ -409,6 +410,11 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN21KWindowEffectsPrivateD0Ev@Base 5.13.0
  _ZN21KWindowEffectsPrivateD1Ev@Base 5.13.0
  _ZN21KWindowEffectsPrivateD2Ev@Base 5.13.0
+ _ZN23KWindowEffectsPrivateV2C1Ev@Base 5.86.0
+ _ZN23KWindowEffectsPrivateV2C2Ev@Base 5.86.0
+ _ZN23KWindowEffectsPrivateV2D0Ev@Base 5.86.0
+ _ZN23KWindowEffectsPrivateV2D1Ev@Base 5.86.0
+ _ZN23KWindowEffectsPrivateV2D2Ev@Base 5.86.0
  _ZN24KWindowShadowTilePrivate3getEPK17KWindowShadowTile@Base 5.69.0
  _ZN24KWindowShadowTilePrivateD0Ev@Base 5.69.0
  _ZN24KWindowShadowTilePrivateD1Ev@Base 5.69.0
@@ -489,7 +495,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZNK10NETWinInfo7opacityEv@Base 4.96.0
  _ZNK10NETWinInfo7urgencyEv@Base 5.2.0+git20140930
  _ZNK10NETWinInfo8iconNameEv@Base 4.96.0
- _ZNK10NETWinInfo8opacityFEv@Base 5.80.0
+ _ZNK10NETWinInfo8opacityFEv@Base 5.79.0
  _ZNK10NETWinInfo8userTimeEv@Base 4.96.0
  _ZNK10NETWinInfo9iconSizesEv@Base 4.96.0
  _ZNK10NETWinInfo9protocolsEv@Base 5.2.0+git20140930
@@ -625,6 +631,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZTI20KWindowSystemPrivate@Base 5.13.0
  _ZTI21KWindowEffectsPrivate@Base 5.13.0
  _ZTI22KWindowSystemPrivateV2@Base 5.83.0
+ _ZTI23KWindowEffectsPrivateV2@Base 5.86.0
  _ZTI24KWindowShadowTilePrivate@Base 5.69.0
  _ZTI28KWindowSystemPluginInterface@Base 5.13.0
  _ZTI30KWindowInfoPrivatePidExtension@Base 5.35.0
@@ -645,6 +652,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZTS20KWindowSystemPrivate@Base 5.13.0
  _ZTS21KWindowEffectsPrivate@Base 5.13.0
  _ZTS22KWindowSystemPrivateV2@Base 5.83.0
+ _ZTS23KWindowEffectsPrivateV2@Base 5.86.0
  _ZTS24KWindowShadowTilePrivate@Base 5.69.0
  _ZTS28KWindowSystemPluginInterface@Base 5.13.0
  _ZTS30KWindowInfoPrivatePidExtension@Base 5.35.0
@@ -663,6 +671,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZTV20KWindowShadowPrivate@Base 5.69.0
  _ZTV20KWindowSystemPrivate@Base 5.13.0
  _ZTV21KWindowEffectsPrivate@Base 5.13.0
+ _ZTV23KWindowEffectsPrivateV2@Base 5.86.0
  _ZTV24KWindowShadowTilePrivate@Base 5.69.0
  _ZTV28KWindowSystemPluginInterface@Base 5.13.0
  _ZTV30KWindowInfoPrivatePidExtension@Base 5.35.0
