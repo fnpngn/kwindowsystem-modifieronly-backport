@@ -1,3 +1,9 @@
+kwindowsystem (5.88.0-1ubuntu2) jammy; urgency=medium
+
+  * Add Kubuntu Vcs fields.
+
+ -- Rik Mills <rikmills@kde.org>  Sun, 28 Nov 2021 18:12:35 +0000
+
 kwindowsystem (5.88.0-1ubuntu1) jammy; urgency=medium
 
   * Restore our symbols file.
