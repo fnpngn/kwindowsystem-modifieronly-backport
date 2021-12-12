@@ -13,7 +13,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: kdeorg\n"
-"PO-Revision-Date: 2021-10-29 13:25\n"
+"PO-Revision-Date: 2021-11-30 15:21\n"
 "Language-Team: Chinese Simplified\n"
 "Language: zh_CN\n"
 "MIME-Version: 1.0\n"
