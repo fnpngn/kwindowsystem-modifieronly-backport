@@ -16,7 +16,12 @@
 #include <QWindow> // WId
 
 #include <X11/Xlib.h>
-#include <qx11info_x11.h>
+
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <private/qtx11extras_p.h>
+#else
+#include <QX11Info>
+#endif
 
 class XcbAtom
 {
@@ -120,9 +125,12 @@ public:
     xcb_connection_t *connection;
     xcb_window_t rootWindow;
 
-    bool nativeEventFilter(const QByteArray &eventType, void *message, long *result) override
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+    bool nativeEventFilter(const QByteArray &eventType, void *message, qintptr *) override
+#else
+    bool nativeEventFilter(const QByteArray &eventType, void *message, long *) override
+#endif
     {
-        Q_UNUSED(result);
         // A faster comparison than eventType != "xcb_generic_event_t"
         if (eventType[0] != 'x') {
             return false;
@@ -291,7 +299,7 @@ static void send_message_internal(WId w_P, const QString &msg_P, long mask_P, Di
     // qDebug() << "send_message_internal" << w_P << msg_P << mask_P << atom1_P << atom2_P << handle_P;
     unsigned int pos = 0;
     QByteArray msg = msg_P.toUtf8();
-    unsigned int len = strlen(msg.constData());
+    const size_t len = msg.size();
     XEvent e;
     e.xclient.type = ClientMessage;
     e.xclient.message_type = atom1_P; // leading message
@@ -300,8 +308,11 @@ static void send_message_internal(WId w_P, const QString &msg_P, long mask_P, Di
     e.xclient.format = 8;
     do {
         unsigned int i;
-        for (i = 0; i < 20 && i + pos <= len; ++i) {
+        for (i = 0; i < 20 && i + pos < len; ++i) {
             e.xclient.data.b[i] = msg[i + pos];
+        }
+        for (; i < 20; ++i) {
+            e.xclient.data.b[i] = 0;
         }
         XSendEvent(disp, w_P, false, mask_P, &e);
         e.xclient.message_type = atom2_P; // following messages
@@ -316,7 +327,7 @@ send_message_internal(xcb_window_t w, const QString &msg_P, xcb_connection_t *c,
 {
     unsigned int pos = 0;
     QByteArray msg = msg_P.toUtf8();
-    const size_t len = strlen(msg.constData());
+    const size_t len = msg.size();
 
     xcb_client_message_event_t event;
     event.response_type = XCB_CLIENT_MESSAGE;
@@ -327,11 +338,11 @@ send_message_internal(xcb_window_t w, const QString &msg_P, xcb_connection_t *c,
 
     do {
         unsigned int i;
-        for (i = 0; i < 20 && i + pos <= len; ++i) {
+        for (i = 0; i < 20 && i + pos < len; ++i) {
             event.data.data8[i] = msg[i + pos];
         }
-        for (unsigned int j = i; j < 20; ++j) {
-            event.data.data8[j] = 0;
+        for (; i < 20; ++i) {
+            event.data.data8[i] = 0;
         }
         xcb_send_event(c, false, w, XCB_EVENT_MASK_PROPERTY_CHANGE, (const char *)&event);
         event.type = followingMessage;

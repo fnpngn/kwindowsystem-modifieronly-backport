@@ -1,3 +1,9 @@
+kwindowsystem (5.90.0-0ubuntu1) jammy; urgency=medium
+
+  * New upstream release (5.90.0)
+
+ -- Rik Mills <rikmills@kde.org>  Thu, 06 Jan 2022 16:49:27 +0000
+
 kwindowsystem (5.89.0-0ubuntu1) jammy; urgency=medium
 
   * New upstream release (5.89.0)
