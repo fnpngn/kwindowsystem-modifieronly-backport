@@ -4,6 +4,7 @@
     SPDX-License-Identifier: LGPL-2.1-only OR LGPL-3.0-only OR LicenseRef-KDE-Accepted-LGPL
 */
 #include "kwindowsystem.h"
+#include "kstartupinfo.h"
 #include "kwindowsystem_dummy_p.h"
 #include "kwindowsystemplugininterface_p.h"
 #include "pluginwrapper_p.h"
@@ -19,6 +20,11 @@
 #endif
 #include <QWindow>
 #if KWINDOWSYSTEM_HAVE_X11
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <private/qtx11extras_p.h>
+#else
+#include <QX11Info>
+#endif
 #endif
 
 // QPoint and QSize all have handy / operators which are useful for scaling, positions and sizes for high DPI support
@@ -106,7 +112,7 @@ void KWindowSystemPrivateDummy::demandAttention(WId win, bool set)
 
 bool KWindowSystemPrivateDummy::compositingActive()
 {
-    return false;
+    return KWindowSystem::isPlatformWayland();
 }
 
 int KWindowSystemPrivateDummy::currentDesktop()
@@ -779,6 +785,30 @@ bool KWindowSystem::isPlatformX11()
 bool KWindowSystem::isPlatformWayland()
 {
     return platform() == Platform::Wayland;
+}
+
+void KWindowSystem::updateStartupId(QWindow *window)
+{
+    // clang-format off
+    // TODO: move to a new KWindowSystemPrivate interface
+#if KWINDOWSYSTEM_HAVE_X11
+    if (isPlatformX11()) {
+        const QByteArray startupId = QX11Info::nextStartupId();
+        if (!startupId.isEmpty()) {
+            KStartupInfo::setNewStartupId(window, startupId);
+        }
+    } else
+#else
+    Q_UNUSED(window);
+#endif
+    if (isPlatformWayland()) {
+        const QString token = qEnvironmentVariable("XDG_ACTIVATION_TOKEN");
+        if (!token.isEmpty()) {
+            setCurrentXdgActivationToken(token);
+            qunsetenv("XDG_ACTIVATION_TOKEN");
+        }
+    }
+    // clang-format on
 }
 
 void KWindowSystem::requestXdgActivationToken(QWindow *win, uint32_t serial, const QString &app_id)

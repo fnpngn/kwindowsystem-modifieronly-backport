@@ -1,4 +1,4 @@
-# SymbolsHelper-Confirmed: 5.89.0 amd64 arm64 armhf ppc64el s390x
+# SymbolsHelper-Confirmed: 5.91.0 amd64 arm64 armhf ppc64el s390x
 libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
 * Build-Depends-Package: libkf5windowsystem-dev
  _ZN10KKeyServer10xEventToQtEP7_XEventPi@Base 4.96.0
@@ -232,6 +232,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  (subst)_ZN13KWindowSystem15demandAttentionE{quintptr}b@Base 4.96.0
  _ZN13KWindowSystem15lastInputSerialEP7QWindow@Base 5.83.0
  (subst)_ZN13KWindowSystem15setOnActivitiesE{quintptr}RK11QStringList@Base 5.2.0
+ _ZN13KWindowSystem15updateStartupIdEP7QWindow@Base 5.91.0
  _ZN13KWindowSystem15workAreaChangedEv@Base 4.96.0
  _ZN13KWindowSystem16numberOfDesktopsEv@Base 4.96.0
  (subst)_ZN13KWindowSystem16readNamePropertyE{quintptr}m@Base 4.96.0
@@ -390,6 +391,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN18KWindowInfoPrivate19installPidExtensionEP30KWindowInfoPrivatePidExtension@Base 5.35.0
  _ZN18KWindowInfoPrivate23installAppMenuExtensionEP34KWindowInfoPrivateAppMenuExtension@Base 5.69.0
  _ZN18KWindowInfoPrivate31installDesktopFileNameExtensionEP42KWindowInfoPrivateDesktopFileNameExtension@Base 5.35.0
+ _ZN18KWindowInfoPrivate32installGtkApplicationIdExtensionEP43KWindowInfoPrivateGtkApplicationIdExtension@Base 5.91.0
  (subst)_ZN18KWindowInfoPrivate6createE{quintptr}6QFlagsIN3NET8PropertyEES0_INS1_9Property2EE@Base 5.13.0
  (subst)_ZN18KWindowInfoPrivateC1E{quintptr}6QFlagsIN3NET8PropertyEES0_INS1_9Property2EE@Base 5.13.0
  (subst)_ZN18KWindowInfoPrivateC2E{quintptr}6QFlagsIN3NET8PropertyEES0_INS1_9Property2EE@Base 5.13.0
@@ -451,6 +453,11 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZN42KWindowInfoPrivateDesktopFileNameExtensionD0Ev@Base 5.35.0
  _ZN42KWindowInfoPrivateDesktopFileNameExtensionD1Ev@Base 5.35.0
  _ZN42KWindowInfoPrivateDesktopFileNameExtensionD2Ev@Base 5.35.0
+ _ZN43KWindowInfoPrivateGtkApplicationIdExtensionC1Ev@Base 5.91.0
+ _ZN43KWindowInfoPrivateGtkApplicationIdExtensionC2Ev@Base 5.91.0
+ _ZN43KWindowInfoPrivateGtkApplicationIdExtensionD0Ev@Base 5.91.0
+ _ZN43KWindowInfoPrivateGtkApplicationIdExtensionD1Ev@Base 5.91.0
+ _ZN43KWindowInfoPrivateGtkApplicationIdExtensionD2Ev@Base 5.91.0
  _ZNK10KXMessages10metaObjectEv@Base 4.96.0
  _ZNK10NETWinInfo10activitiesEv@Base 4.96.0
  _ZNK10NETWinInfo10windowRoleEv@Base 4.96.0
@@ -476,6 +483,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZNK10NETWinInfo15icccmIconPixmapEv@Base 5.6.0+git20150122.0006+15.04
  _ZNK10NETWinInfo15visibleIconNameEv@Base 4.96.0
  _ZNK10NETWinInfo15windowClassNameEv@Base 4.96.0
+ _ZNK10NETWinInfo16gtkApplicationIdEv@Base 5.91.0
  _ZNK10NETWinInfo16passedPropertiesEv@Base 4.96.0
  _ZNK10NETWinInfo16supportsProtocolEN3NET8ProtocolE@Base 5.2.0+git20140930
  _ZNK10NETWinInfo16windowClassClassEv@Base 4.96.0
@@ -518,6 +526,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZNK11KWindowInfo15desktopFileNameEv@Base 5.35.0
  _ZNK11KWindowInfo15visibleIconNameEv@Base 4.96.0
  _ZNK11KWindowInfo15windowClassNameEv@Base 4.96.0
+ _ZNK11KWindowInfo16gtkApplicationIdEv@Base 5.91.0
  _ZNK11KWindowInfo16windowClassClassEv@Base 4.96.0
  _ZNK11KWindowInfo18isOnCurrentDesktopEv@Base 4.96.0
  _ZNK11KWindowInfo20visibleNameWithStateEv@Base 4.96.0
@@ -616,6 +625,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZNK18KWindowInfoPrivate12pidExtensionEv@Base 5.35.0
  _ZNK18KWindowInfoPrivate16appMenuExtensionEv@Base 5.69.0
  _ZNK18KWindowInfoPrivate24desktopFileNameExtensionEv@Base 5.35.0
+ _ZNK18KWindowInfoPrivate25gtkApplicationIdExtensionEv@Base 5.91.0
  _ZNK18KWindowInfoPrivate3winEv@Base 5.13.0
  _ZNK28KWindowSystemPluginInterface10metaObjectEv@Base 5.13.0
  _ZTI10KXMessages@Base 4.96.0
@@ -639,6 +649,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZTI34KWindowInfoPrivateAppMenuExtension@Base 5.69.0
  _ZTI3NET@Base 4.96.0
  _ZTI42KWindowInfoPrivateDesktopFileNameExtension@Base 5.35.0
+ _ZTI43KWindowInfoPrivateGtkApplicationIdExtension@Base 5.91.0
  _ZTS10KXMessages@Base 4.96.0
  _ZTS10NETWinInfo@Base 4.96.0
  _ZTS11NETRootInfo@Base 4.96.0
@@ -660,6 +671,7 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZTS34KWindowInfoPrivateAppMenuExtension@Base 5.69.0
  _ZTS3NET@Base 4.96.0
  _ZTS42KWindowInfoPrivateDesktopFileNameExtension@Base 5.35.0
+ _ZTS43KWindowInfoPrivateGtkApplicationIdExtension@Base 5.91.0
  _ZTV10KXMessages@Base 4.96.0
  _ZTV10NETWinInfo@Base 4.96.0
  _ZTV11NETRootInfo@Base 4.96.0
@@ -678,3 +690,4 @@ libKF5WindowSystem.so.5 libkf5windowsystem5 #MINVER#
  _ZTV30KWindowInfoPrivatePidExtension@Base 5.35.0
  _ZTV34KWindowInfoPrivateAppMenuExtension@Base 5.69.0
  _ZTV42KWindowInfoPrivateDesktopFileNameExtension@Base 5.35.0
+ _ZTV43KWindowInfoPrivateGtkApplicationIdExtension@Base 5.91.0

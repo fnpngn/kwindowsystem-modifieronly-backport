@@ -1,3 +1,11 @@
+kwindowsystem (5.91.0-0ubuntu1) jammy; urgency=medium
+
+  * New upstream release (5.91.0)
+  * Update installed files
+  * Update symbols
+
+ -- José Manuel Santamaría Lema <panfaust@gmail.com>  Mon, 14 Feb 2022 17:10:22 +0000
+
 kwindowsystem (5.90.0-0ubuntu1) jammy; urgency=medium
 
   * New upstream release (5.90.0)
