@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
 
-set(KF_VERSION "5.98.0") # handled by release scripts
+set(KF_VERSION "5.99.0") # handled by release scripts
 project(KWindowSystem VERSION ${KF_VERSION})
 
 # ECM setup
 include(FeatureSummary)
-find_package(ECM 5.98.0  NO_MODULE)
+find_package(ECM 5.99.0  NO_MODULE)
 set_package_properties(ECM PROPERTIES TYPE REQUIRED DESCRIPTION "Extra CMake Modules." URL "https://commits.kde.org/extra-cmake-modules")
 feature_summary(WHAT REQUIRED_PACKAGES_NOT_FOUND FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
@@ -58,7 +58,7 @@ if (APPLE)
     cmake_find_frameworks(CoreFoundation)
 endif()
 
-if(WIN32)
+if(WIN32 AND QT_MAJOR_VERSION EQUAL "5")
    find_package(Qt5WinExtras REQUIRED)
 endif()
 

@@ -111,11 +111,10 @@ if (WIN32)
 # FIXME: adjust kwindowinfo_win to inherit from KWindowInfoPrivate
 #                                                 kwindowinfo_win.cpp
    )
-   target_link_libraries(KF5WindowSystem
-        PRIVATE
-            Qt5::WinExtras # QtWin::fromHICON(), QtWin::toHICON()
-            ws2_32 # gethostname()
-   )
+   target_link_libraries(KF5WindowSystem PRIVATE ws2_32) # gethostname()
+   if (QT_MAJOR_VERSION EQUAL "5")
+      target_link_libraries(KF5WindowSystem PRIVATE Qt5::WinExtras) # QtWin::fromHICON(), QtWin::toHICON()
+   endif()
 endif ()
 
 ecm_generate_export_header(KF5WindowSystem
@@ -154,7 +153,7 @@ ecm_generate_headers(KWindowSystem_HEADERS
   REQUIRED_HEADERS KWindowSystem_HEADERS
 )
 
-install(TARGETS KF5WindowSystem EXPORT KF5WindowSystemTargets ${KF5_INSTALL_TARGETS_DEFAULT_ARGS})
+install(TARGETS KF5WindowSystem EXPORT KF5WindowSystemTargets ${KF_INSTALL_TARGETS_DEFAULT_ARGS})
 
 install(FILES
   # FIXME: It seems odd to install this.
