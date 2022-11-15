@@ -1,11 +1,11 @@
 cmake_minimum_required(VERSION 3.16)
 
-set(KF_VERSION "5.99.0") # handled by release scripts
+set(KF_VERSION "5.100.0") # handled by release scripts
 project(KWindowSystem VERSION ${KF_VERSION})
 
 # ECM setup
 include(FeatureSummary)
-find_package(ECM 5.99.0  NO_MODULE)
+find_package(ECM 5.100.0  NO_MODULE)
 set_package_properties(ECM PROPERTIES TYPE REQUIRED DESCRIPTION "Extra CMake Modules." URL "https://commits.kde.org/extra-cmake-modules")
 feature_summary(WHAT REQUIRED_PACKAGES_NOT_FOUND FATAL_ON_MISSING_REQUIRED_PACKAGES)
 
@@ -80,7 +80,7 @@ if(X11_FOUND)
 endif()
 
 # Subdirectories
-ecm_install_po_files_as_qm(po)
+ecm_install_po_files_as_qm(poqm)
 
 ecm_set_disabled_deprecation_versions(
     QT 5.15.2
