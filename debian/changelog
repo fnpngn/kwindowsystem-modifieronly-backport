@@ -1,3 +1,10 @@
+kwindowsystem (5.101.0-0ubuntu1) lunar; urgency=medium
+
+  * New upstream release (5.101.0)
+  * Update symbols.
+
+ -- Rik Mills <rikmills@kde.org>  Sat, 10 Dec 2022 13:22:45 +0000
+
 kwindowsystem (5.100.0-0ubuntu1) lunar; urgency=medium
 
   * New upstream release (5.100.0)
