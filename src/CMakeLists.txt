@@ -37,16 +37,6 @@ ecm_qt_declare_logging_category(KF5WindowSystem
 )
 
 if (KWINDOWSYSTEM_HAVE_X11)
-  target_sources(KF5WindowSystem PRIVATE
-    platforms/xcb/kselectionowner.cpp
-    platforms/xcb/kselectionwatcher.cpp
-    platforms/xcb/kxerrorhandler.cpp
-    platforms/xcb/kxutils.cpp
-    kx11extras.cpp
-  )
-endif()
-
-if (KWINDOWSYSTEM_HAVE_X11)
    if(NOT X11_Xfixes_LIB)
       message(FATAL_ERROR "The XFixes library could not be found. Please install the development package for it.")
    endif()
@@ -75,8 +65,13 @@ if (KWINDOWSYSTEM_HAVE_X11)
 
    target_sources(KF5WindowSystem PRIVATE
         platforms/xcb/kkeyserver.cpp
+        platforms/xcb/kselectionowner.cpp
+        platforms/xcb/kselectionwatcher.cpp
+        platforms/xcb/kxerrorhandler.cpp
         platforms/xcb/kxmessages.cpp
+        platforms/xcb/kxutils.cpp
         platforms/xcb/netwm.cpp
+        kx11extras.cpp
    )
 
    # we install kkeyserver_x11.h which needs the X11 headers available
@@ -123,7 +118,7 @@ ecm_generate_export_header(KF5WindowSystem
     GROUP_BASE_NAME KF
     VERSION ${KF_VERSION}
     DEPRECATED_BASE_VERSION 0
-    DEPRECATION_VERSIONS 5.0 5.18 5.38 5.62 5.67 5.69 5.80 5.81 5.82 5.101
+    DEPRECATION_VERSIONS 5.0 5.18 5.38 5.62 5.67 5.69 5.80 5.81 5.82 5.101 5.102
     EXCLUDE_DEPRECATED_BEFORE_AND_AT ${EXCLUDE_DEPRECATED_BEFORE_AND_AT}
 )
 
