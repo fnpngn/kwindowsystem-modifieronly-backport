@@ -1,3 +1,9 @@
+kwindowsystem (5.103.0-0ubuntu1) lunar; urgency=medium
+
+  * New upstream release (5.103.0)
+
+ -- José Manuel Santamaría Lema <panfaust@gmail.com>  Wed, 15 Feb 2023 13:45:33 +0000
+
 kwindowsystem (5.102.0-0ubuntu1) lunar; urgency=medium
 
   * New upstream release (5.102.0)
