@@ -330,13 +330,19 @@ public:
      */
     static bool sendFinishXcb(xcb_connection_t *conn, int screen, const KStartupInfoId &id, const KStartupInfoData &data);
 
+#if KWINDOWSYSTEM_ENABLE_DEPRECATED_SINCE(5, 104)
     /**
      * Returns the current startup notification identification for the current
-     * startup notification environment variable. Note that KApplication constructor
-     * unsets the variable and you have to use KApplication::startupId .
+     * startup notification environment variable. Note that QApplication constructor
+     * unsets the variable and you have to use QX11Info::nextStartupId() .
      * @return the current startup notification identification
+     *
+     * @deprecated since 5.104, use QX11Info::nextStartupId().
      */
+    KWINDOWSYSTEM_DEPRECATED_VERSION(5, 104, "Use QX11Info::nextStartupId()")
     static KStartupInfoId currentStartupIdEnv();
+#endif
+
     /**
      * Unsets the startup notification environment variable.
      */
@@ -384,12 +390,19 @@ public:
      * @param secs the new timeout in seconds
      */
     void setTimeout(unsigned int secs);
+
+#if KWINDOWSYSTEM_ENABLE_DEPRECATED_SINCE(5, 104)
     /**
      * Sets the startup notification window property on the given window.
      * @param window the id of the window
      * @param id the startup notification id
+     *
+     * @deprecated since 5.104
      */
+    KWINDOWSYSTEM_DEPRECATED_VERSION(5, 104, "Use setNewStartupId()")
     static void setWindowStartupId(WId window, const QByteArray &id);
+#endif
+
     /**
      * Returns startup notification identification of the given window.
      * @param w the id of the window
