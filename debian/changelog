@@ -1,3 +1,9 @@
+kwindowsystem (5.110.0-0ubuntu1) mantic; urgency=medium
+
+  * New upstream release (5.110.0)
+
+ -- Rik Mills <rikmills@kde.org>  Sun, 10 Sep 2023 00:10:38 +0100
+
 kwindowsystem (5.109.0-0ubuntu1) mantic; urgency=medium
 
   * New upstream release (5.109.0)
