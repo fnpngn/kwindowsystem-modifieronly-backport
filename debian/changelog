@@ -1,3 +1,9 @@
+kwindowsystem (5.113.0-0ubuntu1) noble; urgency=medium
+
+  * New upstream release (5.113.0)
+
+ -- José Manuel Santamaría Lema <panfaust@gmail.com>  Fri, 15 Dec 2023 13:45:45 +0000
+
 kwindowsystem (5.112.0-0ubuntu1) noble; urgency=medium
 
   * New upstream release (5.112.0)
