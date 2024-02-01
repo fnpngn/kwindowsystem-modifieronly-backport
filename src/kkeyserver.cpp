@@ -1393,3 +1393,92 @@ QList<int> keyQtToCodeXs(int keyQt)
     }
     return keyCodes;
 }
+
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(6, 0)
+bool keyQtToSymX(int keyQt, int *keySym)
+{
+    int symQt = keyQt & ~Qt::KeyboardModifierMask;
+
+    if (keyQt & Qt::KeypadModifier) {
+        if (symQt >= Qt::Key_0 && symQt <= Qt::Key_9) {
+            *keySym = XK_KP_0 + (symQt - Qt::Key_0);
+            return true;
+        }
+    } else {
+        if (symQt < 0x1000) {
+            *keySym = QChar(symQt).toUpper().unicode();
+            return true;
+        }
+    }
+
+    for (const TransKey &tk : g_rgQtToSymX) {
+        if (tk.keySymQt == symQt) {
+            if ((keyQt & Qt::KeypadModifier) && !is_keypad_key(tk.keySymX)) {
+                continue;
+            }
+            *keySym = tk.keySymX;
+            return true;
+        }
+    }
+
+    *keySym = 0;
+    if (symQt != Qt::Key_Shift && symQt != Qt::Key_Control && symQt != Qt::Key_Alt && symQt != Qt::Key_Meta && symQt != Qt::Key_Direction_L
+        && symQt != Qt::Key_Direction_R) {
+        // qCDebug(LOG_KKEYSERVER_X11) << "Sym::initQt( " << QString::number(keyQt,16) << " ): failed to convert key.";
+    }
+    return false;
+}
+#endif
+
+QList<int> keyQtToSymXs(int keyQt)
+{
+    int symQt = keyQt & ~Qt::KeyboardModifierMask;
+    QList<int> syms;
+
+    if (keyQt & Qt::KeypadModifier) {
+        if (symQt >= Qt::Key_0 && symQt <= Qt::Key_9) {
+            syms.append(XK_KP_0 + (symQt - Qt::Key_0));
+            return syms;
+        }
+    } else {
+        if (symQt < 0x1000) {
+            syms.append(QChar(symQt).toUpper().unicode());
+            return syms;
+        }
+    }
+
+    for (const TransKey &tk : g_rgQtToSymX) {
+        if (tk.keySymQt == symQt) {
+            if ((keyQt & Qt::KeypadModifier) && !is_keypad_key(tk.keySymX)) {
+                continue;
+            }
+            syms.append(tk.keySymX);
+        }
+    }
+    return syms;
+}
+
+bool symXModXToKeyQt(uint32_t keySym, uint16_t modX, int *keyQt)
+{
+    QList<int> keyCodes;
+    if (!QX11Info::isPlatformX11()) {
+        qCWarning(LOG_KKEYSERVER_X11) << "X11 implementation of KKeyServer accessed from non-X11 platform! This is an application bug.";
+        return keyCodes;
+    }
+    uint mod;
+    const QList<int> syms(keyQtToSymXs(keyQt));
+    keyQtToModX(keyQt, &mod);
+
+    for (int sym : syms) {
+        // Get any extra mods required by the sym.
+        //  E.g., XK_Plus requires SHIFT on the en layout.
+        uint modExtra = getModsRequired(sym);
+        // Get the X modifier equivalent.
+        if (!sym || !keyQtToModX((keyQt & Qt::KeyboardModifierMask) | modExtra, &mod)) {
+            continue;
+        }
+
+        keyCodes.append(XKeysymToKeycode(QX11Info::display(), sym));
+    }
+    return keyCodes;
+}
