@@ -1,3 +1,10 @@
+kwindowsystem (5.115.0-0ubuntu1) noble; urgency=medium
+
+  * New upstream release (5.114.0)
+  * New upstream release (5.115.0)
+
+ -- Scarlett Moore <sgmoore@debian.org>  Fri, 16 Feb 2024 08:05:01 -0700
+
 kwindowsystem (5.113.0-0ubuntu1) noble; urgency=medium
 
   * New upstream release (5.113.0)
