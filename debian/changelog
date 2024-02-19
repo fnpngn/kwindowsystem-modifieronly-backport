@@ -1,3 +1,9 @@
+kwindowsystem (5.115.0-0ubuntu2) noble; urgency=medium
+
+  * Bump build deps
+
+ -- Scarlett Moore <sgmoore@debian.org>  Mon, 19 Feb 2024 09:36:05 -0700
+
 kwindowsystem (5.115.0-0ubuntu1) noble; urgency=medium
 
   * New upstream release (5.114.0)
