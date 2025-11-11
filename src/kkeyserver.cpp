@@ -9,6 +9,19 @@
 
 #include "kkeyserver.h"
 
+#include "kwindowsystem_xcb_debug.h"
+
+#include <private/qtx11extras_p.h>
+
+#define XK_MISCELLANY
+#define XK_XKB_KEYS
+#include <X11/X.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <X11/keysymdef.h>
+#include <xcb/xcb_keysyms.h>
+#define X11_ONLY(arg) arg, // allows to omit an argument
+
 #include <QCoreApplication>
 
 namespace KKeyServer
