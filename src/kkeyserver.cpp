@@ -11,11 +11,7 @@
 
 #include "kwindowsystem_xcb_debug.h"
 
-#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
-    #include <private/qtx11extras_p.h>
-#else
-    #include <QX11Info>
-#endif
+#include <private/qtx11extras_p.h>
 
 #define XK_MISCELLANY
 #define XK_XKB_KEYS
