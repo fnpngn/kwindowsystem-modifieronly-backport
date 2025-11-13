@@ -7,7 +7,6 @@
     SPDX-License-Identifier: LGPL-2.1-or-later
 */
 
-#include "kkeyserver.h"
 #include "kkeyserver_x11.h"
 
 #include "platforms/xcb/kwindowsystem_xcb_debug.h"
