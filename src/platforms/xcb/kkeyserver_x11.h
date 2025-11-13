@@ -17,7 +17,6 @@
 
 namespace KKeyServer
 {
-static const int MODE_SWITCH = 0x2000;
 
 /**
  * Initialises the values to return for the mod*() functions below.
