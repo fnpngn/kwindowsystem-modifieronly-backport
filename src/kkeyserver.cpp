@@ -1397,3 +1397,5 @@ QList<int> keyQtToCodeXs(int keyQt)
     }
     return keyCodes;
 }
+
+}// KKeyServer namespace
