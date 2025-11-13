@@ -1398,4 +1398,257 @@ QList<int> keyQtToCodeXs(int keyQt)
     return keyCodes;
 }
 
-}// KKeyServer namespace
+#if KWINDOWSYSTEM_BUILD_DEPRECATED_SINCE(6, 0)
+bool keyQtToSymX(int keyQt, int *keySym)
+{
+    int symQt = keyQt & ~Qt::KeyboardModifierMask;
+
+    if (keyQt & Qt::KeypadModifier) {
+        if (symQt >= Qt::Key_0 && symQt <= Qt::Key_9) {
+            *keySym = XK_KP_0 + (symQt - Qt::Key_0);
+            return true;
+        }
+    } else {
+        if (symQt < 0x1000) {
+            *keySym = QChar(symQt).toUpper().unicode();
+            return true;
+        }
+    }
+
+    for (const TransKey &tk : g_rgQtToSymX) {
+        if (tk.keySymQt == symQt) {
+            if ((keyQt & Qt::KeypadModifier) && !is_keypad_key(tk.keySymX)) {
+                continue;
+            }
+            *keySym = tk.keySymX;
+            return true;
+        }
+    }
+
+    *keySym = 0;
+    if (symQt != Qt::Key_Shift && symQt != Qt::Key_Control && symQt != Qt::Key_Alt && symQt != Qt::Key_Meta && symQt != Qt::Key_Direction_L
+        && symQt != Qt::Key_Direction_R) {
+        // qCDebug(LOG_KKEYSERVER_X11) << "Sym::initQt( " << QString::number(keyQt,16) << " ): failed to convert key.";
+    }
+    return false;
+}
+#endif
+
+QList<int> keyQtToSymXs(int keyQt)
+{
+    int symQt = keyQt & ~Qt::KeyboardModifierMask;
+    QList<int> syms;
+
+    if (keyQt & Qt::KeypadModifier) {
+        if (symQt >= Qt::Key_0 && symQt <= Qt::Key_9) {
+            syms.append(XK_KP_0 + (symQt - Qt::Key_0));
+            return syms;
+        }
+    } else {
+        if (symQt < 0x1000) {
+            syms.append(QChar(symQt).toUpper().unicode());
+            return syms;
+        }
+    }
+
+    for (const TransKey &tk : g_rgQtToSymX) {
+        if (tk.keySymQt == symQt) {
+            if ((keyQt & Qt::KeypadModifier) && !is_keypad_key(tk.keySymX)) {
+                continue;
+            }
+            syms.append(tk.keySymX);
+        }
+    }
+    return syms;
+}
+
+bool symXModXToKeyQt(uint32_t keySym, uint16_t modX, int *keyQt)
+{
+    int keyModQt = 0;
+    *keyQt = Qt::Key_unknown;
+
+    if (keySym >= XK_KP_0 && keySym <= XK_KP_9) {
+        // numeric keypad keys
+        *keyQt = Qt::Key_0 + ((int)keySym - XK_KP_0);
+    } else if (keySym < 0x1000) {
+        if (keySym >= 'a' && keySym <= 'z') {
+            *keyQt = QChar(keySym).toUpper().unicode();
+        } else {
+            *keyQt = keySym;
+        }
+    }
+
+    else if (keySym < 0x3000) {
+        *keyQt = keySym;
+    }
+
+    else {
+        for (const TransKey &tk : g_rgQtToSymX) {
+            if (tk.keySymX == keySym) {
+                *keyQt = tk.keySymQt;
+                break;
+            }
+        }
+    }
+
+    if (*keyQt == Qt::Key_unknown) {
+        return false;
+    }
+
+    if (modXToQt(modX, &keyModQt)) {
+        *keyQt |= keyModQt;
+        if (is_keypad_key(keySym)) {
+            *keyQt |= Qt::KeypadModifier;
+        }
+        return true;
+    }
+    return false;
+}
+
+bool keyQtToModX(int modQt, uint *modX)
+{
+    if (!g_bInitializedMods) {
+        initializeMods();
+    }
+
+    *modX = 0;
+    for (int i = 0; i < 4; i++) {
+        if (modQt & g_rgX11ModInfo[i].modQt) {
+            if (g_rgX11ModInfo[i].modX) {
+                *modX |= g_rgX11ModInfo[i].modX;
+            } else {
+                // The qt modifier has no x equivalent. Return false
+                return false;
+            }
+        }
+    }
+    return true;
+}
+
+bool modXToQt(uint modX, int *modQt)
+{
+    if (!g_bInitializedMods) {
+        initializeMods();
+    }
+
+    *modQt = 0;
+    for (int i = 0; i < 4; i++) {
+        if (modX & g_rgX11ModInfo[i].modX) {
+            *modQt |= g_rgX11ModInfo[i].modQt;
+            continue;
+        }
+    }
+    return true;
+}
+
+bool codeXToSym(uchar codeX, uint modX, uint *sym)
+{
+    if (!QX11Info::isPlatformX11()) {
+        qCWarning(LOG_KKEYSERVER_X11) << "X11 implementation of KKeyServer accessed from non-X11 platform! This is an application bug.";
+        return false;
+    }
+    KeySym keySym;
+    XKeyPressedEvent event;
+
+    checkDisplay();
+
+    event.type = KeyPress;
+    event.display = QX11Info::display();
+    event.state = modX;
+    event.keycode = codeX;
+
+    XLookupString(&event, nullptr, 0, &keySym, nullptr);
+    *sym = (uint)keySym;
+    return true;
+}
+
+uint accelModMaskX()
+{
+    return modXShift() | modXCtrl() | modXAlt() | modXMeta();
+}
+
+bool xEventToQt(XEvent *e, int *keyQt)
+{
+    Q_ASSERT(e->type == KeyPress || e->type == KeyRelease);
+
+    uchar keyCodeX = e->xkey.keycode;
+    uint keyModX = e->xkey.state & (accelModMaskX() | MODE_SWITCH);
+
+    KeySym keySym;
+    char buffer[16];
+    XLookupString((XKeyEvent *)e, buffer, 15, &keySym, nullptr);
+    uint keySymX = (uint)keySym;
+
+    // If numlock is active and a keypad key is pressed, XOR the SHIFT state.
+    //  e.g., KP_4 => Shift+KP_Left, and Shift+KP_4 => KP_Left.
+    if (e->xkey.state & modXNumLock()) {
+        uint sym = XKeycodeToKeysym(QX11Info::display(), keyCodeX, 0);
+        // TODO: what's the xor operator in c++?
+        // If this is a keypad key,
+        if (sym >= XK_KP_Space && sym <= XK_KP_9) {
+            switch (sym) {
+            // Leave the following keys unaltered
+            // FIXME: The proper solution is to see which keysyms don't change when shifted.
+            case XK_KP_Multiply:
+            case XK_KP_Add:
+            case XK_KP_Subtract:
+            case XK_KP_Divide:
+                break;
+            default:
+                if (keyModX & modXShift()) {
+                    keyModX &= ~modXShift();
+                } else {
+                    keyModX |= modXShift();
+                }
+            }
+        }
+    }
+
+    return KKeyServer::symXModXToKeyQt(keySymX, keyModX, keyQt);
+}
+
+bool xcbKeyPressEventToQt(xcb_generic_event_t *e, int *keyQt)
+{
+    if ((e->response_type & ~0x80) != XCB_KEY_PRESS && (e->response_type & ~0x80) != XCB_KEY_RELEASE) {
+        return false;
+    }
+    return xcbKeyPressEventToQt(reinterpret_cast<xcb_key_press_event_t *>(e), keyQt);
+}
+
+bool xcbKeyPressEventToQt(xcb_key_press_event_t *e, int *keyQt)
+{
+    const uint16_t keyModX = e->state & (accelModMaskX() | MODE_SWITCH);
+
+    xcb_key_symbols_t *symbols = xcb_key_symbols_alloc(QX11Info::connection());
+
+    // We might have to use 4,5 instead of 0,1 here when mode_switch is active, just not sure how to test that.
+    const xcb_keysym_t keySym0 = xcb_key_press_lookup_keysym(symbols, e, 0);
+    const xcb_keysym_t keySym1 = xcb_key_press_lookup_keysym(symbols, e, 1);
+    xcb_keysym_t keySymX;
+
+    if ((e->state & KKeyServer::modXNumLock()) && is_keypad_key(keySym1)) {
+        if ((e->state & XCB_MOD_MASK_SHIFT)) {
+            keySymX = keySym0;
+        } else {
+            keySymX = keySym1;
+        }
+    } else {
+        keySymX = keySym0;
+    }
+
+    bool ok = KKeyServer::symXModXToKeyQt(keySymX, keyModX, keyQt);
+
+    if ((*keyQt & Qt::ShiftModifier) && !KKeyServer::isShiftAsModifierAllowed(*keyQt)) {
+        if (*keyQt != Qt::Key_Tab) { // KKeySequenceWidget does not map shift+tab to backtab
+            static const int FirstLevelShift = 1;
+            keySymX = xcb_key_symbols_get_keysym(symbols, e->detail, FirstLevelShift);
+            KKeyServer::symXModXToKeyQt(keySymX, keyModX, keyQt);
+        }
+        *keyQt &= ~Qt::ShiftModifier;
+    }
+
+    xcb_key_symbols_free(symbols);
+    return ok;
+}
+
+} // end of namespace KKeyServer block
